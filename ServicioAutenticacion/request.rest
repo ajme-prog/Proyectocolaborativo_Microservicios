@@ -1,0 +1,24 @@
+
+GET http://localhost:3000/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZGFhY2E3ZWRmMWRjMDVlZjAxZjMzMDYwNWQ0MmExOGVhNDBmMzNjZWUyOTNiOWEyZDUzMzlhYzgyZmI4ODM3NzZkYWI1OGEyNDU3ZTIwYmM0NDY1ZGIyZGQyYzQ2YWE3MWI0ZjY0MGUxZTU3MjM4ZmI2NzZmMjU1NDRlMjEwYmYiLCJ0aXBvIjoyLCJpYXQiOjE2MjI3ODQwMTB9.tfPfos9c2187Qa2JKRUrhEEARh8V24fQe39qHe1zG44
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "usuario": "John",
+    "pwd": "123"
+}
+###
+PUT http://localhost:3000/registro
+Content-Type: application/json
+
+{
+    "nombre": "Cesar Josue",
+    "apellido": "Reyes Diaz",
+    "correo": "cesar@gmail.com",
+    "pwd": "123",
+    "telefono": "12345678",
+    "tipo": 2
+}
