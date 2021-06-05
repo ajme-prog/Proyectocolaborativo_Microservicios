@@ -1,0 +1,81 @@
+const AWS = require("./Servicios/AWS");
+const md5 = require("md5");
+
+async function insertarUsuario(registro) {
+  const params = {
+    TableName: "usuario",
+    Item: registro,
+  };
+
+  try {
+    await AWS.docClient.put(params).promise();
+    return { error: false, mensaje: "Usuario creado con éxito" };
+  } catch (error) {
+    console.log(error);
+    return { error: true, mensaje: "No se pudo insertar el usuario" };
+  }
+}
+
+async function loginUsuario(correo, pwd) {
+  const params = {
+    TableName: "usuario",
+    FilterExpression: "#cuser = :corr and #pwduser = :pass",
+    ExpressionAttributeNames: {
+      "#cuser": "correo",
+      "#pwduser": "pwd",
+    },
+    ExpressionAttributeValues: { ":corr": correo, ":pass": md5(pwd) },
+  };
+
+  let lastEvaluatedKey = "grupo1";
+  const itemsAll = [];
+
+  while (lastEvaluatedKey) {
+    const data = await AWS.docClient.scan(params).promise();
+    itemsAll.push(...data.Items);
+    lastEvaluatedKey = data.LastEvaluatedKey;
+    if (lastEvaluatedKey) {
+      params.ExclusiveStartKey = lastEvaluatedKey;
+    }
+  }
+
+  return itemsAll;
+}
+
+async function aprobarEditorial(usuario_editorial) {
+  /*const params = {
+        TableName: "usuario",
+        FilterExpression: "#cuser = :corr and #pwduser = :pass",
+        ExpressionAttributeNames: {
+            "#cuser": "correo",
+            "#pwduser": "pwd",
+        },
+        ExpressionAttributeValues: { ":corr": correo, ":pass": md5(pwd)},
+    };*/
+  console.log('usuario_editorial', usuario_editorial)
+  const params = {
+    TableName: "usuario",
+    Key: {
+      "usuario": usuario_editorial,
+    },
+    UpdateExpression: "set estado = :e",
+    ConditionExpression: 'usuario = :userIdVal and tipo = :etipo',
+    ExpressionAttributeValues: {
+      ":e": "Aprobada",
+      ":userIdVal": usuario_editorial,
+      ":etipo": 1
+    },
+    ReturnValues: "UPDATED_NEW",
+  };
+
+  try {
+      await AWS.docClient.update(params).promise()
+      return { error: false, mensaje: "El usuario editorial se aprobó con éxito"}    
+  } catch (error) {
+    console.log('\n\ncatch update\n\n')
+    console.log(error)
+    return { error: true, mensaje: "El usuario editorial no se pudo actualizar"}      
+  }
+}
+
+module.exports = { insertarUsuario, loginUsuario, aprobarEditorial };
