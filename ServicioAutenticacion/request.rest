@@ -1,14 +1,27 @@
 
-GET http://localhost:3000/posts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZGFhY2E3ZWRmMWRjMDVlZjAxZjMzMDYwNWQ0MmExOGVhNDBmMzNjZWUyOTNiOWEyZDUzMzlhYzgyZmI4ODM3NzZkYWI1OGEyNDU3ZTIwYmM0NDY1ZGIyZGQyYzQ2YWE3MWI0ZjY0MGUxZTU3MjM4ZmI2NzZmMjU1NDRlMjEwYmYiLCJ0aXBvIjoyLCJpYXQiOjE2MjI3ODQwMTB9.tfPfos9c2187Qa2JKRUrhEEARh8V24fQe39qHe1zG44
+POST http://localhost:3000/administrador/aprobar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiODJlYzg1Njc3NjE5NzRhYWNiZDU0NDRlN2UzYjEyMzQyMTY5MmVhZjYyNTY2NDI3IiwidGlwbyI6MCwiaWF0IjoxNjIyODM0MDA1fQ.2vP3nG7QMYVAhjC9v34KGHIh_roGrSv_zYNerZhzbqs
+Content-Type: application/json
+
+{
+    "editorial": "b9f63da02c0ba6a6cb16077e6a6563bcdc002445a8f1003d"
+}
 
 ###
 POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "usuario": "John",
-    "pwd": "123"
+    "correo": "josue@gmail.com",
+    "pwd": "alskfdjalsdkf123"
+}
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "correo": "admin@admin.com",
+    "pwd": "admin"
 }
 ###
 PUT http://localhost:3000/registro
@@ -17,8 +30,20 @@ Content-Type: application/json
 {
     "nombre": "Cesar Josue",
     "apellido": "Reyes Diaz",
-    "correo": "cesar@gmail.com",
-    "pwd": "123",
+    "correo": "josue@gmail.com",
+    "pwd": "alskfdjalsdkf123",
     "telefono": "12345678",
     "tipo": 2
+}
+
+###
+PUT http://localhost:3000/registro
+Content-Type: application/json
+
+{
+    "nombre": "Editorial Santillana",
+    "correo": "santillana@gmail.com",
+    "pwd": "ajsdnfjasfnjn",
+    "direccion": "Mixco, Guatemala",
+    "tipo": 1
 }

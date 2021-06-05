@@ -1,5 +1,4 @@
 const AWS = require("./Servicios/AWS");
-const docClient = new AWS.DynamoDB.DocumentClient();
 
 function validarDatosEditorial(editorial) {
     return (
@@ -18,8 +17,6 @@ function validarDatosCliente(cliente) {
 }
 
 async function validarCorreoUsuario(correo) {
-    console.log("\nBuscando correo: ", correo);
-
     const params = {
         TableName: "usuario",
         FilterExpression: "#cuser = :data",
@@ -33,7 +30,7 @@ async function validarCorreoUsuario(correo) {
     const itemsAll = [];
 
     while (lastEvaluatedKey) {
-        const data = await docClient.scan(params).promise();
+        const data = await AWS.docClient.scan(params).promise();
         itemsAll.push(...data.Items);
         lastEvaluatedKey = data.LastEvaluatedKey;
         if (lastEvaluatedKey) {
