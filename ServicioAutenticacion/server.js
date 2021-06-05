@@ -12,26 +12,31 @@ const funciones = require("./funciones");
 app.use(express.json());
 
 // Configuración de CORS
-const corsOptions = { origin: true, optionsSuccessStatus: 200 };
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.put("/registro", async (req, res) => {
+  console.log("\n[REGISTRO]");
   let registro = req.body;
+
+  console.log(registro);
 
   if (registro.tipo === 1) {
     // Es una editorial
-    if (!validaciones.validarDatosEditorial(registro))
+    if (!validaciones.validarDatosEditorial(registro)) {
+      console.log("[ERROR] Campos insuficientes para editorial");
       return res
         .status(400)
         .json({ mensaje: "Campos insuficientes para editorial" });
-
+    }
     registro = { ...registro, estado: "Pendiente de aprobación" };
   } else if (registro.tipo === 2) {
     // Es un cliente
-    if (!validaciones.validarDatosCliente(registro))
+    if (!validaciones.validarDatosCliente(registro)) {
+      console.log("[ERROR] Campos insuficientes para cliente");
       return res
         .status(400)
         .json({ mensaje: "Campos insuficientes para cliente" });
+    }
   } else {
     // Error
     return res.status(400).json({ mensaje: "Tipo de usuario incorrecto" });
@@ -56,10 +61,11 @@ app.put("/registro", async (req, res) => {
       .json({ mensaje: "Ocurrió un error al insertar el usuario" });
 
   const user = { usuario: registro.usuario, tipo: registro.tipo };
-  const accesToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
   console.log("\n[REGISTRO] ", registro.nombre, "\n");
-  res.status(201).json({ mensaje: resultado.mensaje, accesToken: accesToken });
+  delete registro.pwd
+  res.status(201).json({ mensaje: resultado.mensaje, accessToken: accessToken, usuario: registro });
 });
 
 app.post("/login", async (req, res) => {
@@ -79,11 +85,10 @@ app.post("/login", async (req, res) => {
 
   const user = { usuario: usuarioLogin.usuario, tipo: usuarioLogin.tipo };
   const acces_token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-  res.json({ accesToken: acces_token, usuario: usuarioLogin });
+  res.json({ accessToken: acces_token, usuario: usuarioLogin });
 });
 
 app.post("/administrador/aprobar", autenticarToken, async (req, res) => {
-  
   const usuarioAdmin = req.usuarioReq;
 
   if (!(usuarioAdmin && usuarioAdmin.tipo === 0))
@@ -91,13 +96,13 @@ app.post("/administrador/aprobar", autenticarToken, async (req, res) => {
       .status(403)
       .json({ mensaje: "No posee los permisos necesarios" });
 
-  const usuarioEditorial = req.body.editorial
-  const resultado = await funciones.aprobarEditorial(usuarioEditorial)
+  const usuarioEditorial = req.body.editorial;
+  const resultado = await funciones.aprobarEditorial(usuarioEditorial);
 
-  if(resultado.error)
-    return res.status(400).json({ mensaje: resultado.mensaje}) 
+  if (resultado.error)
+    return res.status(400).json({ mensaje: resultado.mensaje });
 
-  res.status(200).json({ mensaje: resultado.mensaje})
+  res.status(200).json({ mensaje: resultado.mensaje });
 });
 
 function autenticarToken(req, res, next) {
@@ -106,10 +111,13 @@ function autenticarToken(req, res, next) {
   if (token == null) return res.sendStatus(401);
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ mensaje: "No posee los permisos necesarios" });
+    if (err)
+      return res
+        .status(403)
+        .json({ mensaje: "No posee los permisos necesarios" });
     req.usuarioReq = user;
     next();
   });
 }
 
-app.listen(3000);
+app.listen(3001);

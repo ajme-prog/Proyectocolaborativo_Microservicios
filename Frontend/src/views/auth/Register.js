@@ -1,24 +1,85 @@
 import React, { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { registrarUsuario } from "../../services/autenticacion";
+import Swal from "sweetalert2";
+import { Link, useHistory } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 
 export default function Register() {
   const [tipoUsuario, setTipoUsuario] = useState("Cliente");
+  const [cookies, setCookie] = useCookies(['usuario']);
+  const history = useHistory();
 
   // Usuario tipo cliente
-  const nombreRef = useRef()
-  const apellidosRef = useRef()
-  const telefonoRef = useRef()
-  const correoRef = useRef()
-  const pwdRef = useRef()
+  const nombreRef = useRef();
+  const apellidosRef = useRef();
+  const telefonoRef = useRef();
+  const correoRef = useRef();
+  const pwdRef = useRef();
+
+  //Swal
+  const swalPersonalizado = Swal.mixin({
+    customClass: {
+      confirmButton:
+        "bg-amber-500 text-white active:bg-amber-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear",
+    },
+    buttonsStyling: false,
+  });
 
   // Usuario tipo editorial
-  const direccionRef = useRef()
+  const direccionRef = useRef();
 
-  function handleSubmit(event){
-    event.preventDefault()
+  async function handleSubmit(event) {
+    event.preventDefault();
 
-    console.log(nombreRef.current.value)
+    const usuario = {
+      nombre: nombreRef.current.value,
+      apellido: apellidosRef.current.value,
+      correo: correoRef.current.value,
+      pwd: pwdRef.current.value,
+      telefono: telefonoRef.current.value,
+      tipo: tipoUsuario === "Cliente" ? 2 : 1,
+    };
 
+    console.log(usuario);
+
+    const rawResponse = await registrarUsuario(usuario);
+    const respuesta = await rawResponse.json();
+
+    console.log(respuesta);
+
+    if (rawResponse.status !== 201) {
+      swalPersonalizado.fire({
+        icon: "error",
+        title: "Error",
+        text: respuesta.mensaje,
+      });
+      return;
+    }
+
+    swalPersonalizado.fire({
+      icon: "success",
+      title: "Registro",
+      text: respuesta.mensaje,
+    });
+
+    limpiarInputs();
+
+    localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
+    setCookie('accesToken', respuesta.accessToken, { path: '/'})
+    history.push("/admin/perfil");
+  }
+
+  function limpiarInputs() {
+    nombreRef.current.value = "";
+    correoRef.current.value = "";
+    pwdRef.current.value = "";
+
+    if (tipoUsuario === "Cliente") {
+      apellidosRef.current.value = "";
+      telefonoRef.current.value = "";
+    } else {
+      direccionRef.current.value = "";
+    }
   }
 
   return (
@@ -38,8 +99,19 @@ export default function Register() {
               </div>
               <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
-                  <small>Crear una nueva cuenta de <span className="text-amber-500">{tipoUsuario}</span></small>
-                  {tipoUsuario === "Editorial" && <div><br/><small className="text-blueGray-500">Deberá esperar a que el administrador apruebe el registro</small></div>}
+                  <small>
+                    Crear una nueva cuenta de{" "}
+                    <span className="text-amber-500">{tipoUsuario}</span>
+                  </small>
+                  {tipoUsuario === "Editorial" && (
+                    <div>
+                      <br />
+                      <small className="text-blueGray-500">
+                        Deberá esperar a que el administrador apruebe el
+                        registro
+                      </small>
+                    </div>
+                  )}
                 </div>
                 <form onSubmit={handleSubmit}>
                   <div className="relative w-full mb-3">
@@ -163,6 +235,13 @@ export default function Register() {
                     </button>
                   </div>
                 </form>
+              </div>
+            </div>
+            <div className="flex flex-wrap mt-6 relative">
+              <div className="w-full text-center">
+                <Link to="/auth/login" className="text-blueGray-200">
+                  <small>¿Ya tienes una cuenta? Iniciar sesión</small>
+                </Link>
               </div>
             </div>
           </div>
