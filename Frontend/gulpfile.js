@@ -9,7 +9,7 @@ gulp.task("licenses", async function () {
       gap.prependText(`/*!
 
 =========================================================
-* Notus React - v1.1.0 based on Tailwind Starter Kit by Creative Tim
+* BookSA - v1.1.0 based on Tailwind Starter Kit by Creative Tim
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/notus-react
@@ -35,7 +35,7 @@ gulp.task("licenses", async function () {
       gap.prependText(`<!--
 
 =========================================================
-* Notus React - v1.1.0 based on Tailwind Starter Kit by Creative Tim
+* BookSA - v1.1.0 based on Tailwind Starter Kit by Creative Tim
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/notus-react
@@ -61,7 +61,7 @@ gulp.task("licenses", async function () {
       gap.prependText(`/*!
 
 =========================================================
-* Notus React - v1.1.0 based on Tailwind Starter Kit by Creative Tim
+* BookSA - v1.1.0 based on Tailwind Starter Kit by Creative Tim
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/notus-react
