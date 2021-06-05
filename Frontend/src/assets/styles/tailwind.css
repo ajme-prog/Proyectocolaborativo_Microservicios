@@ -202,7 +202,8 @@ Correct the inability to style clickable types in iOS and Safari.
 */
 
 button,
-[type='button'] {
+[type='button'],
+[type='submit'] {
   -webkit-appearance: button;
 }
 
@@ -1033,6 +1034,11 @@ select {
   background-color: rgba(99, 102, 241, var(--tw-bg-opacity));
 }
 
+.bg-lightBlue-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(14, 165, 233, var(--tw-bg-opacity));
+}
+
 .bg-teal-200 {
   --tw-bg-opacity: 1;
   background-color: rgba(153, 246, 228, var(--tw-bg-opacity));
@@ -1166,6 +1172,11 @@ select {
 .active\:bg-indigo-600:active {
   --tw-bg-opacity: 1;
   background-color: rgba(79, 70, 229, var(--tw-bg-opacity));
+}
+
+.active\:bg-lightBlue-600:active {
+  --tw-bg-opacity: 1;
+  background-color: rgba(2, 132, 199, var(--tw-bg-opacity));
 }
 
 .active\:bg-amber-600:active {
@@ -2405,10 +2416,6 @@ select {
 
 .break-words {
   overflow-wrap: break-word;
-}
-
-.w-5 {
-  width: 1.25rem;
 }
 
 .w-8 {
