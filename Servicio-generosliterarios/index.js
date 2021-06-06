@@ -15,7 +15,7 @@ app.use(cors());
 var docClient = new AWS.DynamoDB(config.aws_remote_config);
 
 
-//------------CRUD ALBUM---
+//------------CRUD GENEROS---
 app.post('/generoliterario',function(req,res){
 
     //-------------primero verifico que no exista un album con ese nombre
@@ -81,5 +81,40 @@ app.post('/generoliterario',function(req,res){
     
     });
 
+//------OBTENER TODOS LOS GENEROS
+//------obtener todos los albumes del usuario
+app.get('/generoliterario',function(req,res){
 
+    var id_usuario = req.params.id_usuario;
+  
+  
+  
+    const params2 = {
+      TableName: 'GeneroLiterario'
+    };
+  
+    docClient.scan(params2, function (err, data) {
+      if (err) {
+       // res.send({status:200,mensaje:"OK", data: arreglo });
+        res.send("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+      } else {
+        console.log(data.Items.length);
+  
+        var arreglo = [];
+  
+        for (let i = 0; i < data.Items.length; i++) {
+           objeto={id:data.Items[i].id.S,nombre:data.Items[i].nombre.S}
+          arreglo.push(objeto);
+        }
+  
+        res.send({status:200,mensaje:"OK", data: arreglo });
+  
+  
+      }
+    });
+  
+  
+  
+  });
+  
 app.listen(port);
