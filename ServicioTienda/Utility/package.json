@@ -1,0 +1,27 @@
+{
+  "name": "utility",
+  "version": "1.0.0",
+  "description": "Utility meant to be used in the SA project",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ChechaJosue/SA_G1.git"
+  },
+  "keywords": [
+    "Utility",
+    "SA"
+  ],
+  "author": "Renato Flores",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChechaJosue/SA_G1/issues"
+  },
+  "homepage": "https://github.com/ChechaJosue/SA_G1#readme",
+  "dependencies": {
+    "aws-sdk": "^2.922.0",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
