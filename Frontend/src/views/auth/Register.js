@@ -31,21 +31,21 @@ export default function Register() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const usuario = {
+    let usuario = {
       nombre: nombreRef.current.value,
-      apellido: apellidosRef.current.value,
       correo: correoRef.current.value,
       pwd: pwdRef.current.value,
-      telefono: telefonoRef.current.value,
       tipo: tipoUsuario === "Cliente" ? 2 : 1,
     };
 
-    console.log(usuario);
+    if(tipoUsuario === "Cliente"){
+      usuario = { ...usuario, apellido: apellidosRef.current.value, telefono: telefonoRef.current.value }
+    } else {
+      usuario = { ...usuario, direccion: direccionRef.current.value,  }
+    }
 
     const rawResponse = await registrarUsuario(usuario);
     const respuesta = await rawResponse.json();
-
-    console.log(respuesta);
 
     if (rawResponse.status !== 201) {
       swalPersonalizado.fire({
@@ -63,7 +63,6 @@ export default function Register() {
     });
 
     limpiarInputs();
-
     localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
     setCookie('accesToken', respuesta.accessToken, { path: '/'})
     history.push("/admin/perfil");
