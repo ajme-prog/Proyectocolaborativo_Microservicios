@@ -11,6 +11,8 @@ AWS.config.update({
 const doc_client = new AWS.DynamoDB.DocumentClient();
 
 function verify_token(req, res, next) {
+  //If not in production, we avoid authentication.
+  if(process.env.NODE_ENV=='development') return next(); 
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (token == null) return res.sendStatus(401);
@@ -29,6 +31,9 @@ function wrap_function(anotherFunction,debugInfo=null) {
   return function (req, res) {
 	  if(debugInfo)console.log(debugInfo);
     anotherFunction(req, res).catch((err) => {
+      console.log(
+         err["message"] ? err["message"] : "Internal server error." 
+      );
       return res.status(500).json({
         message: err["message"] ? err["message"] : "Internal server error."
       });

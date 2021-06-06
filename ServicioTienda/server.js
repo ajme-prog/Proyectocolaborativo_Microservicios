@@ -8,8 +8,8 @@ const main = require('./main.js');
 const w = utils.wrap_function;
 const v = utils.verify_token;
 
-router.post("/feed", v, w(main.feed));
-router.post("/search", v, w(main.search));
+router.get("/feed", v, w(main.feed));
+router.get("/profile", v, w(main.profile));
 
 const app = express()
   .use(cors())
