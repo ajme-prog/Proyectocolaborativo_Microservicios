@@ -1,10 +1,13 @@
 const doc_client = require('./Utility').doc_client;
 
-async function feed(req, res) {
+async function profile(req, res) {
+  const u = req['usuarioReq'];
+  if(u)console.log(u);
+  const id = u?u.usuario:'222126ea2e363c0fcde6992e7f3e2e80c12bb052b042d361';
   const params = {
     TableName: "usuario",
-    FilterExpression: "correo = :corr",
-    ExpressionAttributeValues: {":corr": "josue@gmail.com"}
+    FilterExpression: "usuario = :id",
+    ExpressionAttributeValues: {":id": id}
   }
 
   const profile = await doc_client.scan(params).promise();
@@ -13,8 +16,15 @@ async function feed(req, res) {
   });
 }
 
-async function profile(req, res) {
-  return res.send({"status":"Not implemented yet"});
+async function feed(req, res) {
+  const params = {
+    TableName: "Libros"
+  }
+
+  const libros = await doc_client.scan(params).promise();
+  return res.send({
+    libros: libros.Items
+  });
 }
 
 module.exports = {feed, profile};
