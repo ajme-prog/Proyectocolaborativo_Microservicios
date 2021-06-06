@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 app.put("/registro", async (req, res) => {
-  console.log("\n[REGISTRO]");
+  
   let registro = req.body;
 
   console.log(registro);
@@ -69,6 +69,8 @@ app.put("/registro", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
+  
+  console.log("\n[LOGIN]");
   //Autenticar al usuario
   const correo = req.body.correo;
   const pwd = req.body.pwd;
@@ -85,7 +87,7 @@ app.post("/login", async (req, res) => {
 
   const user = { usuario: usuarioLogin.usuario, tipo: usuarioLogin.tipo };
   const acces_token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-  res.json({ accessToken: acces_token, usuario: usuarioLogin });
+  res.status(200).json({ accessToken: acces_token, usuario: usuarioLogin });
 });
 
 app.post("/administrador/aprobar", autenticarToken, async (req, res) => {

@@ -1,7 +1,64 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useRef, useState } from "react";
+import { loginUsuario } from "../../services/autenticacion";
+import Swal from "sweetalert2";
+import { Link, useHistory } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export default function Login() {
+
+  const [cookies, setCookie] = useCookies(['usuario']);
+  const history = useHistory();
+  const correoRef = useRef();
+  const pwdRef = useRef();
+
+
+  const swalPersonalizado = Swal.mixin({
+    customClass: {
+      confirmButton:
+        "bg-amber-500 text-white active:bg-amber-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear",
+    },
+    buttonsStyling: false,
+  });
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const correo = correoRef.current.value
+    const pwd = pwdRef.current.value
+
+    if(!(correo && pwd)){
+      swalPersonalizado.fire({
+        icon: "warning",
+        title: "Campos",
+        text: "Debes colocar tu correo y contraseña",
+      });
+      return;
+    }
+
+    const rawResponse = await loginUsuario(correo, pwd);
+    const respuesta = await rawResponse.json();
+    console.log(respuesta)
+
+    if (rawResponse.status !== 200) {
+      swalPersonalizado.fire({
+        icon: "error",
+        title: "Error",
+        text: respuesta.mensaje,
+      });
+      return;
+    }
+
+    swalPersonalizado.fire({
+      icon: "success",
+      title: "Login",
+      text: respuesta.mensaje,
+    });
+
+    localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
+    setCookie('accesToken', respuesta.accessToken, { path: '/'})
+    history.push("/admin/perfil");
+  }
+
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -14,14 +71,14 @@ export default function Login() {
                     BOOKSA
                   </h6>
                 </div>
-                
+
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
               </div>
               <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
                   <small>Ingresa mediante tu correo y contraseña</small>
                 </div>
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -30,9 +87,11 @@ export default function Login() {
                       Correo
                     </label>
                     <input
+                      ref={correoRef}
                       type="email"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Correo electrónico"
+                      required
                     />
                   </div>
 
@@ -44,16 +103,18 @@ export default function Login() {
                       Contraseña
                     </label>
                     <input
+                      ref={pwdRef}
                       type="password"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Contraseña"
+                      required
                     />
                   </div>
 
                   <div className="text-center mt-6">
                     <button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      type="button"
+                      type="submit"
                     >
                       Iniciar sesión
                     </button>
