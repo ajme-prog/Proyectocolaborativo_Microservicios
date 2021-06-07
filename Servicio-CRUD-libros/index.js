@@ -1,28 +1,41 @@
 var express = require('express');
-const AWS = require('aws-sdk');
+const AWS = require('./Servicios/AWS')
 var cors = require('cors')
 var bodyParser = require('body-parser')
 const config = require('./Servicios/config.js');
 const crypto = require('crypto');
 var app = express();
 const generarID = () => crypto.randomBytes(10).toString("hex");
+
+const bucket_name = 'practica2-g28-imagenes'
+const s3 = new AWS.S3({apiVersion: '2006-03-01'})
+var docClient = new AWS.DynamoDB(config.aws_remote_config);
+
 port = 4040;
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use(cors());
 
 
-var docClient = new AWS.DynamoDB(config.aws_remote_config);
 
+//------------CRUD LIBROS---
+app.post('/libros',function(req,res){
 
-//------------CRUD GENEROS---
-app.post('/generoliterario',function(req,res){
+    //-------------primero verifico que no exista un libro con ese nombre
 
-    //-------------primero verifico que no exista un album con ese nombre
+    var id_libro = generarID();
     var nombre=req.body.nombre; 
-    var id_genero = generarID();
+    var generos=req.body.generos;
+    var stock=req.body.stock;
+    var autor=req.body.autor;
+    var editorial=req.body.editorial;
+    var numeropaginas=req.body.paginas;
+    var fechapublicacion=req.body.fechapublicacion;
+    var idioma=req.body.idioma;
+
+
     const params1 = {
-      TableName: 'GeneroLiterario',
+      TableName: 'Libros',
       FilterExpression: "#cg = :data",
       ExpressionAttributeNames: {
           "#cg": "nombre",
@@ -33,8 +46,7 @@ app.post('/generoliterario',function(req,res){
       }
     };
     
-    
-    
+     
     // Call DynamoDB to read the item from the table
     docClient.scan(params1, async function(err, data) {
       if (err) {
@@ -44,15 +56,25 @@ app.post('/generoliterario',function(req,res){
         if(data.Items.length!=0){
           res.send({
             status:409,
-            mensaje: "Genero ya existe"
+            mensaje: "Nombre ya existe"
             });
         }else {
-    //---Si no existe paso a crear el album
+
+
+    //---Si no existe paso a crear el libro
     const params = {
-    TableName:'GeneroLiterario',
+    TableName:'Libros',
     Item: {
+ 
+      'id': {S: id_libro},
       'nombre': {S: nombre},
-      'id': {S: id_genero}
+      'generos': {SS: generos},
+      'stock': {N: stock},
+      'autor': {S: autor},
+      'editorial': {S: editorial},
+      'numeropaginas': {N: numeropaginas},
+      'fechapublicacion': {S: fechapublicacion},
+      'idioma': {S: idioma}
     }
     };
     
@@ -68,7 +90,7 @@ app.post('/generoliterario',function(req,res){
      console.log("SI ENTRE A PUT "+ data);
      res.send({
      status:200,
-     mensaje: {nombre:nombre,id:id_genero}
+     mensaje: {nombre:nombre,id:id_libro}
      });
       }
     } );
@@ -81,8 +103,8 @@ app.post('/generoliterario',function(req,res){
     
     });
 
-//------OBTENER TODOS LOS GENEROS
-//------obtener todos los albumes del usuario
+//------OBTENER TODOS LOS LIBROS
+
 app.get('/generoliterario',function(req,res){
 
     var id_usuario = req.params.id_usuario;
@@ -188,6 +210,8 @@ app.get('/generoliterario',function(req,res){
     });
 
 
+
+
     //----actualizar listaprueba
       
   app.post('/actualizarlista',function(req,res){
@@ -196,7 +220,8 @@ app.get('/generoliterario',function(req,res){
     var nombre=req.body.nombre; 
     var id_genero = req.body.id;
     var lista=["BARCELONA","MADRID","FRANCIA"];
-  
+    var lista2=req.body.lista;
+    console.log("La lista es "+lista2)
     
     const params = {
         TableName: "Libros",
@@ -206,7 +231,7 @@ app.get('/generoliterario',function(req,res){
         },
         ExpressionAttributeValues: {
            
-            ':generos': { SS: lista }
+            ':generos': { SS: lista2 }
             
         },
         UpdateExpression: "set generos = :generos",
@@ -236,4 +261,33 @@ app.get('/generoliterario',function(req,res){
     
     });
 
+
+
+ //---------Subir imagen a S3
+async function upload_file(path, payload){
+  return new Promise((resolve, reject) => {
+    buffer = new Buffer.from(payload,'base64')
+
+    const params = {
+      Bucket: bucket_name,
+      Key: path, // File name you want to save as in S3
+      Body: buffer,
+      ACL:'public-read',
+      ContentEncoding: 'base64', // required
+      ContentType: `image/png`
+    };
+    
+    // Uploading files to the bucket
+    s3.upload(params, function(err, data) {
+        if (err) {
+          console.log(err)
+          reject(err)
+        }
+        console.log(`File uploaded successfully. ${data.Location}`)
+        resolve(`File uploaded successfully. ${data.Location}`)
+    });
+  })
+}
+
+   
 app.listen(port);
