@@ -7,7 +7,7 @@ const crypto = require('crypto');
 var app = express();
 const generarID = () => crypto.randomBytes(10).toString("hex");
 
-const bucket_name = 'practica2-g28-imagenes'
+const bucket_name = 'imagenesproyectosa'
 const s3 = new AWS.S3({apiVersion: '2006-03-01'})
 var docClient = new AWS.DynamoDB(config.aws_remote_config);
 
@@ -32,7 +32,8 @@ app.post('/libros',function(req,res){
     var numeropaginas=req.body.paginas;
     var fechapublicacion=req.body.fechapublicacion;
     var idioma=req.body.idioma;
-
+    var foto=req.body.foto;
+    var precio=req.body.precio;
 
     const params1 = {
       TableName: 'Libros',
@@ -62,6 +63,14 @@ app.post('/libros',function(req,res){
 
 
     //---Si no existe paso a crear el libro
+
+                //-----------SUBIR IMAGEN A S3
+
+ubicacion=  await upload_file(id_libro+".png",foto);
+object_url ="https://imagenesproyectosa.s3.amazonaws.com/"+id_libro+".png"
+console.log("LA IMAGEN DE PERFIL SE GUARDO EN "+object_url);
+
+    if(foto!=""){
     const params = {
     TableName:'Libros',
     Item: {
@@ -69,12 +78,14 @@ app.post('/libros',function(req,res){
       'id': {S: id_libro},
       'nombre': {S: nombre},
       'generos': {SS: generos},
-      'stock': {N: stock},
+      'stock': {S: stock},
       'autor': {S: autor},
       'editorial': {S: editorial},
-      'numeropaginas': {N: numeropaginas},
+      'numeropaginas': {S: numeropaginas},
       'fechapublicacion': {S: fechapublicacion},
-      'idioma': {S: idioma}
+      'idioma': {S: idioma},
+      'imagen': {S: object_url},
+      'precio': {S: precio}
     }
     };
     
@@ -82,7 +93,7 @@ app.post('/libros',function(req,res){
       if(err){
           res.send({
              status: 400,
-             mensaje: 'Error: Server error'
+             mensaje: 'Error: Server error'+err
           });
       }
       else {
@@ -94,7 +105,12 @@ app.post('/libros',function(req,res){
      });
       }
     } );
-    
+  }
+else { //---sino viene código b64
+
+}
+
+
         }
     
       }
