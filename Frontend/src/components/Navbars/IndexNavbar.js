@@ -138,7 +138,7 @@ export default function Navbar(props) {
                     type="button"
                     onClick={() => setShowModal(false)}
                   >
-                    Realizar Compra
+                    Realizar Compra.
                   </button>
                 </div>
               </div>

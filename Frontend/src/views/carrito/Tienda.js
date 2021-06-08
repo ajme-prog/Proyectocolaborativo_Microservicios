@@ -217,9 +217,9 @@ export const Tienda = (props) => {
             <>
               <div className="w-full xl:w-4/12 px-4">
                 <CardProductoTienda
-                  titulo={producto.nombre.S}
+               
                   index={index}
-                
+                  objeto={producto}
                 ></CardProductoTienda>
               </div>
             </>
