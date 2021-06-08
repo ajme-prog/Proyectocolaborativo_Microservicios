@@ -78,6 +78,7 @@ export default function CardProfile() {
             </div>
           </div>
         </div>
+      
       </div>
     </>
   );
