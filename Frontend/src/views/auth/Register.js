@@ -1,6 +1,86 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import { registrarUsuario } from "../../services/autenticacion";
+import Swal from "sweetalert2";
+import { Link, useHistory } from "react-router-dom";
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function Register() {
+  const [tipoUsuario, setTipoUsuario] = useState("Cliente");
+  const {cookies, setCookie} = useAuth();
+  const history = useHistory();
+
+  // Usuario tipo cliente
+  const nombreRef = useRef();
+  const apellidosRef = useRef();
+  const telefonoRef = useRef();
+  const correoRef = useRef();
+  const pwdRef = useRef();
+
+  //Swal
+  const swalPersonalizado = Swal.mixin({
+    customClass: {
+      confirmButton:
+        "bg-amber-500 text-white active:bg-amber-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear",
+    },
+    buttonsStyling: false,
+  });
+
+  // Usuario tipo editorial
+  const direccionRef = useRef();
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    let usuario = {
+      nombre: nombreRef.current.value,
+      correo: correoRef.current.value,
+      pwd: pwdRef.current.value,
+      tipo: tipoUsuario === "Cliente" ? 2 : 1,
+    };
+
+    if(tipoUsuario === "Cliente"){
+      usuario = { ...usuario, apellido: apellidosRef.current.value, telefono: telefonoRef.current.value }
+    } else {
+      usuario = { ...usuario, direccion: direccionRef.current.value,  }
+    }
+
+    const rawResponse = await registrarUsuario(usuario);
+    const respuesta = await rawResponse.json();
+
+    if (rawResponse.status !== 201) {
+      swalPersonalizado.fire({
+        icon: "error",
+        title: "Error",
+        text: respuesta.mensaje,
+      });
+      return;
+    }
+
+    swalPersonalizado.fire({
+      icon: "success",
+      title: "Registro",
+      text: respuesta.mensaje,
+    });
+
+    limpiarInputs();
+    localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
+    setCookie('accessToken', respuesta.accessToken, { path: '/'})
+    history.push("/admin/perfil");
+  }
+
+  function limpiarInputs() {
+    nombreRef.current.value = "";
+    correoRef.current.value = "";
+    pwdRef.current.value = "";
+
+    if (tipoUsuario === "Cliente") {
+      apellidosRef.current.value = "";
+      telefonoRef.current.value = "";
+    } else {
+      direccionRef.current.value = "";
+    }
+  }
+
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -10,51 +90,106 @@ export default function Register() {
               <div className="rounded-t mb-0 px-6 py-6">
                 <div className="text-center mb-3">
                   <h6 className="text-blueGray-500 text-sm font-bold">
-                    Sign up with
+                    BOOKSA
                   </h6>
                 </div>
-                <div className="btn-wrapper text-center">
-                  <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    <img
-                      alt="..."
-                      className="w-5 mr-1"
-                      src={require("assets/img/github.svg").default}
-                    />
-                    Github
-                  </button>
-                  <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    <img
-                      alt="..."
-                      className="w-5 mr-1"
-                      src={require("assets/img/google.svg").default}
-                    />
-                    Google
-                  </button>
-                </div>
+
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
               </div>
               <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
-                  <small>Or sign up with credentials</small>
+                  <small>
+                    Crear una nueva cuenta de{" "}
+                    <span className="text-amber-500">{tipoUsuario}</span>
+                  </small>
+                  {tipoUsuario === "Editorial" && (
+                    <div>
+                      <br />
+                      <small className="text-blueGray-500">
+                        Deberá esperar a que el administrador apruebe el
+                        registro
+                      </small>
+                    </div>
+                  )}
                 </div>
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="grid-password"
                     >
-                      Name
+                      Tipo
+                    </label>
+                    <select
+                      onChange={(event) => setTipoUsuario(event.target.value)}
+                      value={tipoUsuario}
+                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    >
+                      <option>Cliente</option>
+                      <option>Editorial</option>
+                    </select>
+                  </div>
+
+                  <div className="relative w-full mb-3">
+                    <label
+                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                      htmlFor="grid-password"
+                    >
+                      {tipoUsuario === "Cliente" ? "Nombres" : "Nombre"}
                     </label>
                     <input
+                      ref={nombreRef}
+                      type="text"
+                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                      placeholder="Nombre"
+                    />
+                  </div>
+
+                  {tipoUsuario === "Cliente" && (
+                    <>
+                      <div className="relative w-full mb-3">
+                        <label
+                          className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                          htmlFor="grid-password"
+                        >
+                          Apellidos
+                        </label>
+                        <input
+                          ref={apellidosRef}
+                          type="text"
+                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                          placeholder="Apellidos"
+                        />
+                      </div>
+                      <div className="relative w-full mb-3">
+                        <label
+                          className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                          htmlFor="grid-password"
+                        >
+                          Telefono
+                        </label>
+                        <input
+                          ref={telefonoRef}
+                          type="number"
+                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                          placeholder="Telefono"
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  <div className="relative w-full mb-3">
+                    <label
+                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                      htmlFor="grid-password"
+                    >
+                      Correo electrónico
+                    </label>
+                    <input
+                      ref={correoRef}
                       type="email"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Name"
+                      placeholder="Correo electrónico"
                     />
                   </div>
 
@@ -63,58 +198,49 @@ export default function Register() {
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="grid-password"
                     >
-                      Email
+                      Contraseña
                     </label>
                     <input
-                      type="email"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Email"
-                    />
-                  </div>
-
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Password
-                    </label>
-                    <input
+                      ref={pwdRef}
                       type="password"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Password"
+                      placeholder="Contraseña"
                     />
                   </div>
 
-                  <div>
-                    <label className="inline-flex items-center cursor-pointer">
+                  {tipoUsuario === "Editorial" && (
+                    <div className="relative w-full mb-3">
+                      <label
+                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        htmlFor="grid-password"
+                      >
+                        Dirección física
+                      </label>
                       <input
-                        id="customCheckLogin"
-                        type="checkbox"
-                        className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
+                        ref={direccionRef}
+                        type="text"
+                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        placeholder="Dirección física"
                       />
-                      <span className="ml-2 text-sm font-semibold text-blueGray-600">
-                        I agree with the{" "}
-                        <a
-                          href="#pablo"
-                          className="text-lightBlue-500"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          Privacy Policy
-                        </a>
-                      </span>
-                    </label>
-                  </div>
+                    </div>
+                  )}
 
                   <div className="text-center mt-6">
                     <button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      type="button"
+                      type="submit"
                     >
-                      Create Account
+                      Crear cuenta
                     </button>
                   </div>
                 </form>
+              </div>
+            </div>
+            <div className="flex flex-wrap mt-6 relative">
+              <div className="w-full text-center">
+                <Link to="/auth/login" className="text-blueGray-200">
+                  <small>¿Ya tienes una cuenta? Iniciar sesión</small>
+                </Link>
               </div>
             </div>
           </div>

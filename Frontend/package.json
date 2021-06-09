@@ -1,7 +1,7 @@
 {
   "name": "notus-react",
   "version": "1.1.0",
-  "description": "Notus React - A free Tailwind CSS and React UI Kit and Admin by Creative Tim.",
+  "description": "BookSA - A free Tailwind CSS and React UI Kit and Admin by Creative Tim.",
   "repository": "https://github.com/creativetimofficial/notus-react",
   "license": "MIT",
   "dependencies": {
@@ -14,10 +14,12 @@
     "gulp-append-prepend": "1.0.8",
     "postcss": "8.2.8",
     "react": "17.0.1",
+    "react-cookie": "^4.0.3",
     "react-dom": "17.0.1",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
+    "sweetalert2": "^11.0.16",
     "tailwindcss": "2.0.4"
   },
   "scripts": {

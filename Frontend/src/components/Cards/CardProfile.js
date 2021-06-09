@@ -50,7 +50,7 @@ export default function CardProfile() {
             </div>
             <div className="mb-2 text-blueGray-600 mt-10">
               <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-              Solution Manager - Creative Tim Officer
+              Solution Manager - BookSA Officer
             </div>
             <div className="mb-2 text-blueGray-600">
               <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
@@ -69,7 +69,7 @@ export default function CardProfile() {
                 </p>
                 <a
                   href="#pablo"
-                  className="font-normal text-lightBlue-500"
+                  className="font-normal text-amber-500"
                   onClick={(e) => e.preventDefault()}
                 >
                   Show more
