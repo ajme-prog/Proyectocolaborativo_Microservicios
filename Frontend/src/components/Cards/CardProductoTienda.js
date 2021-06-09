@@ -7,13 +7,17 @@ export default function CardProductoCarrito(props) {
   console.log(props.objeto)
   const [producto, setProducto] = useState(props.objeto);
   const [agregar, setAgregado] = useState(false);
-
+  const [showAlert, setShowAlert] = React.useState(false);
 
   const agregarCarrito = (i) => {
 
-    console.log(agregar)
     if(agregar){
-      alert("Ya está agregado al carrito")
+
+      setShowAlert(true)
+
+      setTimeout(() => {
+        setShowAlert(false)
+      }, 1000)
       return;
     }
 
@@ -39,11 +43,6 @@ export default function CardProductoCarrito(props) {
 
   return (
     <>
-
-
-
-
-
       <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
         <div className="rounded-t mb-0 px-4 py-3 border-0">
           <div className="flex flex-wrap items-center">
@@ -94,6 +93,19 @@ export default function CardProductoCarrito(props) {
           </div>
         </div>
       </div>
+
+      {showAlert ? (
+        <div
+          className="text-white px-6 py-4 border-0 rounded relative mb-4 bg-red-500"
+        >
+          
+          <span className="inline-block align-middle mr-8">
+            <b className="capitalize">Error!</b> El producto ya esta agregado al carrito
+          </span>
+         
+        </div>
+      ) : null}
+    
     </>
   );
 }
