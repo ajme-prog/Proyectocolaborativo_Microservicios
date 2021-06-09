@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 export default function Login() {
 
   const [cookies, setCookie] = useCookies(['usuario']);
+  const [loading, setLoading] = useState(false)
   const history = useHistory();
   const correoRef = useRef();
   const pwdRef = useRef();
@@ -22,7 +23,7 @@ export default function Login() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-
+    setLoading(true)
     const correo = correoRef.current.value
     const pwd = pwdRef.current.value
 
@@ -45,6 +46,7 @@ export default function Login() {
         title: "Error",
         text: respuesta.mensaje,
       });
+      setLoading(false)
       return;
     }
 
@@ -55,7 +57,8 @@ export default function Login() {
     });
 
     localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
-    setCookie('accesToken', respuesta.accessToken, { path: '/'})
+    setCookie('accessToken', respuesta.accessToken, { path: '/'})
+    setLoading(false)
     history.push("/admin/perfil");
   }
 
@@ -116,7 +119,7 @@ export default function Login() {
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                       type="submit"
                     >
-                      Iniciar sesión
+                      {loading ? "Cargando..." : "Iniciar sesión"}
                     </button>
                   </div>
                 </form>

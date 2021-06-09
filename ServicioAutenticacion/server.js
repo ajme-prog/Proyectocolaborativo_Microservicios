@@ -15,7 +15,6 @@ app.use(express.json());
 app.use(cors());
 
 app.put("/registro", async (req, res) => {
-  
   let registro = req.body;
 
   console.log(registro);
@@ -64,12 +63,15 @@ app.put("/registro", async (req, res) => {
   const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
   console.log("\n[REGISTRO] ", registro.nombre, "\n");
-  delete registro.pwd
-  res.status(201).json({ mensaje: resultado.mensaje, accessToken: accessToken, usuario: registro });
+  delete registro.pwd;
+  res.status(201).json({
+    mensaje: resultado.mensaje,
+    accessToken: accessToken,
+    usuario: registro,
+  });
 });
 
 app.post("/login", async (req, res) => {
-  
   console.log("\n[LOGIN]");
   //Autenticar al usuario
   const correo = req.body.correo;
@@ -107,8 +109,32 @@ app.post("/administrador/aprobar", autenticarToken, async (req, res) => {
   res.status(200).json({ mensaje: resultado.mensaje });
 });
 
+app.get(
+  "/administrador/editoriales-pendientes",
+  autenticarToken,
+  async (req, res) => {
+    console.log("\n[EDITORIALES-PENDIENTES]")
+    const usuarioAdmin = req.usuarioReq;
+
+    console.log(usuarioAdmin)
+
+    if (!(usuarioAdmin && usuarioAdmin.tipo === 0))
+      return res
+        .status(403)
+        .json({ mensaje: "No posee los permisos necesarios" });
+
+    const resultado = await funciones.recuperarEditorialesPendientes();
+
+    if (resultado.error)
+      return res.status(400).json({ mensaje: resultado.mensaje });
+
+    res.status(200).json({ datos: resultado.datos });
+  }
+);
+
 function autenticarToken(req, res, next) {
   const authHeader = req.headers["authorization"];
+  console.log('Autenticando Token: ', authHeader)
   const token = authHeader && authHeader.split(" ")[1];
   if (token == null) return res.sendStatus(401);
 
