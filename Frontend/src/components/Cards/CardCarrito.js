@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 export default function CardCarrito(props) {
   const [carrito, setCarrito] = useState(props.lista);
-
+  console.log("2222222222222222",carrito)
   const sumar = (i, id) => {
     //setCantidad(cantidad + 1);
     modificar_cantidad(0, i, id);
@@ -20,15 +20,15 @@ export default function CardCarrito(props) {
       nuevo_precio = 0;
 
     for (let j = 0; j < carrito.length; j++) {
-      if (carrito[j].id_producto == id) {
-        console.log(carrito[j].cantidad);
+      if (carrito[j].id.S == id) {
         if (tipo == 0) {
-          carrito[j].cantidad += 1;
+          carrito[j].cantidad.S += 1;
         } else {
-          carrito[j].cantidad -= 1;
+          carrito[j].cantidad.S -= 1;
         }
-        nueva_cantidad = carrito[j].cantidad;
-        nuevo_precio = carrito[j].cantidad * carrito[j].precio;
+        nueva_cantidad = carrito[j].cantidad.S;
+        nuevo_precio = carrito[j].cantidad.S * parseInt(carrito[j].precio.S);
+        carrito[j].subtotal.S = nuevo_precio;
 
         break;
       }
@@ -113,7 +113,7 @@ export default function CardCarrito(props) {
                     <tr>
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                         <img
-                          src={producto.imagen}
+                          src={producto.imagen.S}
                           className="h-12 w-12 bg-white rounded-full border"
                           alt="..."
                         ></img>{" "}
@@ -125,35 +125,35 @@ export default function CardCarrito(props) {
                               : "text-white")
                           }
                         >
-                          {producto.nombre}
+                          {producto.nombre.S}
                         </span>
                       </th>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         <i
                           className="text-blueGray-400 fas fa-minus-circle text-lg leading-lg "
-                          onClick={() => restar(index, producto.id_producto)}
+                          onClick={() => restar(index, producto.id.S)}
                         />
 
                         <input
                           type="text"
                           className="border-0 px-1 py-2 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          value={producto.cantidad}
+                          value={producto.cantidad.S}
                           id={"input" + index}
                         />
 
                         <i
                           className="text-blueGray-400 fas fa-plus-circle text-lg leading-lg "
-                          onClick={() => sumar(index, producto.id_producto)}
+                          onClick={() => sumar(index, producto.id.S)}
                         />
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {producto.precio}
+                        {producto.precio.S}
                       </td>
                       <td
                         className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
                         id={"subtotal" + index}
                       >
-                        <p>Q {producto.cantidad * producto.precio}</p>
+                        <p>Q {producto.cantidad.S * parseInt(producto.precio.S)}</p>
                       </td>
                     </tr>
                   </>

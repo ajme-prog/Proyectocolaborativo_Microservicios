@@ -22,17 +22,15 @@ export default function CardProductoCarrito(props) {
     }
 
     var js = {
-      id_producto: producto.id.S,
-      nombre:producto.nombre.S,
-      precio:parseInt(producto.precio.S),
-      imagen: producto.imagen.S,
-      cantidad:1
+      ...producto,
+      cantidad:{S: 1},
+      subtotal:{S: 1*producto.precio.S}
     };
 
+    console.log("aaaaaaaaaaa",js)
 
     var lista = JSON.parse(localStorage.getItem("Carrito"));
     
-    console.log(lista)
     lista.push(js);
     localStorage.setItem("Carrito",JSON.stringify(lista))
 

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import Footer from "components/Footers/Footer.js";
 import { Tienda } from "./carrito/Tienda";
+import Carrito from "./carrito/Carrito";
 
 
 export default function Index() {
@@ -668,7 +669,7 @@ export default function Index() {
       </section>
       <Footer /> */}
 
-     <Tienda></Tienda>
+     <Carrito></Carrito>
     </>
   
     </>

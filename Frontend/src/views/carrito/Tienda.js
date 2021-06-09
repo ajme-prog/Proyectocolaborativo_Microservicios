@@ -16,13 +16,12 @@ export const Tienda = (props) => {
 
 
   useEffect(() => {
-    localStorage.setItem("Carrito",JSON.stringify([]))
+    //localStorage.setItem("Carrito",JSON.stringify([]))
     obtenerLibros();
   }, []);
 
   const get_caro=(libros)=>{
 
-    console.log("**************************",libros)
     let actual={}
     let precio=0
     libros.map((producto)=>{
@@ -39,9 +38,9 @@ export const Tienda = (props) => {
 
   const get_barato=(libros)=>{
 
-    console.log("**************************",libros)
     let actual={}
     let precio=1111111100000
+
     libros.map((producto)=>{
       let precio_ciclo=parseInt(producto.precio.S)
       if(precio_ciclo<precio){
@@ -79,74 +78,14 @@ export const Tienda = (props) => {
       .catch((error) => console.log(error));
   };
 
-  /*
-  const generarCompra = () => {
-    var usu = JSON.parse(localStorage.getItem("current"));
-    var direc = document.getElementById("txtDireccion").value;
-    var arr = this.state.ListaCarrito;
-    //console.log(this.state.allowCustom);
-    console.log(usu);
-    console.log(direc);
-    var id_usuario = 1;
-    if (usu != null) {
-      id_usuario = usu.id;
-    }
 
-    fetch(`${URL.pedidos}/crearOrden`, {
-      method: "POST",
-      body: JSON.stringify({
-        pedido_usuario: id_usuario,
-        enviar: this.state.allowCustom,
-        direccion: direc,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        mode: "no-cors",
-      },
-    })
-      .then(async function (response) {
-        let respuesta = await response.json();
-        console.log(respuesta[0].id);
-
-        try {
-          for (let i = 0; i < arr.length; i++) {
-            fetch(`${URL.pedidos}/detalleOrden`, {
-              method: "POST",
-              body: JSON.stringify({
-                id: respuesta[0].id,
-                pedido_producto: arr[i].id_producto,
-                pedido_usuario: id_usuario,
-                cantidad: arr[i].cantidad,
-              }),
-              headers: {
-                "Content-Type": "application/json",
-                mode: "no-cors",
-              },
-            })
-              .then(async function (response) {
-                let respuesta = await response.json();
-                console.log(respuesta);
-                //alert("Producto agregado correctamente");
-                window.location.reload();
-              })
-              .catch((error) => console.log(error));
-          }
-        } catch (error) {
-          alert(error);
-        }
-      })
-      .catch((error) => console.log(error));
-  };
-
-
-  };*/
 
   return (
     <>
-      <div className="relative bg-lightBlue-600 md:pt-32 pb-32 pt-12">
+    
+      <div className="relative  pb-20 pt-12">
         <div className="px-4 md:px-10 mx-auto w-full">
           <div>
-            {/* Card stats */console.log("************",libro_caro)}
             <div className="flex flex-wrap">
               <div className="w-full lg:w-6/12 xl:w-6/12 px-4">
                 <CardStats
@@ -178,6 +117,7 @@ export const Tienda = (props) => {
         </div>
       </div>
 
+{/* <div className="px-4 md:px-10 mx-auto w-full -m-24"></div> */}
       <div className="flex flex-wrap">
         {libros.map((producto, index) => {
           return (
