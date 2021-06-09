@@ -2,11 +2,11 @@ import React, { useRef, useState } from "react";
 import { registrarUsuario } from "../../services/autenticacion";
 import Swal from "sweetalert2";
 import { Link, useHistory } from "react-router-dom";
-import { useCookies } from 'react-cookie';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function Register() {
   const [tipoUsuario, setTipoUsuario] = useState("Cliente");
-  const [cookies, setCookie] = useCookies(['usuario']);
+  const {cookies, setCookie} = useAuth();
   const history = useHistory();
 
   // Usuario tipo cliente
@@ -64,7 +64,7 @@ export default function Register() {
 
     limpiarInputs();
     localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
-    setCookie('accesToken', respuesta.accessToken, { path: '/'})
+    setCookie('accessToken', respuesta.accessToken, { path: '/'})
     history.push("/admin/perfil");
   }
 

@@ -2,11 +2,11 @@ import React, { useRef, useState } from "react";
 import { loginUsuario } from "../../services/autenticacion";
 import Swal from "sweetalert2";
 import { Link, useHistory } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function Login() {
 
-  const [cookies, setCookie] = useCookies(['usuario']);
+  const { setCookie, setCurrentUser, cookies } = useAuth()
   const [loading, setLoading] = useState(false)
   const history = useHistory();
   const correoRef = useRef();
@@ -57,9 +57,16 @@ export default function Login() {
     });
 
     localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
-    setCookie('accessToken', respuesta.accessToken, { path: '/'})
+    await setCookie('accessToken', respuesta.accessToken, { path: '/'})
     setLoading(false)
-    history.push("/admin/perfil");
+    
+    if(respuesta.usuario.tipo === 0){
+      console.log('Es admin')
+      history.push("/admin/dashboard");
+    } else {
+      console.log('Es editorial')
+      history.push("/editorial/dashboard");
+    }
   }
 
   return (

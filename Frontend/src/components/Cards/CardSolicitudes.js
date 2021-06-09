@@ -24,7 +24,6 @@ export default function CardSolicitudes() {
     async function recuperarEditoriales() {
       const rawResponse = await editorialesPendientes(cookies.accessToken);
       const respuesta = await rawResponse.json();
-      console.log(respuesta);
       setEditoriales(respuesta.datos);
     }
 
@@ -154,10 +153,7 @@ export default function CardSolicitudes() {
                         className="bg-amber-500 text-white active:bg-amber-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                         type="button"
                         disabled={loading}
-                        onClick={() => {
-                          handleAprobar(editorial.usuario);
-                        }}
-                      >
+                        onClick={() => handleAprobar(editorial.usuario)}>
                         {loading ? "Cargando..." : "Aprobar"}
                       </button>
                     </td>
