@@ -42,6 +42,35 @@ async function loginUsuario(correo, pwd) {
   return itemsAll;
 }
 
+async function recuperarEditorialesPendientes() {
+  const params = {
+      TableName: "usuario",
+      FilterExpression: "#tipo = :tipo_val and #estado = :estado_val",
+      ExpressionAttributeNames: {
+          "#tipo": "tipo",
+          "#estado": "estado"
+      },
+      ExpressionAttributeValues: { 
+        ":tipo_val":  1,
+        ":estado_val": "Pendiente de aprobación"
+      },
+  };
+
+  let lastEvaluatedKey = 'SAGRUPO1'; 
+  const itemsAll = [];
+
+  while (lastEvaluatedKey) {
+      const data = await AWS.docClient.scan(params).promise();
+      itemsAll.push(...data.Items);
+      lastEvaluatedKey = data.LastEvaluatedKey;
+      if (lastEvaluatedKey) {
+          params.ExclusiveStartKey = lastEvaluatedKey;
+      }
+  }
+
+  return { error: false, datos: itemsAll};
+}
+
 async function aprobarEditorial(usuario_editorial) {
   /*const params = {
         TableName: "usuario",
@@ -78,4 +107,6 @@ async function aprobarEditorial(usuario_editorial) {
   }
 }
 
-module.exports = { insertarUsuario, loginUsuario, aprobarEditorial };
+
+
+module.exports = { insertarUsuario, loginUsuario, aprobarEditorial, recuperarEditorialesPendientes };
