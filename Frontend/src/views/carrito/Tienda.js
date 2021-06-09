@@ -1,51 +1,18 @@
-/*!
-
-=========================================================
-* Black Dashboard React v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useEffect, useState } from "react";
 import { URL } from "./rutas";
 
 import CardStats from "../../components/Cards/CardStats";
-
-// reactstrap components
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Table,
-  Form,
-  Button,
-  CardFooter,
-  FormGroup,
-  Input,
-  Row,
-  Col,
-  CardImg,
-  CardSubtitle,
-  CardText,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from "reactstrap";
 import CardProductoTienda from "components/Cards/CardProductoTienda";
+import { parse } from "postcss";
 
 export const Tienda = (props) => {
   const [libros, setLibros] = useState([]);
+  const [libro_caro, setLibroCaro] = useState({});
+  const [libro_barato, setLibroBarato] = useState({});
+  const [booleano, setBooleano] = useState(false);
+
+
+  
 
 
   useEffect(() => {
@@ -53,11 +20,43 @@ export const Tienda = (props) => {
     obtenerLibros();
   }, []);
 
-  const cModal = () => {
-    this.setState({ abrir: !this.state.abrir });
-  };
+  const get_caro=(libros)=>{
+
+    console.log("**************************",libros)
+    let actual={}
+    let precio=0
+    libros.map((producto)=>{
+      let precio_ciclo=parseInt(producto.precio.S)
+      if(precio_ciclo>precio){
+        actual=producto;
+        precio= precio_ciclo
+      }
+    })
+    //console.log(actual)
+    setLibroCaro(actual)
+
+  }
+
+  const get_barato=(libros)=>{
+
+    console.log("**************************",libros)
+    let actual={}
+    let precio=1111111100000
+    libros.map((producto)=>{
+      let precio_ciclo=parseInt(producto.precio.S)
+      if(precio_ciclo<precio){
+        actual=producto;
+        precio= precio_ciclo
+      }
+    })
+    //console.log(actual)
+    setLibroBarato(actual)
+    setBooleano(true)
+
+  }
 
   const obtenerLibros = () => {
+
     fetch(URL.obtener_productos, {
       method: "GET",
       headers: {
@@ -70,8 +69,9 @@ export const Tienda = (props) => {
         let respuesta = await response.json();
 
         if (respuesta.status === 200) {
-          console.log(respuesta.data);
           setLibros(respuesta.data);
+          get_caro(respuesta.data);
+          get_barato(respuesta.data);
         } else {
           alert("Error al crear el producto");
         }
@@ -138,17 +138,7 @@ export const Tienda = (props) => {
       .catch((error) => console.log(error));
   };
 
-  const quitarCarrito = (posicion) => {
-    var lista = this.state.ListaCarrito;
-    let posicion_pr = lista[posicion].posicion_producto;
-    var cantidad = document.getElementById("cant" + posicion_pr);
-    var boton = document.getElementById("butt" + posicion_pr);
 
-    lista.splice(posicion, 1);
-    cantidad.disabled = false;
-    console.log(cantidad);
-    boton.disabled = false;
-    this.setState({ ListaCarrito: lista });
   };*/
 
   return (
@@ -156,56 +146,33 @@ export const Tienda = (props) => {
       <div className="relative bg-lightBlue-600 md:pt-32 pb-32 pt-12">
         <div className="px-4 md:px-10 mx-auto w-full">
           <div>
-            {/* Card stats */}
+            {/* Card stats */console.log("************",libro_caro)}
             <div className="flex flex-wrap">
-              <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+              <div className="w-full lg:w-6/12 xl:w-6/12 px-4">
                 <CardStats
-                  statSubtitle="TRAFFIC"
-                  statTitle="350,897"
+                  statSubtitle="LIBRO MAS CARO"
+                  statTitle={booleano ?(libro_caro.nombre.S):"Cargando..."}
                   statArrow="up"
-                  statPercent="3.48"
+                  statPercent=""
                   statPercentColor="text-emerald-500"
-                  statDescripiron="Since last month"
-                  statIconName="far fa-chart-bar"
+                  statDescripiron={booleano ?("El precio es de Q "+libro_caro.precio.S):"Cargando..."}
+                  statIconName="far fa-plus-square"
                   statIconColor="bg-red-500"
                 />
               </div>
-              <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+              <div className="w-full lg:w-6/12 xl:w-6/12 px-4">
                 <CardStats
-                  statSubtitle="NEW USERS"
-                  statTitle="2,356"
+                  statSubtitle="LIBRO MAS BARATO"
+                  statTitle={booleano ?(libro_barato.nombre.S):"Cargando..."}
                   statArrow="down"
-                  statPercent="3.48"
+                  statPercent=""
                   statPercentColor="text-red-500"
-                  statDescripiron="Since last week"
-                  statIconName="fas fa-chart-pie"
+                  statDescripiron={booleano ?("El precio es de Q "+libro_barato.precio.S):"Cargando..."}
+                  statIconName="fas fa-minus-square"
                   statIconColor="bg-orange-500"
                 />
               </div>
-              <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                <CardStats
-                  statSubtitle="SALES"
-                  statTitle="924"
-                  statArrow="down"
-                  statPercent="1.10"
-                  statPercentColor="text-orange-500"
-                  statDescripiron="Since yesterday"
-                  statIconName="fas fa-users"
-                  statIconColor="bg-pink-500"
-                />
-              </div>
-              <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                <CardStats
-                  statSubtitle="PERFORMANCE"
-                  statTitle="49,65%"
-                  statArrow="up"
-                  statPercent="12"
-                  statPercentColor="text-emerald-500"
-                  statDescripiron="Since last month"
-                  statIconName="fas fa-percent"
-                  statIconColor="bg-lightBlue-500"
-                />
-              </div>
+             
             </div>
           </div>
         </div>
@@ -227,59 +194,7 @@ export const Tienda = (props) => {
         })}
       </div>
 
-      {/* <Modal isOpen={this.state.abrir}>
-        <ModalHeader>Detalle del Producto</ModalHeader>
-        <ModalBody>
-          <Card bg="primary" text="white">
-            <CardImg
-              top
-              width="100%"
-              src={this.state.producto.foto}
-              alt="Card image cap"
-            />
-            <CardBody>
-              <CardTitle tag="h3">{this.state.producto.nombre}</CardTitle>
-              <Row>
-                <Col>
-                  <CardSubtitle tag="h6" className="mb-2 text-muted">
-                    Precio
-                  </CardSubtitle>
-                  <CardText style={{ color: "white" }}>
-                    {this.state.producto.precio}
-                  </CardText>
-                </Col>
-                <Col>
-                  <CardSubtitle tag="h6" className="mb-2 text-muted">
-                    Restaurante
-                  </CardSubtitle>
-                  <CardText style={{ color: "white" }}>
-                    {this.state.producto.nombre_usuario}
-                  </CardText>
-                </Col>
-              </Row>
-              <br></br>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Descripcion
-              </CardSubtitle>
-              <CardText style={{ color: "white" }}>
-                {this.state.producto.descripcion}
-              </CardText>
-            </CardBody>
-          </Card>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            id={"buttD" + this.state.producto.i}
-            onClick={(e) => this.agregarCarrito(this.state.producto.i)}
-          >
-            Agregar a Carrito
-          </Button>
-          <Button color="secondary" onClick={this.cModal}>
-            Cerrar
-          </Button>
-        </ModalFooter>
-      </Modal>
-    */}
+    
     </>
   );
 };
