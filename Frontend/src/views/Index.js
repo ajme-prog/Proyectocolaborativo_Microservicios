@@ -14,8 +14,7 @@ export default function Index() {
 
 <>
       <IndexNavbar fixed />
-     
-      {/* <section className="header relative pt-16 items-center flex h-screen max-h-860-px">
+     <section className="header relative pt-16 items-center flex h-screen max-h-860-px">
         <div className="container mx-auto items-center flex flex-wrap">
           <div className="w-full md:w-8/12 lg:w-6/12 xl:w-6/12 px-4">
             <div className="pt-32 sm:pt-0">
@@ -667,9 +666,9 @@ export default function Index() {
           </div>
         </div>
       </section>
-      <Footer /> */}
+      <Footer /> 
 
-     <Carrito></Carrito>
+   
     </>
   
     </>

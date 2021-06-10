@@ -68,7 +68,9 @@ export const Tienda = (props) => {
         let respuesta = await response.json();
 
         if (respuesta.status === 200) {
-          setLibros(respuesta.data);
+          let arr=respuesta.data.filter((libro)=>parseInt(libro.stock.S)>0);
+          console.log(respuesta.data)
+          setLibros(arr);
           get_caro(respuesta.data);
           get_barato(respuesta.data);
         } else {

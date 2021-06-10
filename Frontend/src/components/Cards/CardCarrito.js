@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 export default function CardCarrito(props) {
   const [carrito, setCarrito] = useState(props.lista);
-  console.log("2222222222222222",carrito)
+
   const sumar = (i, id) => {
     //setCantidad(cantidad + 1);
     modificar_cantidad(0, i, id);

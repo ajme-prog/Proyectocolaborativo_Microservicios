@@ -4,7 +4,7 @@ import { createPopper } from "@popperjs/core";
 import CardStats from "../../components/Cards/CardStats";
 import CardCarrito from "../../components/Cards/CardCarrito";
 
-export const Carrito = (props) => {
+export const Compras = (props) => {
   const [libros, setLibros] = useState(
     JSON.parse(localStorage.getItem("Carrito"))
   );
@@ -196,4 +196,4 @@ export const Carrito = (props) => {
   );
 };
 
-export default Carrito;
+export default Compras;
