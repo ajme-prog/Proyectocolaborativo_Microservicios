@@ -14,20 +14,12 @@ export default function Index() {
           <div className="w-full md:w-8/12 lg:w-6/12 xl:w-6/12 px-4">
             <div className="pt-32 sm:pt-0">
               <h2 className="font-semibold text-4xl text-blueGray-600">
-                BookSA - A beautiful extension for Tailwind CSS.
+                BookSA
               </h2>
               <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
-                BookSA is Free and Open Source. It does not change any of
-                the CSS from{" "}
-                <a
-                  href="https://tailwindcss.com/?ref=creativetim"
-                  className="text-blueGray-600"
-                  target="_blank"
-                >
-                  Tailwind CSS
-                </a>
-                . It features multiple HTML elements and it comes with dynamic
-                components for ReactJS, Vue and Angular.
+                Tienes ganas de leer algún libro interesante pero no sabes cuál?
+                Descubre nuestra selección de libros recomendados para leer este
+                año 2021
               </p>
               <div className="mt-12">
                 <a
@@ -35,15 +27,14 @@ export default function Index() {
                   target="_blank"
                   className="get-started text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-amber-500 active:bg-amber-600 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"
                 >
-                  Get started
+                  Tienda
                 </a>
-                <a
-                  href="https://github.com/creativetimofficial/notus-react?ref=nr-index"
+                <Link
+                  to="/auth/register"
                   className="github-star ml-1 text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-blueGray-700 active:bg-blueGray-600 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"
-                  target="_blank"
                 >
-                  Github Star
-                </a>
+                  Registro
+                </Link>
               </div>
             </div>
           </div>
@@ -496,9 +487,9 @@ export default function Index() {
           <div className="w-full md:w-6/12 px-12 md:px-4">
             <h2 className="font-semibold text-4xl">Beautiful Example Pages</h2>
             <p className="text-lg leading-relaxed mt-4 mb-4 text-blueGray-500">
-              BookSA is a completly new product built using our past
-              experience in web templates. Take the examples we made for you and
-              start playing with them.
+              BookSA is a completly new product built using our past experience
+              in web templates. Take the examples we made for you and start
+              playing with them.
             </p>
           </div>
         </div>

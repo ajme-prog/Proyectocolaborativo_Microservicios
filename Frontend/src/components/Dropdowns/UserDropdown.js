@@ -1,10 +1,12 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
 import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const UserDropdown = () => {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["usuario"]);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
   const openDropdownPopover = () => {
@@ -18,7 +20,9 @@ const UserDropdown = () => {
   };
 
   function handleLogout () {
+    removeCookie('accessToken', { path: '/'})
     
+    localStorage.removeItem("usuario")
   }
 
   return (
@@ -71,6 +75,7 @@ const UserDropdown = () => {
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
+          onClick={handleLogout}
         >
           Salir
         </Link>

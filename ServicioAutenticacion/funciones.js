@@ -42,6 +42,33 @@ async function loginUsuario(correo, pwd) {
   return itemsAll;
 }
 
+async function recuperarUsuarios() {
+  const params = {
+      TableName: "usuario",
+      FilterExpression: "#tipo <> :tipo_val",
+      ExpressionAttributeNames: {
+          "#tipo": "tipo",
+      },
+      ExpressionAttributeValues: { 
+        ":tipo_val":  0,
+      },
+  };
+
+  let lastEvaluatedKey = 'SAGRUPO1'; 
+  const itemsAll = [];
+
+  while (lastEvaluatedKey) {
+      const data = await AWS.docClient.scan(params).promise();
+      itemsAll.push(...data.Items);
+      lastEvaluatedKey = data.LastEvaluatedKey;
+      if (lastEvaluatedKey) {
+          params.ExclusiveStartKey = lastEvaluatedKey;
+      }
+  }
+
+  return { error: false, datos: itemsAll};
+}
+
 async function recuperarEditorialesPendientes() {
   const params = {
       TableName: "usuario",
@@ -72,16 +99,7 @@ async function recuperarEditorialesPendientes() {
 }
 
 async function aprobarEditorial(usuario_editorial) {
-  /*const params = {
-        TableName: "usuario",
-        FilterExpression: "#cuser = :corr and #pwduser = :pass",
-        ExpressionAttributeNames: {
-            "#cuser": "correo",
-            "#pwduser": "pwd",
-        },
-        ExpressionAttributeValues: { ":corr": correo, ":pass": md5(pwd)},
-    };*/
-  console.log('usuario_editorial', usuario_editorial)
+
   const params = {
     TableName: "usuario",
     Key: {
@@ -107,6 +125,27 @@ async function aprobarEditorial(usuario_editorial) {
   }
 }
 
+async function eliminarUsuario(usuario) {
 
+  const params = {
+    TableName: "usuario",
+    Key: {
+      "usuario": usuario,
+    },
+    ConditionExpression: 'usuario = :userIdVal',
+    ExpressionAttributeValues: {
+      ":userIdVal": usuario,
+    },
+  };
 
-module.exports = { insertarUsuario, loginUsuario, aprobarEditorial, recuperarEditorialesPendientes };
+  try {
+      await AWS.docClient.delete(params).promise()
+      return { error: false, mensaje: "El usuario se eliminó con éxito"}    
+  } catch (error) {
+    console.log('\n\ncatch update\n\n')
+    console.log(error)
+    return { error: true, mensaje: "El usuario no se pudo eliminar"}      
+  }
+}
+
+module.exports = { recuperarUsuarios, eliminarUsuario, insertarUsuario, loginUsuario, aprobarEditorial, recuperarEditorialesPendientes };

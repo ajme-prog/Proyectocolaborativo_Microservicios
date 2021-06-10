@@ -14,6 +14,18 @@ async function editorialesPendientes(token) {
   });
 }
 
+async function recuperarUsuarios(token) {
+  return fetch(`${url_api}/usuarios`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      'Access-Control-Allow-Origin': '*',
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 async function aprobarEditorial(usuario, token){
   return fetch(`${url_api}/aprobar`, {
     method: "POST",
@@ -29,4 +41,19 @@ async function aprobarEditorial(usuario, token){
   });
 }
 
-module.exports = { editorialesPendientes, aprobarEditorial }
+async function eliminarUsuario(usuario, token){
+  return fetch(`${url_api}/eliminar`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      'Access-Control-Allow-Origin': '*',
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      usuario: usuario,
+    }),
+  });
+}
+
+module.exports = { eliminarUsuario, recuperarUsuarios, editorialesPendientes, aprobarEditorial }
