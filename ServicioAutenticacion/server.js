@@ -109,6 +109,23 @@ app.post("/administrador/aprobar", autenticarToken, async (req, res) => {
   res.status(200).json({ mensaje: resultado.mensaje });
 });
 
+app.delete('/administrador/eliminar', autenticarToken, async (req , res)=>{
+  const usuarioAdmin = req.usuarioReq;
+
+  if (!(usuarioAdmin && usuarioAdmin.tipo === 0))
+    return res
+      .status(403)
+      .json({ mensaje: "No posee los permisos necesarios" });
+
+  const usuario = req.body.usuario;
+  const resultado = await funciones.eliminarUsuario(usuario);
+
+  if (resultado.error)
+    return res.status(400).json({ mensaje: resultado.mensaje });
+
+  res.status(200).json({ mensaje: resultado.mensaje });
+})
+
 app.get(
   "/administrador/editoriales-pendientes",
   autenticarToken,
@@ -124,6 +141,26 @@ app.get(
         .json({ mensaje: "No posee los permisos necesarios" });
 
     const resultado = await funciones.recuperarEditorialesPendientes();
+
+    if (resultado.error)
+      return res.status(400).json({ mensaje: resultado.mensaje });
+
+    res.status(200).json({ datos: resultado.datos });
+  }
+);
+
+app.get(
+  "/administrador/usuarios",
+  autenticarToken,
+  async (req, res) => {
+    const usuarioAdmin = req.usuarioReq;
+
+    if (!(usuarioAdmin && usuarioAdmin.tipo === 0))
+      return res
+        .status(403)
+        .json({ mensaje: "No posee los permisos necesarios" });
+
+    const resultado = await funciones.recuperarUsuarios();
 
     if (resultado.error)
       return res.status(400).json({ mensaje: resultado.mensaje });

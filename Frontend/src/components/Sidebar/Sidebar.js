@@ -83,7 +83,7 @@ export default function Sidebar() {
             </h6>
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-              <li className="items-center">
+              {/* <li className="items-center">
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
@@ -103,7 +103,7 @@ export default function Sidebar() {
                   ></i>{" "}
                   Dashboard
                 </Link>
-              </li>
+              </li> */}
 
               <li className="items-center">
                 <Link
