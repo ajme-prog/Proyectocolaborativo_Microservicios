@@ -65,23 +65,46 @@ function pFileReader(file) {
   });
 }
 
-export async function ModificarLibro(nombre,generos,stock,autor,editorial,id_editorial,paginas,fechapublicacion,idioma,precio,fotografia) {
+
+export async function getLibros(id_editorial) {
+  return fetch(url_api_libros + "/libros/"+id_editorial, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    }    
+  });
+}
+
+export async function getunLibro(id_libro) {
+  return fetch(url_api_libros + "/libros/unlibro/"+id_libro, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    }    
+  });
+}
+
+export async function ModificarLibro(id_libro,nombre,generos,stock,autor,editorial,id_editorial,paginas,fechapublicacion,idioma,precio,fotografia) {
   
   let foto_base64 = "";
 
   if(fotografia){
-    foto_base64 = await pFileReader(fotografia);
+    let file = fotografia.item(0);
+    foto_base64 = await pFileReader(file);
     foto_base64 = foto_base64.split(",")[1];
     console.log(foto_base64);
   }
 
-  return fetch(url_api_libros+"/libros",{
+  return fetch(url_api_libros+"/libros/modificar",{
     method: "POST",
         headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       } ,
       body: JSON.stringify({
+        id_libro:id_libro,
         nombre: nombre,
         generos:generos,
         stock:stock,

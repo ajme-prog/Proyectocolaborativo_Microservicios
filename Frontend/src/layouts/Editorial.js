@@ -13,6 +13,8 @@ import Dashboard from "views/editorial/Dashboard.js";
 import Settings from "views/editorial/Settings.js";
 //import Libros from "views/editorial/Libros.js"
 import Libros from "views/editorial/Crearlibro.js"
+import VerLibros from "views/editorial/Verlibros.js"
+import Vistamodificarlibro from "views/editorial/Modificarlibro.js"
 export default function Editorial() {
   return (
     <>
@@ -27,6 +29,8 @@ export default function Editorial() {
             <Route path="/editorial/dashboard" exact component={Dashboard} />
             <Route path="/editorial/perfil" exact component={Settings} />
             <Route path="/editorial/Crearlibro" exact component={Libros} />
+            <Route path="/editorial/Verlibro" exact component={VerLibros} />
+            <Route path="/editorial/Modificarlibro/:id_libro" exact component={Vistamodificarlibro} />
             <Redirect from="/editorial" to="/editorial/dashboard" />
           </Switch>
           <FooterAdmin />

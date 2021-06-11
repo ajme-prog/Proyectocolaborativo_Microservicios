@@ -360,6 +360,62 @@ app.get("/libros", function (req, res) {
   });
 });
 
+//-----OBTENER SOLO UN LIBRO 
+app.get('/libros/unlibro/:id_libro',function(req,res){
+
+  var id_editorial = req.params.id_libro;
+
+
+
+  const params2 = {
+    TableName: 'Libros',
+    FilterExpression: "#cg = :data",
+    ExpressionAttributeNames: {
+      "#cg": "id",
+    },
+
+    ExpressionAttributeValues: {
+      ":data": { S: id_editorial },
+    }
+  };
+ 
+  docClient.scan(params2, function (err, data) {
+    if (err) {
+     // res.send({status:200,mensaje:"OK", data: arreglo });
+      res.send("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+    } else {
+     // console.log(data.Items.);
+
+      var arreglo = [];
+   
+      for (let i = 0; i < data.Items.length; i++) {
+         objeto={
+          id_libro:data.Items[i].id.S,
+          nombre:data.Items[i].nombre.S,
+          generos:data.Items[i].generos.SS,
+          stock:data.Items[i].stock.S,
+          autor:data.Items[i].autor.S,
+          editorial:data.Items[i].editorial.S,
+          id_editorial:data.Items[i].id_editorial.S,
+          numeropaginas:data.Items[i].numeropaginas.S,
+          fechapublicacion:data.Items[i].fechapublicacion.S,
+          idioma:data.Items[i].idioma.S,
+          foto:data.Items[i].imagen.S,
+          precio:data.Items[i].precio.S,
+        }
+        arreglo.push(objeto);
+      }
+
+      res.send({status:200,mensaje:"OK", data: arreglo });
+
+
+    }
+  });
+
+
+
+});
+
 //---------Subir imagen a S3
 async function upload_file(path, payload) {
   return new Promise((resolve, reject) => {
