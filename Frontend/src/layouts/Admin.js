@@ -14,7 +14,6 @@ import Dashboard from "views/admin/Dashboard.js";
 import Settings from "views/admin/Settings.js";
 import SolicitudesRegistro from "views/admin/SolicitudesRegistro";
 import EliminarUsuarios from "views/admin/EliminarUsuarios";
-import Tables from "views/admin/Tables.js";
 import Tienda from "views/carrito/Tienda";
 import Carrito from "views/carrito/Carrito";
 import Compras from "views/carrito/Compras";

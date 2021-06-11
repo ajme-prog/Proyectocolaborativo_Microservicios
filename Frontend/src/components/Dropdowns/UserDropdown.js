@@ -19,10 +19,11 @@ const UserDropdown = () => {
     setDropdownPopoverShow(false);
   };
 
-  function handleLogout () {
-    removeCookie('accessToken', { path: '/'})
-    
-    localStorage.removeItem("usuario")
+  function handleLogout() {
+    removeCookie("accessToken", { path: "/" });
+    localStorage.setItem("Carrito", JSON.stringify([]));
+
+    localStorage.removeItem("usuario");
   }
 
   return (
@@ -42,7 +43,6 @@ const UserDropdown = () => {
               alt="..."
               className="w-full rounded-full align-middle border-none shadow-lg"
               src={require("assets/img/user.svg").default}
-              
             />
           </span>
         </div>
@@ -79,8 +79,6 @@ const UserDropdown = () => {
         >
           Salir
         </Link>
-        
-        
       </div>
     </>
   );

@@ -2,16 +2,14 @@ import React, { useRef, useState } from "react";
 import { loginUsuario } from "../../services/autenticacion";
 import Swal from "sweetalert2";
 import { Link, useHistory } from "react-router-dom";
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function Login() {
-
-  const { setCookie, setCurrentUser, cookies } = useAuth()
-  const [loading, setLoading] = useState(false)
+  const { setCookie, setCurrentUser, cookies } = useAuth();
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
   const correoRef = useRef();
   const pwdRef = useRef();
-
 
   const swalPersonalizado = Swal.mixin({
     customClass: {
@@ -23,23 +21,23 @@ export default function Login() {
 
   const Toast = Swal.mixin({
     toast: true,
-    position: 'top-end',
+    position: "top-end",
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
     didOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer)
-      toast.addEventListener('mouseleave', Swal.resumeTimer)
-    }
-  })
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
 
   async function handleSubmit(event) {
     event.preventDefault();
-    setLoading(true)
-    const correo = correoRef.current.value
-    const pwd = pwdRef.current.value
+    setLoading(true);
+    const correo = correoRef.current.value;
+    const pwd = pwdRef.current.value;
 
-    if(!(correo && pwd)){
+    if (!(correo && pwd)) {
       swalPersonalizado.fire({
         icon: "warning",
         title: "Campos",
@@ -50,7 +48,7 @@ export default function Login() {
 
     const rawResponse = await loginUsuario(correo, pwd);
     const respuesta = await rawResponse.json();
-    console.log(respuesta)
+    console.log(respuesta);
 
     if (rawResponse.status !== 200) {
       swalPersonalizado.fire({
@@ -58,7 +56,7 @@ export default function Login() {
         title: "Error",
         text: respuesta.mensaje,
       });
-      setLoading(false)
+      setLoading(false);
       return;
     }
 
@@ -68,14 +66,19 @@ export default function Login() {
     });
 
     localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
-    await setCookie('accessToken', respuesta.accessToken, { path: '/'})
-    setLoading(false)
-    
-    if(respuesta.usuario.tipo === 0){
-      console.log('Es admin')
+    await setCookie("accessToken", respuesta.accessToken, { path: "/" });
+    setLoading(false);
+
+    console.log("*******************",respuesta.usuario.tipo)
+
+    if (respuesta.usuario.tipo === 0) {
+      console.log("Es admin");
       history.push("/admin/settings");
+    } else if (respuesta.usuario.tipo === 2) {
+      console.log("Es cliente");
+      history.push("/cliente/tienda");
     } else {
-      console.log('Es editorial')
+      console.log("Es editorial");
       history.push("/editorial/dashboard");
     }
   }

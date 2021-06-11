@@ -3,20 +3,21 @@ import { URL } from "./rutas";
 
 import CardStats from "../../components/Cards/CardStats";
 import CardProductoTienda from "components/Cards/CardProductoTienda";
-import { parse } from "postcss";
 
 export const Tienda = (props) => {
   const [libros, setLibros] = useState([]);
   const [libro_caro, setLibroCaro] = useState({});
   const [libro_barato, setLibroBarato] = useState({});
   const [booleano, setBooleano] = useState(false);
+  const [carrito, setCarrito] = useState(JSON.parse(localStorage.getItem("Carrito")));
 
 
-  
+    
 
 
   useEffect(() => {
     //localStorage.setItem("Carrito",JSON.stringify([]))
+
     obtenerLibros();
   }, []);
 
@@ -31,7 +32,6 @@ export const Tienda = (props) => {
         precio= precio_ciclo
       }
     })
-    //console.log(actual)
     setLibroCaro(actual)
 
   }
@@ -48,7 +48,6 @@ export const Tienda = (props) => {
         precio= precio_ciclo
       }
     })
-    //console.log(actual)
     setLibroBarato(actual)
     setBooleano(true)
 
@@ -69,7 +68,6 @@ export const Tienda = (props) => {
 
         if (respuesta.status === 200) {
           let arr=respuesta.data.filter((libro)=>parseInt(libro.stock.S)>0);
-          console.log(respuesta.data)
           setLibros(arr);
           get_caro(respuesta.data);
           get_barato(respuesta.data);
@@ -126,9 +124,9 @@ export const Tienda = (props) => {
             <>
               <div className="w-full xl:w-4/12 px-4">
                 <CardProductoTienda
-               
                   index={index}
                   objeto={producto}
+                  lista={carrito}
                 ></CardProductoTienda>
               </div>
             </>
