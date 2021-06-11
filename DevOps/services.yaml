@@ -1,0 +1,9 @@
+servicios:
+  - servicio-autenticacion:
+    port: 3001
+  - servicio-crud-libros:
+    port: 4040
+  - servicio-generos:
+    port: 4000
+  - servicio-tienda:
+    port: 1999
