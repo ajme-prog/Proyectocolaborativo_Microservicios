@@ -44,13 +44,13 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3000/registro
+PUT http://localhost:3001/registro
 Content-Type: application/json
 
 {
-    "nombre": "Editorial Santillana",
-    "correo": "santillana@gmail.com",
-    "pwd": "ajsdnfjasfnjn",
+    "nombre": "Monterrico",
+    "correo": "monterrico@gmail.com",
+    "pwd": "1234",
     "direccion": "Mixco, Guatemala",
     "tipo": 1
 }

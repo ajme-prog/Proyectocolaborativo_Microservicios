@@ -84,24 +84,51 @@ export default function EditorialSidebar() {
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               <li className="items-center">
+               
+
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/editorial/dashboard") !== -1
+                    (window.location.href.indexOf("/editorial/Crearlibro") !== -1
                       ? "text-amber-500 hover:text-amber-600"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
-                  to="/editorial/dashboard"
+                  to="/editorial/Crearlibro"
                 >
                   <i
                     className={
                       "fas fa-tv mr-2 text-sm " +
-                      (window.location.href.indexOf("/editorial/dashboard") !== -1
+                      (window.location.href.indexOf("/editorial/Crearlibro") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
                     }
                   ></i>{" "}
-                  Dashboard
+                  Crear Libro
+
+                
+                </Link>
+
+
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/editorial/Verlibro") !== -1
+                      ? "text-amber-500 hover:text-amber-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/editorial/Verlibro"
+                >
+                  <i
+                    className={
+                      "fas fa-tv mr-2 text-sm " +
+                      (window.location.href.indexOf("/editorial/Verlibro") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Ver Libros
+
+                
                 </Link>
               </li>             
             </ul>
