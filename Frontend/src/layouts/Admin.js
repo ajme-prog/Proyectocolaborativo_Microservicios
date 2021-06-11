@@ -13,6 +13,7 @@ import FooterAdmin from "components/Footers/FooterAdmin.js";
 import Dashboard from "views/admin/Dashboard.js";
 import Settings from "views/admin/Settings.js";
 import SolicitudesRegistro from "views/admin/SolicitudesRegistro";
+import EliminarUsuarios from "views/admin/EliminarUsuarios";
 
 export default function Admin() {
   return (
@@ -28,6 +29,7 @@ export default function Admin() {
             <Route path="/admin/dashboard" exact component={Dashboard} />
             <Route path="/admin/settings" exact component={Settings} />
             <Route path="/admin/solicitudes-registro" exact component={SolicitudesRegistro} />
+            <Route path="/admin/eliminar-usuarios" exact component={EliminarUsuarios} />
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
           <FooterAdmin />

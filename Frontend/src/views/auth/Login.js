@@ -21,6 +21,18 @@ export default function Login() {
     buttonsStyling: false,
   });
 
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+
   async function handleSubmit(event) {
     event.preventDefault();
     setLoading(true)
@@ -50,10 +62,9 @@ export default function Login() {
       return;
     }
 
-    swalPersonalizado.fire({
+    Toast.fire({
       icon: "success",
-      title: "Login",
-      text: respuesta.mensaje,
+      text: `Bienvenido ${respuesta.usuario.nombre}`,
     });
 
     localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
@@ -62,7 +73,7 @@ export default function Login() {
     
     if(respuesta.usuario.tipo === 0){
       console.log('Es admin')
-      history.push("/admin/dashboard");
+      history.push("/admin/settings");
     } else {
       console.log('Es editorial')
       history.push("/editorial/dashboard");
