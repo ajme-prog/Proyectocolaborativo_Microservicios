@@ -4,9 +4,12 @@ import { Link } from "react-router-dom";
 // components
 
 import IndexDropdown from "components/Dropdowns/IndexDropdown.js";
+import CardCarrito from "components/Cards/CardCarrito";
 
 export default function Navbar(props) {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
+
+
   return (
     <>
       <nav className="top-0 fixed z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg bg-white shadow">
@@ -51,6 +54,8 @@ export default function Navbar(props) {
           </div>
         </div>
       </nav>
+
+      
     </>
   );
 }

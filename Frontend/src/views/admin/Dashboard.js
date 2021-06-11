@@ -8,6 +8,7 @@ import CardPageVisits from "components/Cards/CardPageVisits.js";
 import CardSocialTraffic from "components/Cards/CardSocialTraffic.js";
 
 export default function Dashboard() {
+  localStorage.setItem("Carrito",JSON.stringify([]))
   return (
     <>
       <div className="flex flex-wrap">
