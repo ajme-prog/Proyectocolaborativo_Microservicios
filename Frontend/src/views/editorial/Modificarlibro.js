@@ -25,7 +25,7 @@ export default function Vistamodificarlibro() {
   }
 
   const onChange = (selectedOptions) => setSelected(selectedOptions);
-
+  const history = useHistory();
   var state = {
     active: false,
     imageSrc: "",
@@ -259,6 +259,9 @@ export default function Vistamodificarlibro() {
       preview.innerHTML = "";
       preview.append(image);
       document.getElementById("file").value = "";
+
+      history.push(`/editorial/Verlibro`)
+
     } else if (respuestaalbum.status == 401) {
       Toast.fire({
         icon: "warning",

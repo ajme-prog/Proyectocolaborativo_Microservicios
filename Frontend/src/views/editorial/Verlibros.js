@@ -302,7 +302,7 @@ async function eliminaralbum(e){
                                 {foto.nombre}
                               </h5>
                               <a>
-                                <div className="hover:-mt-4 relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg ease-linear transition-all duration-150">
+                                <div className="hover:-mt-4 relative align-middle flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg ease-linear transition-all duration-150">
                                   <img
                                     alt={foto.nombre}
                                     className="align-middle border-none max-w-full h-auto rounded-lg"
@@ -312,7 +312,7 @@ async function eliminaralbum(e){
                             
                                <div className="text-left py-3 px-md-10">
                                 
-                               <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold">
+                               <div className="text-sm align-middle leading-normal mt-0 mb-2 text-gray-500 font-bold">
                                   <i className=" fas fa-book mr-4 text-lg text-gray-500"></i>
                                   
                                   {foto.generos.join('-')}
