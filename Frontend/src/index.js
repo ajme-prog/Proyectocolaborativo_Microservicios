@@ -19,6 +19,7 @@ import Index from "views/Index.js";
 
 import PrivateRoute from "components/PrivateRoute";
 import { AuthProvider } from "./contexts/AuthContext";
+import Cliente from "layouts/Cliente";
 
 ReactDOM.render(
   <CookiesProvider>
@@ -28,6 +29,8 @@ ReactDOM.render(
           {/* add routes with layouts */}
           <PrivateRoute path="/admin" component={Admin} />
           <PrivateRoute path="/editorial" component={Editorial} />
+          <PrivateRoute path="/cliente" component={Cliente} />
+
           <Route path="/auth" component={Auth} />
           {/* add routes without layouts */}
           <Route path="/landing" exact component={Landing} />

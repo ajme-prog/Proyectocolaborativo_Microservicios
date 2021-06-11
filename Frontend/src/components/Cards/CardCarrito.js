@@ -20,8 +20,8 @@ export default function CardCarrito(props) {
       nuevo_precio = 0;
 
     for (let j = 0; j < carrito.length; j++) {
-      if (carrito[j].id.S == id) {
-        if (tipo == 0) {
+      if (carrito[j].id.S === id) {
+        if (tipo === 0) {
           carrito[j].cantidad.S += 1;
         } else {
           carrito[j].cantidad.S -= 1;
@@ -41,6 +41,14 @@ export default function CardCarrito(props) {
     document.getElementById(
       "subtotal" + i
     ).innerHTML = `<p>Q ${nuevo_precio}</p>`;
+  };
+
+  const eliminar_producto = (id) => {
+    //setCantidad(cantidad - 1);
+    let arreglo_tmp=carrito.filter((producto)=>producto.id.S!=id)
+    setCarrito(arreglo_tmp)
+    localStorage.setItem("Carrito", JSON.stringify(arreglo_tmp));
+
   };
 
   return (
@@ -103,14 +111,16 @@ export default function CardCarrito(props) {
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                   }
-                ></th>
+                >
+                  X
+                </th>
               </tr>
             </thead>
             <tbody>
               {carrito.map((producto, index) => {
                 return (
                   <>
-                    <tr>
+                    <tr key={index}>
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                         <img
                           src={producto.imagen.S}
@@ -147,13 +157,25 @@ export default function CardCarrito(props) {
                         />
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {producto.precio.S}
+                        Q {producto.precio.S}
                       </td>
                       <td
                         className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
                         id={"subtotal" + index}
                       >
-                        <p>Q {producto.cantidad.S * parseInt(producto.precio.S)}</p>
+                        <p>
+                          Q {producto.cantidad.S * parseInt(producto.precio.S)}
+                        </p>
+                      </td>
+
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <button
+                          className="bg-orange-500 text-white active:bg-orange-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          type="button"
+                          onClick={()=>eliminar_producto(producto.id.S)}
+                        >
+                          <i className="fas fa-minus-circle"></i>
+                        </button>
                       </td>
                     </tr>
                   </>

@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { URL } from "./rutas";
 import { createPopper } from "@popperjs/core";
-import CardStats from "../../components/Cards/CardStats";
 import CardCarrito from "../../components/Cards/CardCarrito";
+import { useAuth } from "../../contexts/AuthContext";
+import Swal from "sweetalert2";
 
 export const Carrito = (props) => {
   const [libros, setLibros] = useState(
     JSON.parse(localStorage.getItem("Carrito"))
   );
+
+  const { cookies } = useAuth();
 
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
   const btnDropdownRef = React.createRef();
@@ -16,7 +19,6 @@ export const Carrito = (props) => {
   const [dropdownPopoverShow_2, setDropdownPopoverShow_2] = useState(false);
   const btnDropdownRef_2 = React.createRef();
   const popoverDropdownRef_2 = React.createRef();
-
 
   const [metodo_pago, setMetodoPago] = useState("Metodo de Pago");
   const [metodo_envio, setMetodoEnvio] = useState("Metodo de Envío");
@@ -35,6 +37,18 @@ export const Carrito = (props) => {
     "Taxi",
   ]);
 
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+
   const openDropdownPopover = () => {
     createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
       placement: "bottom-start",
@@ -44,9 +58,6 @@ export const Carrito = (props) => {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
-
-
-
 
   const openDropdownPopover_2 = () => {
     createPopper(btnDropdownRef_2.current, popoverDropdownRef_2.current, {
@@ -58,51 +69,68 @@ export const Carrito = (props) => {
     setDropdownPopoverShow_2(false);
   };
 
-
   const cambiar_metodo_pago = (pago) => {
-    setMetodoPago(pago)
+    setMetodoPago(pago);
     closeDropdownPopover();
   };
 
   const cambiar_metodo_envio = (envio) => {
-    setMetodoEnvio(envio)
+    setMetodoEnvio(envio);
     closeDropdownPopover_2();
   };
 
   const generarCompra = () => {
-    var usu = JSON.parse(localStorage.getItem("current"));
-    let fecha = new Date();
-    console.log(libros);
-
-    fetch(URL.generar_pedido, {
-      method: "POST",
-      body: JSON.stringify({
-        id_usuario: 1,
-        fecha: fecha,
-        pedido: libros,
-        tipo_pago:metodo_pago,
-        tipo_envio:metodo_envio
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        mode: "no-cors",
-      },
-    })
-      .then(async function (response) {
-        let respuesta = await response.json();
-        console.log(respuesta);
-        localStorage.setItem("Carrito", JSON.stringify([]));
-        //window.location.reload()
-      })
-      .catch((error) => console.log(error));
+    if (metodo_pago != "Metodo de Pago") {
+      if (metodo_envio != "Metodo de Envío") {
+        if (libros.length != 0) {
+          fetch(URL.generar_pedido, {
+            method: "POST",
+            body: JSON.stringify({
+              fecha: new Date(),
+              pedido: JSON.parse(localStorage.getItem("Carrito")),
+              tipo_pago: metodo_pago,
+              tipo_envio: metodo_envio,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              Authorization: `Bearer ${cookies.accessToken}`,
+            },
+          })
+            .then(async function (response) {
+              let respuesta = await response.json();
+              console.log(respuesta);
+              localStorage.setItem("Carrito", JSON.stringify([]));
+              window.location.reload();
+            })
+            .catch((error) => {
+              Toast.fire({
+                icon: "warning",
+                text: `Error al registrar la compra`,
+              });
+            });
+        } else {
+          Toast.fire({
+            icon: "warning",
+            text: `No hay productos agregados al carrito`,
+          });
+        }
+      } else {
+        Toast.fire({
+          icon: "warning",
+          text: `Debe elegir un método de envío`,
+        });
+      }
+    } else {
+      Toast.fire({
+        icon: "warning",
+        text: `Debe seleccionar un método de pago`,
+      });
+    }
   };
 
   return (
     <>
-      <div className="flex flex-wrap w-full mb-12 px-4">
-        <CardCarrito color="light" lista={libros}></CardCarrito>
-      </div>
-
       <div className="flex flex-wrap">
         <div className="w-full sm:w-6/12 md:w-4/12 px-4">
           <div className="relative inline-flex align-middle w-full">
@@ -125,27 +153,24 @@ export const Carrito = (props) => {
                 "bg-emerald-500 text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 min-w-48"
               }
             >
-              {arreglo_pagos.map((pago,index) => {
+              {arreglo_pagos.map((pago, index) => {
                 return (
                   <>
                     <a
                       className="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent text-white"
                       onClick={(e) => cambiar_metodo_pago(pago)}
                       key={index}
-                    >{pago}</a>
+                    >
+                      {pago}
+                    </a>
                   </>
                 );
               })}
             </div>
           </div>
         </div>
-      </div>
 
-
-
-
-      <div className="flex flex-wrap">
-        <div className="w-full sm:w-6/12 md:w-4/12 px-4">
+        <div className="w-full sm:w-6/12 md:w-6/12 px-4">
           <div className="relative inline-flex align-middle w-full">
             <button
               className="text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 bg-red-500 active:bg-red-600 ease-linear transition-all duration-150"
@@ -166,14 +191,16 @@ export const Carrito = (props) => {
                 "bg-red-500 text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 min-w-48"
               }
             >
-              {arreglo_envios.map((envio,index) => {
+              {arreglo_envios.map((envio, index) => {
                 return (
                   <>
                     <a
                       className="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent text-white"
                       onClick={(e) => cambiar_metodo_envio(envio)}
                       key={index}
-                    >{envio}</a>
+                    >
+                      {envio}
+                    </a>
                   </>
                 );
               })}
@@ -182,8 +209,11 @@ export const Carrito = (props) => {
         </div>
       </div>
 
+      <br />
 
-
+      <div className="flex flex-wrap w-full mb-12 px-4">
+        <CardCarrito color="dark" lista={libros}></CardCarrito>
+      </div>
 
       <button
         className="bg-orange-500 text-white active:bg-orange-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"

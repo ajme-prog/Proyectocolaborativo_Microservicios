@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { URL } from "./rutas";
 import CardCompras from "components/Cards/CardCompras";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const Compras = (props) => {
   const [compras, setCompras] = useState(
     []
   );
 
+  const { cookies } = useAuth();
+
+
   useEffect(() => {
-    //localStorage.setItem("Carrito",JSON.stringify([]))
     get_compras();
   }, []);
 
   const get_compras=()=>{
-    fetch(URL.obtener_compras+"1", {
+    fetch(URL.obtener_compras, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        mode: "no-cors",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${cookies.accessToken}`,
       },
     })
       .then((res) => res)

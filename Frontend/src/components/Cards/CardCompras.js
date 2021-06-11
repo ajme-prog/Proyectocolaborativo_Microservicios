@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { propTypes } from "react-bootstrap/esm/Image";
+import React, {useState } from "react";
 
 // components
 
 export default function CardCompras(props) {
-  const [compras, setCompras] = useState(props.lista);
   const [detalle, setDetalle] = useState([]);
 
   const [showModal, setShowModal] = React.useState(false);
@@ -69,14 +67,6 @@ export default function CardCompras(props) {
                   Detalle Compra
                 </th>
 
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (props.color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                ></th>
               </tr>
             </thead>
             <tbody>
@@ -96,7 +86,7 @@ export default function CardCompras(props) {
 
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         <button
-                          className="bg-orange-500 text-white active:bg-orange-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          className="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="button"
                           onClick={() => obtener_detalle(compra)}
                         >
@@ -118,7 +108,7 @@ export default function CardCompras(props) {
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
             onClick={() => setShowModal(false)}
           >
-            <div className="relative w-auto my-6 mx-auto max-w-sm">
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
               {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
