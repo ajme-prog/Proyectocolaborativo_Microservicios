@@ -9,6 +9,16 @@ Content-Type: application/json
 
 ###
 
+DELETE http://localhost:3001/administrador/eliminar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiODJlYzg1Njc3NjE5NzRhYWNiZDU0NDRlN2UzYjEyMzQyMTY5MmVhZjYyNTY2NDI3IiwidGlwbyI6MCwiaWF0IjoxNjIyODM0MDA1fQ.2vP3nG7QMYVAhjC9v34KGHIh_roGrSv_zYNerZhzbqs
+Content-Type: application/json
+
+{
+    "usuario": "4ef6162c0e214b379f0248be5bd9a520752bc2b91d022fd6"
+}
+
+###
+
 GET http://localhost:3001/administrador/editoriales-pendientes
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiODJlYzg1Njc3NjE5NzRhYWNiZDU0NDRlN2UzYjEyMzQyMTY5MmVhZjYyNTY2NDI3IiwidGlwbyI6MCwiaWF0IjoxNjIyODM0MDA1fQ.2vP3nG7QMYVAhjC9v34KGHIh_roGrSv_zYNerZhzbqs
 Content-Type: application/json
@@ -44,13 +54,13 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3000/registro
+PUT http://localhost:3001/registro
 Content-Type: application/json
 
 {
-    "nombre": "Editorial Santillana",
-    "correo": "santillana@gmail.com",
-    "pwd": "ajsdnfjasfnjn",
+    "nombre": "Monterrico",
+    "correo": "monterrico@gmail.com",
+    "pwd": "1234",
     "direccion": "Mixco, Guatemala",
     "tipo": 1
 }
