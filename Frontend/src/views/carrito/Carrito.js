@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { URL } from "./rutas";
 import { createPopper } from "@popperjs/core";
 import CardCarrito from "../../components/Cards/CardCarrito";
-import { useAuth } from "../../contexts/AuthContext";
 import Swal from "sweetalert2";
+const { useAuth } = require("../../contexts/AuthContext");
 
 export const Carrito = (props) => {
   const [libros, setLibros] = useState(

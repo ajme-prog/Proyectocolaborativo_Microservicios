@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useCookies } from "react-cookie";
-import { editorialesPendientes, aprobarEditorial } from "../../services/administrador";
 import Swal from "sweetalert2"
+const { editorialesPendientes, aprobarEditorial } = require("../../services/administrador");
 
 export default function CardSolicitudes() {
   const [loading, setLoading] = useState(false)

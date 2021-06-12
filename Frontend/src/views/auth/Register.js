@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
-import { registrarUsuario } from "../../services/autenticacion";
 import Swal from "sweetalert2";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContext';
+const { registrarUsuario } = require("../../services/autenticacion");
 
 export default function Register() {
   const [tipoUsuario, setTipoUsuario] = useState("Cliente");

@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
-import { loginUsuario } from "../../services/autenticacion";
 import Swal from "sweetalert2";
 import { Link, useHistory } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+const { loginUsuario } = require("../../services/autenticacion");
+const { useAuth } = require("../../contexts/AuthContext");
 
 export default function Login() {
   const { setCookie, setCurrentUser, cookies } = useAuth();

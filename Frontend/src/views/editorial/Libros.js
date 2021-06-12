@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { getGeneros,Crearlibro,ModificarLibro,DeleteLibro } from "../../services/Libros";
+const { getGeneros,Crearlibro,ModificarLibro,DeleteLibro } = require("../../services/Libros");
 export default function Libros() {
    var state = {
         active: false,

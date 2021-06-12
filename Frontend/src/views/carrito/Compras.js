@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { URL } from "./rutas";
 import CardCompras from "components/Cards/CardCompras";
-import { useAuth } from "../../contexts/AuthContext";
+const { useAuth } = require("../../contexts/AuthContext");
 
 export const Compras = (props) => {
   const [compras, setCompras] = useState(
