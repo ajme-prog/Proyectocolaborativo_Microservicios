@@ -5,6 +5,9 @@ import Swal from "sweetalert2";
 
 export default function CardProductoCarrito(props) {
   const [producto, setProducto] = useState(props.objeto);
+  const [generos, setGeneros] = useState(props.objeto.generos.SS);
+
+  console.log(producto)
 
   const Toast = Swal.mixin({
     toast: true,
@@ -19,13 +22,13 @@ export default function CardProductoCarrito(props) {
   });
 
   const agregarCarrito = (i) => {
-
     var lista = JSON.parse(localStorage.getItem("Carrito"));
 
+    let tmp_carrito = lista.filter(
+      (producto_tmp) => producto_tmp.id.S == producto.id.S
+    );
 
-    let tmp_carrito=lista.filter((producto_tmp)=>producto_tmp.id.S==producto.id.S)
-  
-    if (tmp_carrito.length!=0) {
+    if (tmp_carrito.length != 0) {
       Toast.fire({
         icon: "warning",
         text: `El producto ya está agregado al carrito`,
@@ -39,16 +42,16 @@ export default function CardProductoCarrito(props) {
       subtotal: { S: producto.precio.S },
     };
 
-
-
     lista.push(tmp);
     localStorage.setItem("Carrito", JSON.stringify(lista));
-
   };
 
   return (
     <>
-      <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded" key={props.index}>
+      <div
+        className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
+        key={props.index}
+      >
         <div className="rounded-t mb-0 px-4 py-3 border-0">
           <div className="flex flex-wrap items-center">
             <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
@@ -78,7 +81,7 @@ export default function CardProductoCarrito(props) {
                 </div>
               </div>
             </div>
-            <div className="text-center mt-6">
+            <div className="text-center mt-10">
               <h1 className="text-xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
                 {producto.nombre.S}
               </h1>
@@ -86,10 +89,36 @@ export default function CardProductoCarrito(props) {
                 <i className="fas fa-user-edit mr-2 text-lg text-blueGray-400"></i>{" "}
                 {producto.autor.S}
               </div>
+              
+              
+              
+              {generos.map((genero) => {
+                return (
+                  <>
+                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-600 bg-red-200 uppercase last:mr-0 mr-1">
+                      {genero}
+                    </span>
+                  </>
+                );
+              })}
               <div className="text-blueGray-600 mt-10 uppercase">
                 <i className="fas fa-language mr-2 text-lg text-blueGray-400 "></i>
                 Lenguaje: {producto.idioma.S}
               </div>
+
+              <div className="text-blueGray-600 uppercase">
+                <i className="fas fa-sort-numeric-up-alt mr-2 text-lg text-blueGray-400 "></i>
+                Stock: {producto.stock.S}
+              </div>
+              <div className="text-blueGray-600 uppercase">
+                <i className="fas fa-newspaper mr-2 text-lg text-blueGray-400 "></i>
+                Editorial: {producto.editorial.S}
+              </div>
+              <div className="text-blueGray-600 uppercase">
+                <i className="fas fa-calendar-alt mr-2 text-lg text-blueGray-400 "></i>
+                Fecha de Publicación: {producto.fechapublicacion.S}
+              </div>
+
               <div className="text-blueGray-600 uppercase">
                 <i className="fas fa-money-bill-alt mr-2 text-lg text-blueGray-400"></i>
                 Q {producto.precio.S}
