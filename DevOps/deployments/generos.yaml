@@ -14,6 +14,6 @@ spec:
     spec:                       
       containers:              
         - name: generos                      
-          image: docker.io/ren776/generos:1.0
+          image: docker.io/ren776/generos:1.5
           ports:                 
             - containerPort: 4000

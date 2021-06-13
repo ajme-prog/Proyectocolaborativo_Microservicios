@@ -14,6 +14,6 @@ spec:
     spec:                       
       containers:              
         - name: libros                      
-          image: docker.io/ren776/libros:1.0
+          image: docker.io/ren776/libros:1.5
           ports:                 
             - containerPort: 4040
