@@ -141,6 +141,7 @@ export default function CardProfile({id, nombre, apellido, correo, telefono}) {
 
         
       </div>
+    
     </>
   );
 }

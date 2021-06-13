@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useCookies } from "react-cookie";
-import { recuperarUsuarios, eliminarUsuario } from "../../services/administrador";
 import Swal from "sweetalert2"
+const { recuperarUsuarios, eliminarUsuario } = require("../../services/administrador");
 
 export default function CardEliminarUsuarios() {
   const [loading, setLoading] = useState(false)

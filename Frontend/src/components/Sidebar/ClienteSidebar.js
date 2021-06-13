@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import NotificationDropdown from "components/Dropdowns/NotificationDropdown.js";
 import UserDropdown from "components/Dropdowns/UserDropdown.js";
 
-export default function Sidebar() {
+export default function ClienteSidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
   return (
     <>
@@ -79,114 +79,102 @@ export default function Sidebar() {
             <hr className="my-4 md:min-w-full" />
             
             <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              ADMIN
+              CLIENTE
             </h6>
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-              {/* <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/dashboard") !== -1
-                      ? "text-amber-500 hover:text-amber-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/dashboard"
-                >
-                  <i
-                    className={
-                      "fas fa-tv mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/dashboard") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Dashboard
-                </Link>
-              </li> */}
-
               <li className="items-center">
+               
+
+     
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/settings") !== -1
-                      ? "text-amber-500 hover:text-amber-600"
+                    (window.location.href.indexOf("/cliente/tienda") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
-                  to="/admin/settings"
+                  to="/cliente/tienda"
                 >
                   <i
                     className={
-                      "fas fa-user mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/settings") !== -1
+                      "fas fa-store mr-2 text-sm " +
+                      (window.location.href.indexOf("/cliente/tienda") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
                     }
                   ></i>{" "}
-                  Perfil
+                    Tienda
                 </Link>
-              </li>
-
-              
-            </ul>
-
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
-            {/* Heading */}
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Usuarios
-            </h6>
-            {/* Navigation */}
-
-            <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-            <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/solicitudes-registro") !== -1
-                      ? "text-amber-500 hover:text-amber-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/solicitudes-registro"
-                >
-                  <i
-                    className={
-                      "fas fa-check-double mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/solicitudes-registro") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Solicitudes registro
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/eliminar-usuarios") !== -1
-                      ? "text-amber-500 hover:text-amber-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/eliminar-usuarios"
-                >
-                  <i
-                    className={
-                      "fas fa-trash mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/eliminar-usuarios") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Eliminar
-                </Link>
-              </li>
+           
           
+           
+              </li>             
+         
+         
+              <li className="items-center">
+               
 
-              
+     
+               <Link
+                 className={
+                   "text-xs uppercase py-3 font-bold block " +
+                   (window.location.href.indexOf("/cliente/carrito") !== -1
+                     ? "text-lightBlue-500 hover:text-lightBlue-600"
+                     : "text-blueGray-700 hover:text-blueGray-500")
+                 }
+                 to="/cliente/carrito"
+               >
+                 <i
+                   className={
+                     "fas fa-store mr-2 text-sm " +
+                     (window.location.href.indexOf("/cliente/carrito") !== -1
+                       ? "opacity-75"
+                       : "text-blueGray-300")
+                   }
+                 ></i>{" "}
+                   Carrito
+               </Link>
+          
+         
+          
+             </li>        
+
+
+
+
+             <li className="items-center">
+               
+
+     
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/cliente/compras") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/cliente/compras"
+                >
+                  <i
+                    className={
+                      "fas fa-store mr-2 text-sm " +
+                      (window.location.href.indexOf("/cliente/compras") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                    Compras
+                </Link>
+           
+          
+           
+              </li>             
+                
+          
+           
+           
             </ul>
-
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
           
