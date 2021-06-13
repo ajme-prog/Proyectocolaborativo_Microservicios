@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:              
+  name: tienda
+spec:                 
+  selector:                 
+    matchLabels:             
+      app: tienda     
+  replicas: 2              
+  template:     
+    metadata:                      
+      labels:               
+        app: tienda             
+    spec:                       
+      containers:              
+        - name: tienda                      
+          image: docker.io/ren776/tienda:1.0
+          ports:                 
+            - containerPort: 1999
