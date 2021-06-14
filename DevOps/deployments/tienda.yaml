@@ -16,4 +16,4 @@ spec:
         - name: tienda                      
           image: docker.io/ren776/tienda:1.5
           ports:                 
-            - containerPort: 1999
+            - containerPort: 1989

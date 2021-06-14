@@ -6,4 +6,6 @@ servicios:
   - servicio-generos:
     port: 4000
   - servicio-tienda:
-    port: 1999
+    port: 1989
+  - servicio-compras:
+    port: 9000
