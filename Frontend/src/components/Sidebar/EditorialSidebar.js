@@ -97,7 +97,7 @@ export default function EditorialSidebar() {
                 >
                   <i
                     className={
-                      "fas fa-tv mr-2 text-sm " +
+                      "fas fa-book mr-2 text-sm " +
                       (window.location.href.indexOf("/editorial/Crearlibro") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
@@ -120,15 +120,32 @@ export default function EditorialSidebar() {
                 >
                   <i
                     className={
-                      "fas fa-tv mr-2 text-sm " +
+                      "fas fa-book-open mr-2 text-sm " +
                       (window.location.href.indexOf("/editorial/Verlibro") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
                     }
                   ></i>{" "}
                   Ver Libros
-
-                
+                </Link>
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/editorial/calculadora-impuestos") !== -1
+                      ? "text-amber-500 hover:text-amber-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/editorial/calculadora-impuestos"
+                >
+                  <i
+                    className={
+                      "fas fa-funnel-dollar mr-2 text-sm " +
+                      (window.location.href.indexOf("/editorial/calculadora-impuestos") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Calculadora impuestos
                 </Link>
               </li>             
             </ul>

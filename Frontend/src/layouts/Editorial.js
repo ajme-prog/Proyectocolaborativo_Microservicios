@@ -13,6 +13,7 @@ import Dashboard from "views/editorial/Dashboard.js";
 import Settings from "views/editorial/Settings.js";
 //import Libros from "views/editorial/Libros.js"
 import Libros from "views/editorial/Crearlibro.js"
+import CalculadoraImpuestos from "views/editorial/CalculadoraImpuestos"
 import VerLibros from "views/editorial/Verlibros.js"
 import Vistamodificarlibro from "views/editorial/Modificarlibro.js"
 export default function Editorial() {
@@ -27,6 +28,7 @@ export default function Editorial() {
         <div className="px-4 md:px-10 mx-auto w-full -m-24">
           <Switch>
             <Route path="/editorial/dashboard" exact component={Dashboard} />
+            <Route path="/editorial/calculadora-impuestos" exact component={CalculadoraImpuestos} />
             <Route path="/editorial/perfil" exact component={Settings} />
             <Route path="/editorial/Crearlibro" exact component={Libros} />
             <Route path="/editorial/Verlibro" exact component={VerLibros} />
