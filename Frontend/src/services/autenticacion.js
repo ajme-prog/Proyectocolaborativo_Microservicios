@@ -27,4 +27,4 @@ async function loginUsuario(correo, pwd){
   });
 }
 
-module.exports = { registrarUsuario, loginUsuario };
+export{ registrarUsuario, loginUsuario };

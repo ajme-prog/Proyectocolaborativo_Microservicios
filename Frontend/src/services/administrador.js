@@ -56,4 +56,4 @@ async function eliminarUsuario(usuario, token){
   });
 }
 
-module.exports = { eliminarUsuario, recuperarUsuarios, editorialesPendientes, aprobarEditorial }
+export { eliminarUsuario, recuperarUsuarios, editorialesPendientes, aprobarEditorial }
