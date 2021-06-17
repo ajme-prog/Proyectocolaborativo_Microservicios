@@ -1,32 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
-
+const { recuperarImpuestos } = require("../../services/editorial"); 
 // components
 
 export default function CardImpuestos() {
-  const url_api = "http://localhost:3001";
   const [loading, setLoading] = useState(false);
   const [pais, setPais] = useState(0)
   const [precio, setPrecio] = useState(0)
   const [total, setTotal] = useState(0)
-  const [paises, setPaises] = useState([
-    { nombre: "El Salvador", impuesto: 15 },
-    { nombre: "México", impuesto: 25 },
-  ]);
-
+  const [paises, setPaises] = useState([]);
 
   useEffect(() => {
-    async function recuperarImpuestos() {
-      const rawReponse = await fetch(`${url_api}/login`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
+    async function getImpuestos() {
+      const rawReponse = await recuperarImpuestos();
+      const respuesta = await rawReponse.json();
+
+      if(rawReponse.status !== 200){
+        return
+      }
+      console.log('respuesta', respuesta)
+      setPaises(respuesta.data)
+      setPais(respuesta.data[0].impuesto)
     }
 
-    //recuperarUsuario();
+    getImpuestos()
   }, []);
 
   return (
@@ -84,7 +80,7 @@ export default function CardImpuestos() {
                   >
                     {paises.length > 0 &&
                       paises.map((pais_) => {
-                        return <option key={pais_.nombre} value={pais_.impuesto}>{pais_.nombre}</option>;
+                        return <option key={pais_.pais} value={pais_.impuesto}>{pais_.pais}</option>;
                       })}
                   </select>
                 </div>
