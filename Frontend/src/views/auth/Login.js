@@ -69,7 +69,7 @@ export default function Login() {
     await setCookie("accessToken", respuesta.accessToken, { path: "/" });
     setLoading(false);
 
-    console.log("*******************",respuesta.usuario.tipo)
+    console.log("*******************",respuesta.usuario)
 
     if (respuesta.usuario.tipo === 0) {
       console.log("Es admin");

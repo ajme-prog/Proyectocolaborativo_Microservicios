@@ -34,13 +34,7 @@ router.get("/obtener_libros", function (req, res, next) {
   });
 });
 
-router.get("/obtener_compras", autenticarToken, function (req, res, next) {
-  const { usuarioReq } = req;
-
-  if (!(usuarioReq && usuarioReq.tipo === 2))
-    return res
-      .status(403)
-      .json({ mensaje: "No posee los permisos necesarios" });
+router.get("/obtener_compras/:id_usuario", function (req, res, next) {
 
   const params = {
     TableName: "Compras",
@@ -50,29 +44,24 @@ router.get("/obtener_compras", autenticarToken, function (req, res, next) {
     if (err) {
       res.json({ status: 404, mensaje: "Error en la base de datos" });
     } else {
-      console.log(data.Items);
+      //console.log(data.Items);
       let arreglo = data.Items.filter(
-        (compra) => compra.id_usuario.S == usuarioReq.usuario
+        (compra) => compra.id_usuario.S == req.params.id_usuario
       );
       res.json({ status: 200, mensaje: "OK", data: arreglo });
     }
   });
 });
 
-router.post("/generar_pedido", autenticarToken, function (req, res, next) {
-  const { fecha, pedido, tipo_envio, tipo_pago } = req.body;
-  const { usuarioReq } = req;
-
-  if (!(usuarioReq && usuarioReq.tipo === 2))
-    return res
-      .status(403)
-      .json({ mensaje: "No posee los permisos necesarios" });
+router.post("/generar_pedido", function (req, res, next) {
+  const { id_usuario,fecha, pedido, tipo_envio, tipo_pago } = req.body;
+  
 
   const params = {
     TableName: "Compras",
     Item: {
       id: { S: generarID() },
-      id_usuario: { S: usuarioReq.usuario },
+      id_usuario: { S: id_usuario },
       fecha: { S: fecha },
       tipo_envio: { S: tipo_envio },
       tipo_pago: { S: tipo_pago },

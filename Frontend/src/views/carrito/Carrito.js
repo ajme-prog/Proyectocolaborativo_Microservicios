@@ -92,6 +92,7 @@ export const Carrito = (props) => {
           fetch(URL.generar_pedido, {
             method: "POST",
             body: JSON.stringify({
+              id_usuario:JSON.parse(localStorage.getItem("usuario")).usuario,
               fecha: new Date(),
               pedido: JSON.parse(localStorage.getItem("Carrito")),
               tipo_pago: metodo_pago,
@@ -107,7 +108,10 @@ export const Carrito = (props) => {
               let respuesta = await response.json();
               console.log(respuesta);
               localStorage.setItem("Carrito", JSON.stringify([]));
-              history.push('/cliente/compras')
+              setMetodoPago("Metodo de Pago");
+    setMetodoEnvio("Metodo de Envío");
+    history.push("/cliente/compras")
+              
             })
             .catch((error) => {
               Toast.fire({

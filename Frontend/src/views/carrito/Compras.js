@@ -12,11 +12,12 @@ export const Compras = (props) => {
 
 
   useEffect(() => {
+    console.log("Que pedo",cookies.accessToken)
     get_compras();
   }, []);
 
   const get_compras=()=>{
-    fetch(URL.obtener_compras, {
+    fetch(URL.obtener_compras+JSON.parse(localStorage.getItem("usuario")).usuario, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
