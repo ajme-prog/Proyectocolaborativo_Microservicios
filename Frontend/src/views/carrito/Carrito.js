@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { URL } from "./rutas";
 import { createPopper } from "@popperjs/core";
+import {useHistory} from 'react-router-dom';
+
 import CardCarrito from "../../components/Cards/CardCarrito";
+
 import Swal from "sweetalert2";
+
 const { useAuth } = require("../../contexts/AuthContext");
-import {useHistory} from 'react-router-dom'
+
 export const Carrito = (props) => {
   const [libros, setLibros] = useState(
     JSON.parse(localStorage.getItem("Carrito"))
