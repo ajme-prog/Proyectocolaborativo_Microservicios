@@ -59,13 +59,17 @@ export default function Register() {
     swalPersonalizado.fire({
       icon: "success",
       title: "Registro",
-      text: respuesta.mensaje,
+      text: tipoUsuario === "Cliente" ? respuesta.mensaje : "Editorial creada, pendiente de aprobación",
     });
 
     limpiarInputs();
-    localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
-    setCookie('accessToken', respuesta.accessToken, { path: '/'})
-    history.push("/admin/perfil");
+    if(tipoUsuario === "Cliente"){
+      localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
+      setCookie('accessToken', respuesta.accessToken, { path: '/'})
+      history.push("/cliente/tienda");
+    } else {
+      history.push("/auth/login");
+    }
   }
 
   function limpiarInputs() {

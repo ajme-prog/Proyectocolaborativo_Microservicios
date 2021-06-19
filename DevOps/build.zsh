@@ -1,4 +1,5 @@
 #!/bin/env/zsh
+
 source ./DevOps/env.zsh
 AVER="$(cat ~/.version)"
 AVER="${AVER:-1.0}"
