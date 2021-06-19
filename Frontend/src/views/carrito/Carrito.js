@@ -4,13 +4,15 @@ import { createPopper } from "@popperjs/core";
 import CardCarrito from "../../components/Cards/CardCarrito";
 import Swal from "sweetalert2";
 const { useAuth } = require("../../contexts/AuthContext");
-
+import {useHistory} from 'react-router-dom'
 export const Carrito = (props) => {
   const [libros, setLibros] = useState(
     JSON.parse(localStorage.getItem("Carrito"))
   );
 
   const { cookies } = useAuth();
+
+  const history=useHistory();
 
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
   const btnDropdownRef = React.createRef();
@@ -101,7 +103,7 @@ export const Carrito = (props) => {
               let respuesta = await response.json();
               console.log(respuesta);
               localStorage.setItem("Carrito", JSON.stringify([]));
-              window.location.reload();
+              history.push('/cliente/compras')
             })
             .catch((error) => {
               Toast.fire({
