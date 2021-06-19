@@ -59,7 +59,7 @@ export default function Register() {
     swalPersonalizado.fire({
       icon: "success",
       title: "Registro",
-      text: respuesta.mensaje,
+      text: tipoUsuario === "Cliente" ? respuesta.mensaje : "Editorial creada, pendiente de aprobación",
     });
 
     limpiarInputs();
@@ -70,7 +70,6 @@ export default function Register() {
     } else {
       history.push("/auth/login");
     }
-    
   }
 
   function limpiarInputs() {
