@@ -23,7 +23,7 @@ export default function CardProductoCarrito(props) {
 
   const agregarCarrito = (i) => {
     var lista = JSON.parse(localStorage.getItem("Carrito"));
-
+    console.log("Carrito",lista)
     let tmp_carrito = lista.filter(
       (producto_tmp) => producto_tmp.id.S == producto.id.S
     );
