@@ -76,6 +76,7 @@ export default function Login() {
       history.push("/admin/settings");
     } else if (respuesta.usuario.tipo === 2) {
       console.log("Es cliente");
+      localStorage.setItem("Carrito", JSON.stringify([]));
       history.push("/cliente/tienda");
     } else {
       console.log("Es editorial");
