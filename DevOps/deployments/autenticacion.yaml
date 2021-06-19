@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:              
+  name: autenticacion
+spec:                 
+  selector:                 
+    matchLabels:             
+      app: autenticacion     
+  replicas: 2              
+  template:     
+    metadata:                      
+      labels:               
+        app: autenticacion             
+    spec:                       
+      containers:              
+        - name: autenticacion                      
+          image: docker.io/ren776/autenticacion:1.5
+          ports:                 
+            - containerPort: 3001

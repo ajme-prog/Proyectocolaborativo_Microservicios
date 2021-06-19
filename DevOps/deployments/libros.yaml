@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:              
+  name: libros
+spec:                 
+  selector:                 
+    matchLabels:             
+      app: libros     
+  replicas: 2              
+  template:     
+    metadata:                      
+      labels:               
+        app: libros             
+    spec:                       
+      containers:              
+        - name: libros                      
+          image: docker.io/ren776/libros:1.5
+          ports:                 
+            - containerPort: 4040
