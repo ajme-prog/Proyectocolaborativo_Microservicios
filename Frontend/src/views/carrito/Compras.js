@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+
 import { URL } from "./rutas";
 import CardCompras from "components/Cards/CardCompras";
 const { useAuth } = require("../../contexts/AuthContext");
@@ -8,7 +10,8 @@ export const Compras = (props) => {
     []
   );
 
-  const { cookies } = useAuth();
+  const [cookies, setCookie] = useCookies(["usuario"]);
+
 
 
   useEffect(() => {

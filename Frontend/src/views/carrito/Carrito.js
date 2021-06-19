@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { URL } from "./rutas";
+import { useCookies } from "react-cookie";
+
 import { createPopper } from "@popperjs/core";
 import {useHistory} from 'react-router-dom';
 
@@ -14,7 +16,8 @@ export const Carrito = (props) => {
     JSON.parse(localStorage.getItem("Carrito"))
   );
 
-  const { cookies } = useAuth();
+  const [cookies, setCookie] = useCookies(["usuario"]);
+  
 
   const history=useHistory();
 
