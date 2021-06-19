@@ -87,6 +87,9 @@ app.post("/login", async (req, res) => {
   const usuarioLogin = resultado[0];
   delete usuarioLogin.pwd;
 
+  if (usuarioLogin.tipo === 1 && usuarioLogin.estado !== "Aprobada")
+    return res.status(404).json({ mensaje: "Pendiente de aprobación" });
+
   const user = { usuario: usuarioLogin.usuario, tipo: usuarioLogin.tipo };
   const acces_token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
   res.status(200).json({ accessToken: acces_token, usuario: usuarioLogin });
