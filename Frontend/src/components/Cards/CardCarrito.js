@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 // components
 
@@ -45,7 +45,7 @@ export default function CardCarrito(props) {
 
   const eliminar_producto = (id) => {
     //setCantidad(cantidad - 1);
-    let arreglo_tmp=carrito.filter((producto)=>producto.id.S!=id)
+    let arreglo_tmp=carrito.filter((producto)=>producto.id.S!==id)
     setCarrito(arreglo_tmp)
     localStorage.setItem("Carrito", JSON.stringify(arreglo_tmp));
 

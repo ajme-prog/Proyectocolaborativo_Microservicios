@@ -33,6 +33,7 @@ export default function Cliente() {
             <Route path="/cliente/tienda" exact component={Tienda} />
             <Route path="/cliente/carrito" exact component={Carrito} />
             <Route path="/cliente/compras" exact component={Compras} />
+            <Route path="/cliente/settings" exact component={Settings} />
             <Redirect from="/cliente" to="/cliente/tienda" />
           </Switch>
           <FooterAdmin />

@@ -9,7 +9,7 @@ export const Tienda = (props) => {
   const [libro_caro, setLibroCaro] = useState({});
   const [libro_barato, setLibroBarato] = useState({});
   const [booleano, setBooleano] = useState(false);
-  const [carrito, setCarrito] = useState(JSON.parse(localStorage.getItem("Carrito")));
+  const [carrito] = useState(JSON.parse(localStorage.getItem("Carrito")));
 
 
     

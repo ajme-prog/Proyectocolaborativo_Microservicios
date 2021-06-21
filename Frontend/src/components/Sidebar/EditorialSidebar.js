@@ -77,14 +77,35 @@ export default function EditorialSidebar() {
 
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
-            
+
             <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
               EDITORIAL
             </h6>
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               <li className="items-center">
-               
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/settings") !== -1
+                      ? "text-amber-500 hover:text-amber-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/editorial/perfil"
+                >
+                  <i
+                    className={
+                      "fas fa-user mr-2 text-sm " +
+                      (window.location.href.indexOf("/editorial/perfil") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Perfil
+                </Link>
+              </li>
+              <li className="items-center">
+
 
                 <Link
                   className={
@@ -105,7 +126,7 @@ export default function EditorialSidebar() {
                   ></i>{" "}
                   Crear Libro
 
-                
+
                 </Link>
 
 
@@ -147,11 +168,11 @@ export default function EditorialSidebar() {
                   ></i>{" "}
                   Calculadora impuestos
                 </Link>
-              </li>             
+              </li>
             </ul>
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
-          
+
           </div>
         </div>
       </nav>

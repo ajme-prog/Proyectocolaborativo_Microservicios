@@ -75,18 +75,42 @@ export default function ClienteSidebar() {
               </div>
             </form>
 
+
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
-            
+
             <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
               CLIENTE
             </h6>
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               <li className="items-center">
-               
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/settings") !== -1
+                      ? "text-amber-500 hover:text-amber-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/cliente/settings"
+                >
+                  <i
+                    className={
+                      "fas fa-user mr-2 text-sm " +
+                      (window.location.href.indexOf("/cliente/settings") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Perfil
+                </Link>
+              </li>
 
-     
+
+              <li className="items-center">
+
+
+
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
@@ -104,49 +128,49 @@ export default function ClienteSidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>{" "}
-                    Tienda
+                  Tienda
                 </Link>
-           
-          
-           
-              </li>             
-         
-         
+
+
+
+              </li>
+
+
               <li className="items-center">
-               
-
-     
-               <Link
-                 className={
-                   "text-xs uppercase py-3 font-bold block " +
-                   (window.location.href.indexOf("/cliente/carrito") !== -1
-                     ? "text-lightBlue-500 hover:text-lightBlue-600"
-                     : "text-blueGray-700 hover:text-blueGray-500")
-                 }
-                 to="/cliente/carrito"
-               >
-                 <i
-                   className={
-                     "fas fa-store mr-2 text-sm " +
-                     (window.location.href.indexOf("/cliente/carrito") !== -1
-                       ? "opacity-75"
-                       : "text-blueGray-300")
-                   }
-                 ></i>{" "}
-                   Carrito
-               </Link>
-          
-         
-          
-             </li>        
 
 
 
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/cliente/carrito") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/cliente/carrito"
+                >
+                  <i
+                    className={
+                      "fas fa-store mr-2 text-sm " +
+                      (window.location.href.indexOf("/cliente/carrito") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Carrito
+                </Link>
 
-             <li className="items-center">
-               
 
-     
+
+              </li>
+
+
+
+
+              <li className="items-center">
+
+
+
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
@@ -164,20 +188,20 @@ export default function ClienteSidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>{" "}
-                    Compras
+                  Compras
                 </Link>
-           
-          
-           
-              </li>             
-                
-          
-           
-           
+
+
+
+              </li>
+
+
+
+
             </ul>
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
-          
+
           </div>
         </div>
       </nav>
