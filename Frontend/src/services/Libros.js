@@ -3,6 +3,7 @@ const url_api_libros = "http://localhost:4040"
 const url_api_solicitudes = "http://localhost:4080"
 
 
+
 export async function getGeneros() {
   return fetch(url_api_genero + "/generoliterario", {
     method: "GET",
@@ -12,6 +13,28 @@ export async function getGeneros() {
     }
   });
 }
+
+export const CrearLibroSolicitud = (id_editorial,editorial,nombre, autor, fecha) =>{
+  return fetch(url_api_libros + "/librossimple", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      nombre,
+      autor,
+      editorial:editorial,
+      id_editorial:id_editorial,
+      fechapublicacion:fecha
+    }),
+  });
+}
+
+
+
+
+
 
 export async function Crearlibro(nombre, generos, stock, autor, editorial, id_editorial, paginas, fechapublicacion, idioma, precio, fotografias) {
   let file = fotografias.item(0);
@@ -57,6 +80,33 @@ export const SolicitarLibro = async (nombre, autor, fecha, pdf_original) => {
         autor,
         fecha,
         pdf
+      })
+    },
+  );
+}
+
+export const getSolicitudesPendientes = () => {
+  return fetch(url_api_solicitudes + '/libros/solicitudes',
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      }
+    });
+}
+
+export const AceptarSolicitud = (id) => {
+  
+  return fetch(url_api_solicitudes + '/libros/nuevasolicitud/modificar',
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id
       })
     },
   );

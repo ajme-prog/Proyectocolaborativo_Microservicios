@@ -22,7 +22,7 @@ export default function EditorialSidebar() {
           {/* Brand */}
           <Link
             className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-            to="/"
+            to="/editorial/dashboard"
           >
             BookSA
           </Link>
@@ -48,7 +48,7 @@ export default function EditorialSidebar() {
                 <div className="w-6/12">
                   <Link
                     className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-                    to="/"
+                    to="/editorial/dashboard"
                   >
                     BookSA
                   </Link>
@@ -102,6 +102,27 @@ export default function EditorialSidebar() {
                     }
                   ></i>{" "}
                   Perfil
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/settings") !== -1
+                      ? "text-amber-500 hover:text-amber-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/editorial/dashboard"
+                >
+                  <i
+                    className={
+                      "fas fa-list-ul mr-2 text-sm " +
+                      (window.location.href.indexOf("/editorial/dashboard") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Solicitudes de libros
                 </Link>
               </li>
               <li className="items-center">

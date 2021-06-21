@@ -109,6 +109,95 @@ app.post("/libros", function (req, res) {
   });
 });
 
+
+
+//---Crear libro simple
+
+app.post("/librossimple", function (req, res) {
+  //-------------primero verifico que no exista un libro con ese nombre
+
+  var id_libro = generarID();
+  var nombre = req.body.nombre;
+  var generos = ["Aventura"];
+  var stock = "150";
+  var autor = req.body.autor;
+  var editorial = req.body.editorial;
+  var id_editorial = req.body.id_editorial;
+  var numeropaginas = "100";
+  var fechapublicacion = req.body.fechapublicacion;
+  var idioma = "Español";
+  var foto = "https://upload.wikimedia.org/wikipedia/commons/e/e5/Book_PNG2116.png";
+  var precio = "300";
+
+  const params1 = {
+    TableName: "Libros",
+    FilterExpression: "#cg = :data",
+    ExpressionAttributeNames: {
+      "#cg": "nombre",
+    },
+
+    ExpressionAttributeValues: {
+      ":data": { S: nombre },
+    },
+  };
+
+  // Call DynamoDB to read the item from the table
+  docClient.scan(params1, async function (err, data) {
+    if (err) {
+      console.log("Error", err);
+    } else {
+      if (data.Items.length != 0) {
+        res.send({
+          status: 409,
+          mensaje: "Nombre ya existe",
+        });
+      } else {
+        //---Si no existe paso a crear el libro
+
+        //-----------SUBIR IMAGEN A S3
+
+        // ubicacion = await upload_file(id_libro + ".png", foto);
+        object_url =foto;
+        //console.log("LA IMAGEN DE PERFIL SE GUARDO EN "+object_url);
+
+        const params = {
+          TableName: "Libros",
+          Item: {
+            id: { S: id_libro },
+            nombre: { S: nombre },
+            generos: { SS: generos },
+            stock: { S: stock },
+            autor: { S: autor },
+            editorial: { S: editorial },
+            id_editorial: { S: id_editorial },
+            numeropaginas: { S: numeropaginas },
+            fechapublicacion: { S: fechapublicacion },
+            idioma: { S: idioma },
+            imagen: { S: object_url },
+            precio: { S: precio },
+          },
+        };
+
+        docClient.putItem(params, function (err, data) {
+          if (err) {
+            res.send({
+              status: 400,
+              mensaje: "Error: Server error" + err,
+            }); 
+          } else {
+            console.log("SI ENTRE A PUT " + data);
+            res.send({
+              status: 200,
+              mensaje: { nombre: nombre, id: id_libro },
+            });
+          }
+        });
+      }
+    }
+  });
+});
+
+
 //-----actualizar libro
 
 app.post("/libros/modificar", async function (req, res) {
