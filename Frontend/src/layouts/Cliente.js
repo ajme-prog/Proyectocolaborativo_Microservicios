@@ -4,20 +4,16 @@ import { Switch, Route, Redirect } from "react-router-dom";
 // components
 
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
-import Sidebar from "components/Sidebar/Sidebar.js";
-import HeaderStats from "components/Headers/HeaderStats.js";
 import FooterAdmin from "components/Footers/FooterAdmin.js";
 
 // views
 
-import Dashboard from "views/admin/Dashboard.js";
 import Settings from "views/admin/Settings.js";
-import SolicitudesRegistro from "views/admin/SolicitudesRegistro";
-import EliminarUsuarios from "views/admin/EliminarUsuarios";
 import Tienda from "views/carrito/Tienda";
 import Carrito from "views/carrito/Carrito";
 import Compras from "views/carrito/Compras";
 import ClienteSidebar from "components/Sidebar/ClienteSidebar";
+import { SolicitudScreen } from "views/carrito/SolicitudScreen";
 
 export default function Cliente() {
   return (
@@ -34,6 +30,7 @@ export default function Cliente() {
             <Route path="/cliente/carrito" exact component={Carrito} />
             <Route path="/cliente/compras" exact component={Compras} />
             <Route path="/cliente/settings" exact component={Settings} />
+            <Route path="/cliente/solicitudes" exact component={SolicitudScreen} />
             <Redirect from="/cliente" to="/cliente/tienda" />
           </Switch>
           <FooterAdmin />
