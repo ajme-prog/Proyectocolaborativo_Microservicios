@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import Swal from "sweetalert2"
 const { recuperarUsuarios, eliminarUsuario } = require("../../services/administrador");
 
 export default function CardEliminarUsuarios() {
   const [loading, setLoading] = useState(false)
-  const [cookies, setCookie] = useCookies(["usuario"]);
+  const [cookies] = useCookies(["usuario"]);
   const [usuarios, setUsuarios] = useState([]);
 
   const Toast = Swal.mixin({

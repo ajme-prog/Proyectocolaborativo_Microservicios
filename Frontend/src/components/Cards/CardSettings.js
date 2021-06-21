@@ -60,12 +60,31 @@ export default function CardSettings() {
                   >
                     Nombre
                   </label>
-                  <input
-                    type="text"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    value={usuarioActual ? `${usuarioActual.nombre} ${usuarioActual.apellido}`  : "Cargando..."}
-                    disabled
-                  />
+                  {
+                     (usuarioActual) &&(usuarioActual.tipo===1) &&
+                    <input
+                      type="text"
+                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                      value={usuarioActual ? `${usuarioActual.nombre}`  : "Cargando..."}
+                      disabled
+                    />
+                    // <input
+                    //   type="text"
+                    //   className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    //   value={usuarioActual ? `${usuarioActual.nombre} ${usuarioActual.apellido}`  : "Cargando..."}
+                    //   disabled
+                    // />
+                  }
+                  {
+                     (usuarioActual) &&(usuarioActual.tipo!==1) &&
+                      <input
+                        type="text"
+                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        value={usuarioActual ? `${usuarioActual.nombre} ${usuarioActual.apellido}`  : "Cargando..."}
+                        disabled
+                      />
+                  }
+                  
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -92,12 +111,24 @@ export default function CardSettings() {
                   >
                     Telefono
                   </label>
-                  <input
-                    type="text"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    value={usuarioActual ? usuarioActual.telefono  : "Cargando..."}
-                    disabled
-                  />
+                  {
+                     (usuarioActual) &&(usuarioActual.tipo===1) &&
+                    <input
+                      type="text"
+                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                      value=""
+                      disabled
+                    />
+                  }
+                  {
+                     (usuarioActual) &&(usuarioActual.tipo!==1) &&
+                      <input
+                        type="text"
+                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        value={usuarioActual ? usuarioActual.telefono   : "Cargando..."}
+                        disabled
+                      />
+                  }
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
