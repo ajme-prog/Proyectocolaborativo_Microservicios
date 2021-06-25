@@ -11,6 +11,26 @@ const bucket_name = "imagenesproyectosa";
 const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
 var docClient = new AWS.DynamoDB(config.aws_remote_config);
 
+
+function log_activity(servicio, ruta, operacion, cuerpo = '{}'){
+  const params = {
+    TableName: "Logs",
+    Item: {
+      ID: { S: generarID() },
+      SERVICIO: { S: 'LIBROS' },
+      ruta: { S: ruta },
+      operacion: { S: operacion },
+      argumento: { S: cuerpo }
+    }
+  };
+
+  docClient.putItem(params, function (err, data) {
+    if (err) {
+      console.log('Error al insertar log: '+err);
+    }
+  });
+}
+
 port = 4040;
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
@@ -25,6 +45,8 @@ app.use(cors());
 //------------CRUD LIBROS---
 //----crear libro
 app.post("/libros", function (req, res) {
+
+  log_activity('LIBROS','/libros','POST', json.stringify(req.body))
   //-------------primero verifico que no exista un libro con ese nombre
 
   var id_libro = generarID();
@@ -115,6 +137,7 @@ app.post("/libros", function (req, res) {
 
 app.post("/librossimple", function (req, res) {
   //-------------primero verifico que no exista un libro con ese nombre
+  log_activity('LIBROS','/libros','POST', json.stringify(req.body))
 
   var id_libro = generarID();
   var nombre = req.body.nombre;
@@ -201,6 +224,7 @@ app.post("/librossimple", function (req, res) {
 //-----actualizar libro
 
 app.post("/libros/modificar", async function (req, res) {
+  log_activity('LIBROS','/libros/modificar','POST', json.stringify(req.body))
   var id_libro = req.body.id_libro;
   var nombre = req.body.nombre;
   var generos = req.body.generos;
@@ -326,6 +350,7 @@ app.post("/libros/modificar", async function (req, res) {
 //----OBTENER LIBROS DE UNA EDITORIAL
 app.get('/libros/:id_editorial',function(req,res){
 
+  log_activity('LIBROS','/libros/:id_editorial','GET', 'ID: '+req.params.id_editorial)
   var id_editorial = req.params.id_editorial;
 
 
@@ -381,6 +406,7 @@ app.get('/libros/:id_editorial',function(req,res){
 
 //----ELIMINAR LIBRO
 app.delete('/libros',function(req,res){
+  log_activity('LIBROS','/libros','DELETE', `ID:${req.body.id_libro}`)
 var id_libro=req.body.id_libro;
  
 
@@ -410,6 +436,7 @@ docClient.deleteItem(params2, function(err, data) {
 app.get("/libros", function (req, res) {
   var id_usuario = req.params.id_usuario;
 
+  log_activity('LIBROS','/libros','GET', '{}')
   const params2 = {
     TableName: "Libros",
   };
@@ -452,6 +479,7 @@ app.get("/libros", function (req, res) {
 //-----OBTENER SOLO UN LIBRO 
 app.get('/libros/unlibro/:id_libro',function(req,res){
 
+  log_activity('LIBROS','/libros/unlibro/:id_libro','POST', 'ID:'+req.params.id_libro)
   var id_editorial = req.params.id_libro;
 
 
