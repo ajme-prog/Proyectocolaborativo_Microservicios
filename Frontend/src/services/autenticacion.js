@@ -1,4 +1,5 @@
 const url_api = "http://localhost:3001"
+// const url_api = "http://localhost:4091"
 
 async function registrarUsuario(usuario) {
   return fetch(`${url_api}/registro`, {
