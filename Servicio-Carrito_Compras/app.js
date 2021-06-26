@@ -16,6 +16,10 @@ app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 app.use(morgan('tiny'));
 morgan(':method :url :status :res[content-length] - :response-time ms');
 
+var carrito_esb = require('./routes/carrito_esb');
+app.use('/orders', carrito_esb);
+
+
 
 var carrito = require('./routes/carrito');
 app.use('/carrito', carrito);
