@@ -16,6 +16,73 @@ async function insertarUsuario(registro) {
   }
 }
 
+async function insertarCliente(registro) {
+  const params = {
+    TableName: "cliente_esb",
+    Item: registro,
+  };
+
+  try {
+    await AWS.docClient.put(params).promise();
+    return { error: false, mensaje: "Usuario creado con éxito" };
+  } catch (error) {
+    console.log(error);
+    return { error: true, mensaje: "Ocurrió un error al insertar el usuario" };
+  }
+}
+
+async function loginCliente(correo, pwd) {
+  const params = {
+    TableName: "cliente_esb",
+    FilterExpression: "#cuser = :corr and #pwduser = :pass",
+    ExpressionAttributeNames: {
+      "#cuser": "correo",
+      "#pwduser": "pwd",
+    },
+    ExpressionAttributeValues: { ":corr": correo, ":pass": md5(pwd) },
+  };
+
+  let lastEvaluatedKey = "grupo1";
+  const itemsAll = [];
+
+  while (lastEvaluatedKey) {
+    const data = await AWS.docClient.scan(params).promise();
+    itemsAll.push(...data.Items);
+    lastEvaluatedKey = data.LastEvaluatedKey;
+    if (lastEvaluatedKey) {
+      params.ExclusiveStartKey = lastEvaluatedKey;
+    }
+  }
+
+  return itemsAll;
+}
+
+async function loginEditorial(correo, pwd) {
+  const params = {
+    TableName: "editorial_esb",
+    FilterExpression: "#cuser = :corr and #pwduser = :pass",
+    ExpressionAttributeNames: {
+      "#cuser": "correo",
+      "#pwduser": "pwd",
+    },
+    ExpressionAttributeValues: { ":corr": correo, ":pass": md5(pwd) },
+  };
+
+  let lastEvaluatedKey = "grupo1";
+  const itemsAll = [];
+
+  while (lastEvaluatedKey) {
+    const data = await AWS.docClient.scan(params).promise();
+    itemsAll.push(...data.Items);
+    lastEvaluatedKey = data.LastEvaluatedKey;
+    if (lastEvaluatedKey) {
+      params.ExclusiveStartKey = lastEvaluatedKey;
+    }
+  }
+
+  return itemsAll;
+}
+
 async function loginUsuario(correo, pwd) {
   const params = {
     TableName: "usuario",
@@ -148,4 +215,4 @@ async function eliminarUsuario(usuario) {
   }
 }
 
-module.exports = { recuperarUsuarios, eliminarUsuario, insertarUsuario, loginUsuario, aprobarEditorial, recuperarEditorialesPendientes };
+module.exports = { loginCliente, loginEditorial, insertarCliente, recuperarUsuarios, eliminarUsuario, insertarUsuario, loginUsuario, aprobarEditorial, recuperarEditorialesPendientes };

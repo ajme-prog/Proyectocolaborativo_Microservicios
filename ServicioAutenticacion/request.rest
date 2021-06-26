@@ -1,4 +1,25 @@
+###
+POST http://localhost:3001/auth/login
+Content-Type: application/json
 
+{
+    "email": "josue@gmail.com",
+    "passwd": "alskfdjalsdkf123"
+}
+
+###
+PUT http://localhost:3001/auth/registro
+Content-Type: application/json
+
+{
+    "nombre": "Cesar Josue",
+    "apellido": "Reyes Diaz",
+    "correo": "josue@gmail.com",
+    "pwd": "alskfdjalsdkf123",
+    "telefono": "12345678"
+}
+
+###
 POST http://localhost:3000/administrador/aprobar
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiODJlYzg1Njc3NjE5NzRhYWNiZDU0NDRlN2UzYjEyMzQyMTY5MmVhZjYyNTY2NDI3IiwidGlwbyI6MCwiaWF0IjoxNjIyODM0MDA1fQ.2vP3nG7QMYVAhjC9v34KGHIh_roGrSv_zYNerZhzbqs
 Content-Type: application/json
