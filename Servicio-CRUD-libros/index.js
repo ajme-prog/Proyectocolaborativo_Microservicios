@@ -137,7 +137,7 @@ app.post("/libros", function (req, res) {
 
 app.post("/librossimple", function (req, res) {
   //-------------primero verifico que no exista un libro con ese nombre
-  log_activity('LIBROS','/libros','POST', json.stringify(req.body))
+  log_activity('LIBROS','/libros','POST', JSON.stringify(req.body))
 
   var id_libro = generarID();
   var nombre = req.body.nombre;
