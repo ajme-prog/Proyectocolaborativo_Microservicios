@@ -533,6 +533,129 @@ app.get('/libros/unlibro/:id_libro',function(req,res){
 
 });
 
+
+
+//---------SERVICIO ESB-----------
+
+//----crear libro
+app.post("/book/create", function (req, res) {
+
+  //log_activity('LIBROS','/libros','POST', JSON.stringify(req.body))
+  //-------------primero verifico que no exista un libro con ese nombre
+
+  var id_libro = generarID();
+  var nombre = req.body.nombre;
+  var generos = req.body.generos;
+  var stock = parseInt(req.body.stock);
+  var autor = req.body.autor;
+  var id_editorial = req.body.id_editorial;
+  var foto = req.body.foto;
+  var precio = parseFloat(req.body.precio);
+
+  const params1 = {
+    TableName: "libros_esb",
+    FilterExpression: "#cg = :data",
+    ExpressionAttributeNames: {
+      "#cg": "nombre",
+    },
+
+    ExpressionAttributeValues: {
+      ":data": { S: nombre },
+    },
+  };
+
+  // Call DynamoDB to read the item from the table
+  docClient.scan(params1, async function (err, data) {
+    if (err) {
+      console.log("Error", err);
+    } else {
+      if (data.Items.length != 0) {
+        res.status(500).json({ message: "Error al guardar el registro del libro" });
+     
+      } else {
+        //---Si no existe paso a crear el libro
+
+        //-----------SUBIR IMAGEN A S3
+
+        ubicacion = await upload_file(id_libro + ".png", foto);
+        object_url =
+          "https://imagenesproyectosa.s3.amazonaws.com/" + id_libro + ".png";
+        //console.log("LA IMAGEN DE PERFIL SE GUARDO EN "+object_url);
+
+        const params = {
+          TableName: "libros_esb",
+          Item: {
+            id: { S: id_libro },
+            nombre: { S: nombre },
+            generos: { SS: generos },
+            stock: { N: stock.toString() },
+            autor: { S: autor },
+            id_editorial: { S: id_editorial },
+            foto: { S: object_url },
+            precio: { N: precio.toString() },
+          },
+        };
+
+        docClient.putItem(params, function (err, data) {
+          if (err) {
+            console.log("el segundo "+err)
+            res.status(500).json({ message: "Error al guardar el registro del libro" });
+     
+          } else {
+            console.log("SI ENTRE A PUT " + data);
+            res.status(200).json({ message: "Ok" });
+     
+          }
+        });
+      }
+    }
+  });
+});
+
+//---obtener libros
+
+app.get("/book/read", function (req, res) {
+
+
+  log_activity('LIBROS','/libros','GET', '{}')
+  const params2 = {
+    TableName: "libros_esb",
+  };
+
+  docClient.scan(params2, function (err, data) {
+    if (err) {
+      // res.send({status:200,mensaje:"OK", data: arreglo });
+      res.status(500).json({ message: "Error al obtener los libros" });
+     
+    } else {
+      console.log(data.Items.length);
+
+      var arreglo = [];
+
+      for (let i = 0; i < data.Items.length; i++) {
+        objeto={
+         id_libro:data.Items[i].id.S,
+         nombre:data.Items[i].nombre.S,
+         autor:data.Items[i].autor.S,
+         generos:data.Items[i].generos.SS,
+         stock:parseInt(data.Items[i].stock.N), 
+         id_editorial:data.Items[i].id_editorial.S,
+         foto:data.Items[i].foto.S,
+         precio:parseFloat(data.Items[i].precio.N),
+       }
+       arreglo.push(objeto);
+     }
+
+     res.status(200).json(arreglo);
+    }
+  });
+});
+
+
+//------TERMINAN SERVICIOS ESB----
+
+
+
 //---------Subir imagen a S3
 async function upload_file(path, payload) {
   return new Promise((resolve, reject) => {
