@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:              
+  name: impuestos
+spec:                 
+  selector:                 
+    matchLabels:             
+      app: impuestos     
+  replicas: 2              
+  template:     
+    metadata:                      
+      labels:               
+        app: impuestos             
+    spec:                       
+      containers:              
+        - name: impuestos                      
+          image: docker.io/ren776/impuestos:1.5
+          ports:                 
+            - containerPort: 9000

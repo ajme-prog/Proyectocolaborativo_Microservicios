@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 
+const nodemailer = require('nodemailer');
+
 var express = require("express");
 var bodyParser = require("body-parser");
 var router = express.Router();
@@ -13,6 +15,29 @@ const generarID = () => crypto.randomBytes(16).toString("hex");
 var AWS = require("aws-sdk");
 
 var dynamoClient = new AWS.DynamoDB(aws_keys.dynamodb);
+
+function send_email(target, contenido){
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.email,
+      pass: process.env.email_pass
+    }
+  });
+  const mailOptions = {
+    from: process.env.email,
+    to: target,
+    subject: 'Compra realizada con exito',
+    text: contenido
+  };
+  transporter.sendMail(mailOptions, function (err, info){
+    if(error){
+      console.log(error);
+    }else{
+      console.log('Email sent successfully to: '+target);
+    }
+  });
+}
 
 router.use(cors(corsOptions));
 router.use(bodyParser.json({ limit: "50mb", extended: true }));

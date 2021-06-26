@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:              
+  name: esb
+spec:                 
+  selector:                 
+    matchLabels:             
+      app: esb     
+  replicas: 2              
+  template:     
+    metadata:                      
+      labels:               
+        app: esb             
+    spec:                       
+      containers:              
+        - name: esb                      
+          image: docker.io/ren776/esb:1.5
+          ports:                 
+            - containerPort: 4091
