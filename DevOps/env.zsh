@@ -6,6 +6,9 @@ SERVICES=('ServicioAutenticacion:autenticacion'
 'Servicio-Carrito_Compras:compras'
 'Servicio-CRUD-libros:libros'
 'Servicio-generosliterarios:generos'
+'ServicioESB:esb'
+'Servicio-Impuestos:impuestos'
+'Servicio-Solicitud_libros:solicitud'
 'ServicioTienda:tienda')
 
 NEXT_VERSION=$(cat << 'EOF'
