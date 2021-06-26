@@ -17,7 +17,7 @@ function log_activity(servicio, ruta, operacion, cuerpo = '{}'){
   const clean_body = '';
   switch(typeof cuerpo){
     case "string": 
-      clean_body = cuerpo.length > MAX_SIZE ? clean_body.substring(0,MAX_SIZE): cuerpo;
+      clean_body = cuerpo.length > MAX_SIZE ? cuerpo.substring(0,MAX_SIZE): cuerpo;
       break;
     case "number":
       clean_body = cuerpo.toString();
