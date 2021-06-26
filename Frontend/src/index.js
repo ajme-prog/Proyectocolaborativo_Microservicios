@@ -19,12 +19,14 @@ import Index from "views/Index.js";
 
 import PrivateRoute from "components/PrivateRoute";
 import { AuthProvider } from "./contexts/AuthContext";
+import { EsbProvider } from "./contexts/EsbContext";
 import Cliente from "layouts/Cliente";
 
 ReactDOM.render(
   <CookiesProvider>
     <BrowserRouter>
       <AuthProvider>
+      <EsbProvider>
         <Switch>
           {/* add routes with layouts */}
           <PrivateRoute path="/admin" component={Admin} />
@@ -39,6 +41,7 @@ ReactDOM.render(
           {/* add redirect for first page */}
           <Redirect from="*" to="/" />
         </Switch>
+      </EsbProvider>
       </AuthProvider>
     </BrowserRouter>
   </CookiesProvider>,

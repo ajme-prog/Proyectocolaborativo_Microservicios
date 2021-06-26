@@ -4,7 +4,7 @@ import { useCookies } from "react-cookie";
 
 export default function PrivateRoute({ component: Component, ...rest }) {
 
-    const [cookies, setCookie] = useCookies(["usuario"]);
+    /*const [cookies, setCookie] = useCookies(["usuario"]);
 
     useEffect(() => {
         async function recuperarCookies () {
@@ -12,13 +12,14 @@ export default function PrivateRoute({ component: Component, ...rest }) {
         }
 
         recuperarCookies()
-    }, [])
+    }, [])*/
 
     return (
         <Route
             {...rest}
             render={props => {
-                return cookies.accessToken ? <Component {...props} /> : <Redirect to="/auth/login"/>
+                //return cookies.accessToken ? <Component {...props} /> : <Redirect to="/auth/login"/>
+                return true ? <Component {...props} /> : <Redirect to="/auth/login"/>
             }}
         ></Route>
     )
