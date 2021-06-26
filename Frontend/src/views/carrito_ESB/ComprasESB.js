@@ -20,7 +20,7 @@ export const ComprasESB = (props) => {
   }, []);
 
   const get_compras=()=>{
-    fetch(URL.obtener_compras+JSON.parse(localStorage.getItem("usuario")).usuario, {
+    fetch(URL.obtener_compras, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -31,9 +31,9 @@ export const ComprasESB = (props) => {
       .then((res) => res)
       .then(async (response) => {
         let respuesta = await response.json();
-        if (respuesta.status === 200) {
-          let arr=respuesta.data;
-          console.log(respuesta.data)
+        if (response.status === 200) {
+          let arr=respuesta.filter((compra)=>{compra.id_cliente===JSON.parse(localStorage.getItem("usuario")).usuario});
+          console.log(respuesta)
           setCompras(arr);
         } else {
           alert("Error al obtener las compras");

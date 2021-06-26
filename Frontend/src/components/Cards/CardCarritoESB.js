@@ -20,15 +20,15 @@ export default function CardCarritoESB(props) {
       nuevo_precio = 0;
 
     for (let j = 0; j < carrito.length; j++) {
-      if (carrito[j].id.S === id) {
+      if (carrito[j].id_libro === id) {
         if (tipo === 0) {
-          carrito[j].cantidad.S += 1;
+          carrito[j].cantidad += 1;
         } else {
-          carrito[j].cantidad.S -= 1;
+          carrito[j].cantidad -= 1;
         }
-        nueva_cantidad = carrito[j].cantidad.S;
-        nuevo_precio = carrito[j].cantidad.S * parseInt(carrito[j].precio.S);
-        carrito[j].subtotal.S = nuevo_precio;
+        nueva_cantidad = carrito[j].cantidad;
+        nuevo_precio = carrito[j].cantidad * parseInt(carrito[j].precio);
+        carrito[j].subtotal = nuevo_precio;
 
         break;
       }
