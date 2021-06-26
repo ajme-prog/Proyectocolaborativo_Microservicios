@@ -41,8 +41,34 @@ async function validarCorreoUsuario(correo) {
     return itemsAll.length === 0;
 }
 
+async function validarCorreoCliente(correo) {
+    const params = {
+        TableName: "cliente_esb",
+        FilterExpression: "#cuser = :data",
+        ExpressionAttributeNames: {
+            "#cuser": "correo",
+        },
+        ExpressionAttributeValues: { ":data": correo },
+    };
+
+    let lastEvaluatedKey = 'dummy'; 
+    const itemsAll = [];
+
+    while (lastEvaluatedKey) {
+        const data = await AWS.docClient.scan(params).promise();
+        itemsAll.push(...data.Items);
+        lastEvaluatedKey = data.LastEvaluatedKey;
+        if (lastEvaluatedKey) {
+            params.ExclusiveStartKey = lastEvaluatedKey;
+        }
+    }
+
+    return itemsAll.length === 0;
+}
+
 module.exports = {
     validarDatosEditorial,
     validarDatosCliente,
     validarCorreoUsuario,
+    validarCorreoCliente
 };

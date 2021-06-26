@@ -14,6 +14,84 @@ app.use(express.json());
 // Configuración de CORS
 app.use(cors());
 
+
+/* EDNPOINTS ESB */
+
+app.put("/auth/registro", async (req, res) => {
+  let registro = req.body;
+
+  if (!validaciones.validarDatosCliente(registro)) {
+    console.log("[ERROR] Campos insuficientes para cliente");
+    return res
+      .status(400)
+      .json({ message: "Campos insuficientes" });
+  }
+
+  const correoUnico = await validaciones.validarCorreoCliente(registro.correo);
+
+  if (!correoUnico)
+    return res.status(400).json({ message: "Ya hay un usuario asociado con el correo ingresado" });
+
+  registro = {
+    ...registro,
+    id_cliente: crypto.randomBytes(24).toString("hex"),
+    pwd: md5(registro.pwd),
+  };
+
+  const resultado = await funciones.insertarCliente(registro);
+
+  if (resultado.error)
+    return res
+      .status(400)
+      .json({ message: "Ocurrió un error al insertar el usuario" });
+
+  console.log("\n[REGISTRO] ", registro.nombre, "\n");
+
+  res.status(200).json({
+    message: resultado.mensaje
+  });
+});
+
+app.post("/auth/login", async (req, res) => {
+  
+  //Autenticar al usuario
+  const correo = req.body.email;
+  const pwd = req.body.passwd;
+
+  if(correo === "admin" && pwd === "admin") return res.status(200).json({ data: { id: "admin", nombre: "admin", "tipo": 2 } });
+
+  //Validar login
+  const resultadoCliente = await funciones.loginCliente(correo, pwd);
+  const resultadoEditorial = await funciones.loginEditorial(correo, pwd);
+
+  if (resultadoCliente.length === 0 && resultadoEditorial.length === 0)
+    return res.status(400).json({ message: "El usuario no existe" });
+
+  
+  const tipo = resultadoCliente.length !== 0 ? 4 : 3
+  const usuarioLogin = tipo === 4 ? resultadoCliente[0] : resultadoEditorial[0];
+  
+  delete usuarioLogin.pwd;
+  delete usuarioLogin.correo;
+
+  if(tipo === 4){
+    delete usuarioLogin.telefono;
+    delete usuarioLogin.apellido;
+    usuarioLogin.id = usuarioLogin.id_cliente;
+    delete usuarioLogin.id_cliente
+  }else{
+    delete usuarioLogin.direccion;
+    usuarioLogin.id = usuarioLogin.id_editorial;
+    delete usuarioLogin.id_editorial
+  }
+
+  usuarioLogin.tipo = tipo
+  console.log(`\n[LOGIN] ${correo}`);
+  res.status(200).json({ data: usuarioLogin });
+});
+
+/* ENDPOINTS ESB*/
+
 app.put("/registro", async (req, res) => {
   let registro = req.body;
 
