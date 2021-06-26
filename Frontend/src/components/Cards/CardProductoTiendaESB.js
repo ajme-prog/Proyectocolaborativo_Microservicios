@@ -25,7 +25,7 @@ export default function CardProductoTiendaESB(props) {
     var lista = JSON.parse(localStorage.getItem("Carrito"));
     console.log("Carrito",lista)
     let tmp_carrito = lista.filter(
-      (producto_tmp) => producto_tmp.id.S == producto.id.S
+      (producto_tmp) => producto_tmp.id_libro == producto.id_libro
     );
 
     if (tmp_carrito.length != 0) {
@@ -75,7 +75,7 @@ export default function CardProductoTiendaESB(props) {
                 <div className="relative">
                   <img
                     alt="..."
-                    src={producto.imagen.foto}
+                    src={producto.foto}
                     className="shadow-xl rounded-full h-auto align-middle border-none "
                   />
                 </div>
