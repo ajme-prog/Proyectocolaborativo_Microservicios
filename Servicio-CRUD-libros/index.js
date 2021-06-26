@@ -13,6 +13,28 @@ var docClient = new AWS.DynamoDB(config.aws_remote_config);
 
 
 function log_activity(servicio, ruta, operacion, cuerpo = '{}'){
+  const MAX_SIZE = 40;
+  const clean_body = '';
+  switch(typeof cuerpo){
+    case "string": 
+      clean_body = cuerpo.length > MAX_SIZE ? clean_body.substring(0,MAX_SIZE): cuerpo;
+      break;
+    case "number":
+      clean_body = cuerpo.toString();
+    case "object":
+      const b = {};
+      for ( const k in cuerpo ){
+        const v = cuerpo[k];
+        b[k] = v.toString().length > MAX_SIZE ? v.toString().substring(0,MAX_SIZE):v.toString();
+      }
+      clean_body = JSON.stringify(b);
+      break;
+    default:
+      clean_body = cuerpo.toString().length > MAX_SIZE ? 
+        cuerpo.toString().substring(0,MAX_SIZE):cuerpo.toString();
+
+  }
+
   const params = {
     TableName: "Logs",
     Item: {
@@ -20,7 +42,7 @@ function log_activity(servicio, ruta, operacion, cuerpo = '{}'){
       SERVICIO: { S: 'LIBROS' },
       ruta: { S: ruta },
       operacion: { S: operacion },
-      argumento: { S: cuerpo }
+      argumento: { S: clean_body }
     }
   };
 
@@ -46,7 +68,7 @@ app.use(cors());
 //----crear libro
 app.post("/libros", function (req, res) {
 
-  log_activity('LIBROS','/libros','POST', json.stringify(req.body))
+  log_activity('LIBROS','/libros','POST', req.body)
   //-------------primero verifico que no exista un libro con ese nombre
 
   var id_libro = generarID();
@@ -137,7 +159,7 @@ app.post("/libros", function (req, res) {
 
 app.post("/librossimple", function (req, res) {
   //-------------primero verifico que no exista un libro con ese nombre
-  log_activity('LIBROS','/libros','POST', JSON.stringify(req.body))
+  log_activity('LIBROS','/libros','POST',req.body)
 
   var id_libro = generarID();
   var nombre = req.body.nombre;
@@ -224,7 +246,7 @@ app.post("/librossimple", function (req, res) {
 //-----actualizar libro
 
 app.post("/libros/modificar", async function (req, res) {
-  log_activity('LIBROS','/libros/modificar','POST', json.stringify(req.body))
+  log_activity('LIBROS','/libros/modificar','POST', req.body)
   var id_libro = req.body.id_libro;
   var nombre = req.body.nombre;
   var generos = req.body.generos;

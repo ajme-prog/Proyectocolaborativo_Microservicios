@@ -2,4 +2,5 @@ FROM node:14
 COPY . .
 RUN npm install
 RUN npm i aws-sdk
-CMD [ "node", "app.js" ]
+RUN echo '. ./.env && node ./app.js' > app.sh
+CMD [ "sh", "app.sh" ]
