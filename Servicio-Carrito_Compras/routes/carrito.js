@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 var express = require("express");
 var bodyParser = require("body-parser");
@@ -16,25 +16,25 @@ var AWS = require("aws-sdk");
 
 var dynamoClient = new AWS.DynamoDB(aws_keys.dynamodb);
 
-function send_email(target, contenido){
+function send_email(target, contenido) {
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
       user: process.env.email,
-      pass: process.env.email_pass
-    }
+      pass: process.env.email_pass,
+    },
   });
   const mailOptions = {
     from: process.env.email,
     to: target,
-    subject: 'Compra realizada con exito',
-    text: contenido
+    subject: "Compra realizada con exito",
+    text: contenido,
   };
-  transporter.sendMail(mailOptions, function (err, info){
-    if(error){
+  transporter.sendMail(mailOptions, function (err, info) {
+    if (error) {
       console.log(error);
-    }else{
-      console.log('Email sent successfully to: '+target);
+    } else {
+      console.log("Email sent successfully to: " + target);
     }
   });
 }
@@ -59,30 +59,34 @@ router.get("/obtener_libros", function (req, res, next) {
   });
 });
 
-router.get("/obtener_compras/:id_usuario", autenticarToken, function (req, res, next) {
-  const { usuarioReq } = req;
-  console.log(usuarioReq)
-  if (!(usuarioReq && usuarioReq.tipo === 2))
-    return res
-      .status(403)
-      .json({ mensaje: "No posee los permisos necesarios" });
+router.get(
+  "/obtener_compras/:id_usuario",
+  autenticarToken,
+  function (req, res, next) {
+    const { usuarioReq } = req;
+    console.log(usuarioReq);
+    if (!(usuarioReq && usuarioReq.tipo === 2))
+      return res
+        .status(403)
+        .json({ mensaje: "No posee los permisos necesarios" });
 
-  const params = {
-    TableName: "Compras",
-  };
+    const params = {
+      TableName: "Compras",
+    };
 
-  dynamoClient.scan(params, function (err, data) {
-    if (err) {
-      res.json({ status: 404, mensaje: "Error en la base de datos" });
-    } else {
-      console.log(data.Items);
-      let arreglo = data.Items.filter(
-        (compra) => compra.id_usuario.S == usuarioReq.usuario
-      );
-      res.json({ status: 200, mensaje: "OK", data: arreglo });
-    }
-  });
-});
+    dynamoClient.scan(params, function (err, data) {
+      if (err) {
+        res.json({ status: 404, mensaje: "Error en la base de datos" });
+      } else {
+        console.log(data.Items);
+        let arreglo = data.Items.filter(
+          (compra) => compra.id_usuario.S == usuarioReq.usuario
+        );
+        res.json({ status: 200, mensaje: "OK", data: arreglo });
+      }
+    });
+  }
+);
 
 router.post("/generar_pedido", autenticarToken, function (req, res, next) {
   const { fecha, pedido, tipo_envio, tipo_pago } = req.body;
