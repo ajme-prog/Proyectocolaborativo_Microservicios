@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-
+const { useEsb } = require("../../contexts/EsbContext");
 // components
 
 export default function CardSettings() {
-
+  const { esb } = useEsb();
   const [usuarioActual, setUsuarioActual] = useState()
 
   useEffect(() => {
     async function recuperarUsuario () {
+
       let usuario = localStorage.getItem("usuario")
       usuario = await JSON.parse(usuario)
       console.log(usuario)
