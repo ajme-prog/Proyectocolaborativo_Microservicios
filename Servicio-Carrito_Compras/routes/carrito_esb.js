@@ -1,6 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var router = express.Router();
+const notice_purchase = require('./email.js');
 
 const crypto = require("crypto");
 const cors = require("cors");
@@ -63,6 +64,10 @@ router.post("/buy", function (req, res, next) {
         mensaje: "La compra no se realizó, verifique nuevamente su orden",
       });
     } else {
+      notice_purchase(id_cliente,`Número de confirmación: ${id_compra}; 
+        Total: ${total};
+        Detalle: ${JSON.stringify(books)}`,dynamoClient);
+
       res.status(200).json({
         message: "Compra registrada correctamente",
       });
