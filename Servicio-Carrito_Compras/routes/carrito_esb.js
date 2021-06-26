@@ -9,6 +9,7 @@ var corsOptions = { origin: true, optionsSuccessStatus: 200 };
 const generarID = () => crypto.randomBytes(16).toString("hex");
 
 var AWS = require("aws-sdk");
+const { parse } = require("dotenv");
 
 var dynamoClient = new AWS.DynamoDB(aws_keys.dynamodb);
 
@@ -16,58 +17,54 @@ router.use(cors(corsOptions));
 router.use(bodyParser.json({ limit: "50mb", extended: true }));
 router.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-router.get("read/:id_usuario", function (req, res, next) {
+router.get("/read", function (req, res, next) {
   const params = {
     TableName: "compras_esb",
   };
 
   dynamoClient.scan(params, function (err, data) {
     if (err) {
-      res.json({ status: 500, mensaje: "Error en la base de datos" });
+      res.status(500).json({message: "Error en la base de datos" });
     } else {
       console.log(data.Items);
-      let arreglo = data.Items.filter(
-        (compra) => compra.id_usuario.S == req.params.id_usuario
-      );
+      let arreglo = data.Items;
 
       let arreglo_esb = arreglo.map((compra) => {
         return {
           id_compra: compra.id_compra.S,
-          id_usuario: compra.id_cliente.S,
+          id_cliente: compra.id_cliente.S,
           total: compra.total.N,
           books: JSON.parse(compra.detalle.S),
         };
       });
       console.log(arreglo_esb);
-      res.json({ status: 200, mensaje: "OK", data: arreglo_esb });
+      res.status(200).json(arreglo_esb);
     }
   });
 });
 
 router.post("/buy", function (req, res, next) {
-  const { id_cliente, pedido, total } = req.body;
-
+  const { id_cliente, books, total } = req.body;
+  console.log(req.body)
   const params = {
     TableName: "compras_esb",
     Item: {
-      id: { S: generarID() },
-      id_usuario: { S: id_cliente },
-      total: { N: total },
-      detalle: { S: JSON.stringify(pedido) },
+      id_compra: { S: generarID() },
+      id_cliente: { S: id_cliente },
+      total: { N: total.toString() },
+      detalle: { S: JSON.stringify(books) },
     },
   };
 
   dynamoClient.putItem(params, function (err, data) {
     if (err) {
       console.log(err);
-      res.json({
-        status: 400,
+      res.status(400).json({
         mensaje: "La compra no se realizó, verifique nuevamente su orden",
       });
     } else {
-      res.json({
-        status: 200,
-        mensaje: "Compra registrada correctamente",
+      res.status(200).json({
+        message: "Compra registrada correctamente",
       });
     }
   });
