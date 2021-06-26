@@ -14,7 +14,7 @@ var docClient = new AWS.DynamoDB(config.aws_remote_config);
 
 function log_activity(servicio, ruta, operacion, cuerpo = '{}'){
   const MAX_SIZE = 40;
-  const clean_body = '';
+  let clean_body = '';
   switch(typeof cuerpo){
     case "string": 
       clean_body = cuerpo.length > MAX_SIZE ? cuerpo.substring(0,MAX_SIZE): cuerpo;
@@ -383,7 +383,7 @@ app.get('/libros/:id_editorial',function(req,res){
     ExpressionAttributeNames: {
       "#cg": "id_editorial",
     },
-
+ 
     ExpressionAttributeValues: {
       ":data": { S: id_editorial },
     }
@@ -405,12 +405,12 @@ app.get('/libros/:id_editorial',function(req,res){
           generos:data.Items[i].generos.SS,
           stock:data.Items[i].stock.S,
           autor:data.Items[i].autor.S,
-          editorial:data.Items[i].editorial.S,
+          editorial:data.Items[i].editorial&& data.Items[i].editorial.S,
           id_editorial:data.Items[i].id_editorial.S,
-          numeropaginas:data.Items[i].numeropaginas.S,
-          fechapublicacion:data.Items[i].fechapublicacion.S,
-          idioma:data.Items[i].idioma.S,
-          foto:data.Items[i].imagen.S,
+          numeropaginas:data.Items[i].numeropaginas&&data.Items[i].numeropaginas.S,
+          fechapublicacion:data.Items[i].fechapublicacion&&data.Items[i].fechapublicacion.S,
+          idioma:data.Items[i].idioma&&data.Items[i].idioma.S,
+          foto:data.Items[i].imagen&&data.Items[i].imagen.S,
           precio:data.Items[i].precio.S,
         }
         arreglo.push(objeto);
@@ -482,12 +482,12 @@ app.get("/libros", function (req, res) {
          generos:data.Items[i].generos.SS,
          stock:data.Items[i].stock.S,
          autor:data.Items[i].autor.S,
-         editorial:data.Items[i].editorial.S,
+         editorial: data.Items[i].editorial && data.Items[i].editorial.S,
          id_editorial:data.Items[i].id_editorial.S,
-         numeropaginas:data.Items[i].numeropaginas.S,
-         fechapublicacion:data.Items[i].fechapublicacion.S,
-         idioma:data.Items[i].idioma.S,
-         foto:data.Items[i].imagen.S,
+         numeropaginas:data.Items[i].numeropaginas && data.Items[i].numeropaginas.S,
+         fechapublicacion:data.Items[i].fechapublicacion&& data.Items[i].fechapublicacion.S,
+         idioma:data.Items[i].idioma&& data.Items[i].idioma.S,
+         foto:data.Items[i].imagen&&data.Items[i].imagen.S,
          precio:data.Items[i].precio.S,
        }
        arreglo.push(objeto);
@@ -554,7 +554,7 @@ app.get('/libros/unlibro/:id_libro',function(req,res){
 
 
 });
-
+ 
 
 
 //---------SERVICIO ESB-----------
