@@ -5,7 +5,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 9000
-      targetPort: 9000
+    - port: 9010
+      targetPort: 9010
   selector:
     app: impuestos
