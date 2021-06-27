@@ -46,11 +46,12 @@ router.get("/read", function (req, res, next) {
 
 router.post("/buy", function (req, res, next) {
   const { id_cliente, books, total } = req.body;
+  const gen_id_compra = generarID();
   console.log(req.body)
   const params = {
     TableName: "compras_esb",
     Item: {
-      id_compra: { S: generarID() },
+      id_compra: { S: gen_id_compra },
       id_cliente: { S: id_cliente },
       total: { N: total.toString() },
       detalle: { S: JSON.stringify(books) },
@@ -64,7 +65,7 @@ router.post("/buy", function (req, res, next) {
         mensaje: "La compra no se realizó, verifique nuevamente su orden",
       });
     } else {
-      notice_purchase(id_cliente,`Número de confirmación: ${id_compra}; 
+      notice_purchase(id_cliente,`Número de confirmación: ${gen_id_compra}; 
         Total: ${total};
         Detalle: ${JSON.stringify(books)}`,dynamoClient);
 

@@ -94,7 +94,7 @@ router.post("/generar_pedido", autenticarToken, function (req, res, next) {
       });
     } else {
       notice_purchase(usuarioReq.usuario,`Fecha: ${fecha}; 
-        Tipo de envío: ${tipo_envío};
+        Tipo de envío: ${tipo_envio};
         Tipo de pago: ${tipo_pago};
         Detalle: ${JSON.stringify(pedido)}`,dynamoClient);
       res.json({
