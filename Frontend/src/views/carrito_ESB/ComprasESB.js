@@ -3,24 +3,25 @@ import { useCookies } from "react-cookie";
 
 import { URL } from "./rutas";
 import CardComprasESB from "components/Cards/CardComprasESB";
-const { useAuth } = require("../../contexts/AuthContext");
+const { useEsb } = require("../../contexts/EsbContext");
 
-export const ComprasESB = (props) => {
-  const [compras, setCompras] = useState(
-    []
-  );
+
+
+
+
+export const ComprasESB = () => {
+  const [compras, setCompras] = useState([]);
 
   const [cookies, setCookie] = useCookies(["usuario"]);
-
-
+  const esb =useEsb();
+  console.log("IP ESB: ",esb.esb)
 
   useEffect(() => {
-    console.log("Que pedo",cookies.accessToken)
-    get_compras();
+      get_compras();
   }, []);
 
-  const get_compras=()=>{
-    fetch(URL.obtener_compras, {
+  const get_compras = () => {
+    fetch(`${esb.esb}/orders/read`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -28,30 +29,35 @@ export const ComprasESB = (props) => {
         Authorization: `Bearer ${cookies.accessToken}`,
       },
     })
-      .then((res) => res)
       .then(async (response) => {
         let respuesta = await response.json();
-        if (response.status === 200) {
-          let arr=respuesta.filter((compra)=>{compra.id_cliente===JSON.parse(localStorage.getItem("usuario")).usuario});
-          console.log(respuesta)
-          setCompras(arr);
-        } else {
-          alert("Error al obtener las compras");
+
+        let arr = [];
+        for (let i = 0; i < respuesta.length; i++) {
+          if (
+            respuesta[i].id_cliente ==
+            JSON.parse(localStorage.getItem("usuario")).id
+          ) {
+            arr.push(respuesta[i]);
+          }
         }
+        console.log(arr);
+        setCompras(arr);
       })
       .catch((error) => console.log(error));
-  }
-
- 
+  };
 
   return (
     <>
       <div className="flex flex-wrap w-full mb-12 px-4">
-       <CardComprasESB color="light" color2="dark" lista={compras}></CardComprasESB> 
+        <CardComprasESB
+          color="light"
+          color2="dark"
+          lista={compras}
+        ></CardComprasESB>
       </div>
-
     </>
   );
 };
 
-export default Compras;
+export default ComprasESB;

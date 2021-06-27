@@ -5,9 +5,8 @@ import Swal from "sweetalert2";
 
 export default function CardProductoTiendaESB(props) {
   const [producto, setProducto] = useState(props.objeto);
-  const [generos, setGeneros] = useState(props.objeto.generos);
+  const [generos, setGeneros] = useState(props.objeto.generos.SS);
 
-  console.log(producto)
 
   const Toast = Swal.mixin({
     toast: true,
@@ -25,7 +24,7 @@ export default function CardProductoTiendaESB(props) {
     var lista = JSON.parse(localStorage.getItem("Carrito"));
     console.log("Carrito",lista)
     let tmp_carrito = lista.filter(
-      (producto_tmp) => producto_tmp.id_libro == producto.id_libro
+      (producto_tmp) => producto_tmp.id.S == producto.id.S
     );
 
     if (tmp_carrito.length != 0) {
@@ -38,8 +37,8 @@ export default function CardProductoTiendaESB(props) {
 
     var tmp = {
       ...producto,
-      cantidad: { S: 1 },
-      subtotal: { S: producto.precio },
+      cantidad: { N: 1 },
+      subtotal: producto.precio.N,
     };
 
     lista.push(tmp);
@@ -50,9 +49,9 @@ export default function CardProductoTiendaESB(props) {
     <>
       <div
         className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
-        key={props.index}
+        key={props.index*100+15}
       >
-        <div className="rounded-t mb-0 px-4 py-3 border-0">
+        <div className="rounded-t mb-0 px-4 py-3 border-0" >
           <div className="flex flex-wrap items-center">
             <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
               <button
@@ -75,7 +74,7 @@ export default function CardProductoTiendaESB(props) {
                 <div className="relative">
                   <img
                     alt="..."
-                    src={producto.foto}
+                    src={producto.foto.S}
                     className="shadow-xl rounded-full h-auto align-middle border-none "
                   />
                 </div>
@@ -83,11 +82,11 @@ export default function CardProductoTiendaESB(props) {
             </div>
             <div className="text-center mt-10">
               <h1 className="text-xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                {producto.nombre}
+                {producto.nombre.S}
               </h1>
               <div className="text-l leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                 <i className="fas fa-user-edit mr-2 text-lg text-blueGray-400"></i>{" "}
-                {producto.autor}
+                {producto.autor.S}
               </div>
               
               
@@ -105,7 +104,7 @@ export default function CardProductoTiendaESB(props) {
 
               <div className="text-blueGray-600 uppercase">
                 <i className="fas fa-sort-numeric-up-alt mr-2 text-lg text-blueGray-400 "></i>
-                Stock: {producto.stock}
+                Stock: {producto.stock.N}
               </div>
               {/* <div className="text-blueGray-600 uppercase">
                 <i className="fas fa-newspaper mr-2 text-lg text-blueGray-400 "></i>
@@ -118,7 +117,7 @@ export default function CardProductoTiendaESB(props) {
 
               <div className="text-blueGray-600 uppercase">
                 <i className="fas fa-money-bill-alt mr-2 text-lg text-blueGray-400"></i>
-                Q {producto.precio}
+                Q {producto.precio.N}
               </div>
             </div>
           </div>
