@@ -84,7 +84,7 @@ export default function EsbLogin() {
       history.push("/cliente/tienda");
     } else {
       console.log("Es editorial");
-      history.push("/editorial/dashboard");
+      history.push("/editorial/esb/Crearlibro");
     }
   }
 
