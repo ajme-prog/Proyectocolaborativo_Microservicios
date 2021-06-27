@@ -21,6 +21,7 @@ import PrivateRoute from "components/PrivateRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 import { EsbProvider } from "./contexts/EsbContext";
 import Cliente from "layouts/Cliente";
+import ClienteESB from "layouts/ClienteESB";
 
 ReactDOM.render(
   <CookiesProvider>
@@ -29,9 +30,11 @@ ReactDOM.render(
       <EsbProvider>
         <Switch>
           {/* add routes with layouts */}
+          <PrivateRoute path="/cliente_esb" component={ClienteESB} />
           <PrivateRoute path="/admin" component={Admin} />
           <PrivateRoute path="/editorial" component={Editorial} />
           <PrivateRoute path="/cliente" component={Cliente} />
+
 
           <Route path="/auth" component={Auth} />
           {/* add routes without layouts */}

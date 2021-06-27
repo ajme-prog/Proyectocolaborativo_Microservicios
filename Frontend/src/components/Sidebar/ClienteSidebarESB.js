@@ -116,16 +116,16 @@ export default function ClienteSidebarESB() {
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/cliente/tienda") !== -1
+                    (window.location.href.indexOf("/cliente_esb/tienda_esb") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
-                  to="/cliente_esb/tienda"
+                  to="/cliente_esb/tienda_esb"
                 >
                   <i
                     className={
                       "fas fa-store mr-2 text-sm " +
-                      (window.location.href.indexOf("/cliente/tienda") !== -1
+                      (window.location.href.indexOf("/cliente_esb/tienda_esb") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
                     }
@@ -145,7 +145,7 @@ export default function ClienteSidebarESB() {
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/cliente/carrito") !== -1
+                    (window.location.href.indexOf("/cliente_esb/carrito") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
@@ -154,7 +154,7 @@ export default function ClienteSidebarESB() {
                   <i
                     className={
                       "fas fa-store mr-2 text-sm " +
-                      (window.location.href.indexOf("/cliente/carrito") !== -1
+                      (window.location.href.indexOf("/cliente_esb/carrito") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
                     }
@@ -176,7 +176,7 @@ export default function ClienteSidebarESB() {
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/cliente/compras") !== -1
+                    (window.location.href.indexOf("/cliente_esb/compras") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
@@ -185,7 +185,7 @@ export default function ClienteSidebarESB() {
                   <i
                     className={
                       "fas fa-store mr-2 text-sm " +
-                      (window.location.href.indexOf("/cliente/compras") !== -1
+                      (window.location.href.indexOf("/cliente_esb/compras") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
                     }

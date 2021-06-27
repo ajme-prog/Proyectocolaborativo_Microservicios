@@ -3,6 +3,7 @@ import { URL } from "./rutas";
 
 import CardStats from "../../components/Cards/CardStats";
 import CardProductoTiendaESB from "components/Cards/CardProductoTiendaESB";
+import { useEsb } from "contexts/EsbContext";
 
 export const TiendaESB = (props) => {
   const [libros, setLibros] = useState([]);
@@ -10,7 +11,9 @@ export const TiendaESB = (props) => {
   const [libro_barato, setLibroBarato] = useState({});
   const [booleano, setBooleano] = useState(false);
   const [carrito] = useState(JSON.parse(localStorage.getItem("Carrito")));
+  const esb =useEsb();
 
+  console.log("QQQQQQQQQQQQQQQQQQq",esb)
   useEffect(() => {
     //localStorage.setItem("Carrito",JSON.stringify([]))
 
@@ -46,7 +49,7 @@ export const TiendaESB = (props) => {
   };
 
   const obtenerLibros = () => {
-    fetch(URL.obtener_productos, {
+    fetch("http://localhost:9000/orders/get_books", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -56,11 +59,12 @@ export const TiendaESB = (props) => {
       .then((res) => res)
       .then(async (response) => {
         let respuesta = await response.json();
-
+        console.log("_REeeeeee",respuesta)
         if (respuesta.status === 200) {
           let arr = respuesta.data.filter(
-            (libro) => parseInt(libro.stock.S) > 0
+            (libro) => parseInt(libro.stock.N) > 0
           );
+          
           setLibros(arr);
           /*get_caro(respuesta.data);
           get_barato(respuesta.data);*/
@@ -81,7 +85,7 @@ export const TiendaESB = (props) => {
                 <CardStats
                   statSubtitle="LIBRO MAS CARO"
                   statTitle={booleano ? libro_caro.nombre.S : "Cargando..."}
-                  statArrow="up"
+                  statArrow="up"tienda
                   statPercent=""
                   statPercentColor="text-emerald-500"
                   statDescripiron={
@@ -134,4 +138,4 @@ export const TiendaESB = (props) => {
   );
 };
 
-export default Tienda;
+export default TiendaESB;

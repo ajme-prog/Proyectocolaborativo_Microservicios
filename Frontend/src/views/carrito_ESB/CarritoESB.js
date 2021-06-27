@@ -90,8 +90,9 @@ export const CarritoESB = (props) => {
   const calcular_total = () => {
     let arreglo = JSON.parse(localStorage.getItem("Carrito"));
     let suma = 0;
-    suma += arreglo.map((compra) => {
-      return compra.cantidad;
+    arreglo.map((compra) => {
+      console.log(compra);
+      suma += parseInt(compra.subtotal);
     });
     return suma;
   };
@@ -100,11 +101,11 @@ export const CarritoESB = (props) => {
     if (metodo_pago != "Metodo de Pago") {
       if (metodo_envio != "Metodo de Envío") {
         if (libros.length != 0) {
-          fetch(URL.generar_pedido, {
+          console.log(JSON.parse(localStorage.getItem("usuario")))
+          fetch("http://localhost:9000/orders/buy", {
             method: "POST",
-            body: JSON.stringify({
-              id_cliente: JSON.parse(localStorage.getItem("usuario")).usuario,
-              //Cambiar arreglo
+            body: JSON.stringify({  
+              id_cliente: JSON.parse(localStorage.getItem("usuario")).id,
               books: JSON.parse(localStorage.getItem("Carrito")),
               total: calcular_total(),
             }),
@@ -120,7 +121,7 @@ export const CarritoESB = (props) => {
               localStorage.setItem("Carrito", JSON.stringify([]));
               setMetodoPago("Metodo de Pago");
               setMetodoEnvio("Metodo de Envío");
-              history.push("/cliente_esb/compras");
+              //history.push("/cliente_esb");
             })
             .catch((error) => {
               Toast.fire({
@@ -245,4 +246,4 @@ export const CarritoESB = (props) => {
   );
 };
 
-export default Carrito;
+export default CarritoESB;

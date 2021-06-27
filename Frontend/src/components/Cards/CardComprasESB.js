@@ -8,9 +8,10 @@ export default function CardComprasESB(props) {
   const [showModal, setShowModal] = React.useState(false);
 
   const obtener_detalle = (compra) => {
-    let detalle_tmp = JSON.parse(compra.books);
-    console.log(detalle_tmp);
-    setDetalle(detalle_tmp);
+    console.log("detalles",compra.books);
+
+//    let detalle_tmp = JSON.parse(compra.books);
+    setDetalle(compra.books);
     setShowModal(true)
   };
 
@@ -135,6 +136,7 @@ export default function CardComprasESB(props) {
                           >
                             Producto
                           </th>
+                          
                           <th
                             className={
                               "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
@@ -145,6 +147,16 @@ export default function CardComprasESB(props) {
                           >
                             Cantidad
                           </th>
+                          <th
+                            className={
+                              "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                              (props.color2 === "light"
+                                ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                                : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
+                            }
+                          >
+                            Subtotal
+                          </th>
                          
                         </tr>
                       </thead>
@@ -152,10 +164,10 @@ export default function CardComprasESB(props) {
                         {detalle.map((producto, index) => {
                           return (
                             <>
-                              <tr>
+                              <tr key={index}>
                                 <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                                   <img
-                                    src={producto.foto}
+                                    src={producto.foto.S}
                                     className="h-12 w-12 bg-white rounded-full border"
                                     alt="..."
                                   ></img>{" "}
@@ -167,13 +179,15 @@ export default function CardComprasESB(props) {
                                         : "text-white")
                                     }
                                   >
-                                    {producto.id_libro}
+                                    {producto.nombre.S}
                                   </span>
                                 </th>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  {producto.cantidad}
+                                  {producto.cantidad.N}
                                 </td>
-                               
+                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                  {producto.subtotal}
+                                </td>
                               </tr>
                             </>
                           );
