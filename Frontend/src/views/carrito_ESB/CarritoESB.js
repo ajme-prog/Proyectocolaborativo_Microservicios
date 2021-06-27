@@ -8,8 +8,11 @@ import { useHistory } from "react-router-dom";
 import CardCarritoESB from "../../components/Cards/CardCarritoESB";
 
 import Swal from "sweetalert2";
+import { isExpressionWithTypeArguments } from "typescript";
+const { useEsb } = require("../../contexts/EsbContext");
 
 const { useAuth } = require("../../contexts/AuthContext");
+
 
 export const CarritoESB = (props) => {
   const [libros, setLibros] = useState(
@@ -31,19 +34,12 @@ export const CarritoESB = (props) => {
   const [metodo_pago, setMetodoPago] = useState("Metodo de Pago");
   const [metodo_envio, setMetodoEnvio] = useState("Metodo de Envío");
 
-  const [arreglo_pagos, setArregloPagos] = useState([
-    "Tarjeta de Credito",
-    "Tarjeta de Debito",
-    "Efectivo",
-    "Paypal",
-  ]);
+  const [direccion, setDireccion] = useState("");
 
-  const [arreglo_envios, setArregloEnvios] = useState([
-    "Avión",
-    "Carro",
-    "Moto",
-    "Taxi",
-  ]);
+
+  const esb =useEsb();
+  console.log("IP ESB: ",esb.esb)
+
 
   const Toast = Swal.mixin({
     toast: true,
@@ -98,142 +94,70 @@ export const CarritoESB = (props) => {
   };
 
   const generarCompra = () => {
-    if (metodo_pago != "Metodo de Pago") {
-      if (metodo_envio != "Metodo de Envío") {
-        if (libros.length != 0) {
-          console.log(JSON.parse(localStorage.getItem("usuario")))
-          fetch("http://localhost:9000/orders/buy", {
-            method: "POST",
-            body: JSON.stringify({  
-              id_cliente: JSON.parse(localStorage.getItem("usuario")).id,
-              books: JSON.parse(localStorage.getItem("Carrito")),
-              total: calcular_total(),
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              Authorization: `Bearer ${cookies.accessToken}`,
-            },
+    if (direccion != "") {
+      if (libros.length != 0) {
+        console.log(JSON.parse(localStorage.getItem("usuario")));
+        //fetch(`${esb.esb}/orders/buy`, {
+          fetch(`${esb.eb}/orders/buy`, {
+          
+        method: "POST",
+          body: JSON.stringify({
+            id_cliente: JSON.parse(localStorage.getItem("usuario")).id,
+            books: JSON.parse(localStorage.getItem("Carrito")),
+            total: calcular_total(),
+            direccion:direccion
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            Authorization: `Bearer ${cookies.accessToken}`,
+          },
+        })
+          .then(async function (response) {
+            let respuesta = await response.json();
+            console.log(respuesta);
+            localStorage.setItem("Carrito", JSON.stringify([]));
+            setDireccion("")
+            history.push("/cliente_esb/compras");
           })
-            .then(async function (response) {
-              let respuesta = await response.json();
-              console.log(respuesta);
-              localStorage.setItem("Carrito", JSON.stringify([]));
-              setMetodoPago("Metodo de Pago");
-              setMetodoEnvio("Metodo de Envío");
-              //history.push("/cliente_esb");
-            })
-            .catch((error) => {
-              Toast.fire({
-                icon: "warning",
-                text: `Error al registrar la compra`,
-              });
+          .catch((error) => {
+            Toast.fire({
+              icon: "warning",
+              text: `Error al registrar la compra`,
             });
-        } else {
-          Toast.fire({
-            icon: "warning",
-            text: `No hay productos agregados al carrito`,
           });
-        }
       } else {
         Toast.fire({
           icon: "warning",
-          text: `Debe elegir un método de envío`,
+          text: `No hay productos agregados al carrito`,
         });
       }
     } else {
       Toast.fire({
         icon: "warning",
-        text: `Debe seleccionar un método de pago`,
+        text: `Debe llenar la dirección`,
       });
     }
   };
 
+  const onChangeDireccion = (e) => {
+    setDireccion(e.target.value);
+  };
+
   return (
     <>
-      <div className="flex flex-wrap">
-        <div className="w-full sm:w-6/12 md:w-4/12 px-4">
-          <div className="relative inline-flex align-middle w-full">
-            <button
-              className="text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 bg-emerald-500 active:bg-emerald-600 ease-linear transition-all duration-150"
-              type="button"
-              ref={btnDropdownRef}
-              onClick={() => {
-                dropdownPopoverShow
-                  ? closeDropdownPopover()
-                  : openDropdownPopover();
-              }}
-            >
-              {metodo_pago}
-            </button>
-            <div
-              ref={popoverDropdownRef}
-              className={
-                (dropdownPopoverShow ? "block " : "hidden ") +
-                "bg-emerald-500 text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 min-w-48"
-              }
-            >
-              {arreglo_pagos.map((pago, index) => {
-                return (
-                  <>
-                    <a
-                      className="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent text-white"
-                      onClick={(e) => cambiar_metodo_pago(pago)}
-                      key={index}
-                    >
-                      {pago}
-                    </a>
-                  </>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div className="w-full sm:w-6/12 md:w-6/12 px-4">
-          <div className="relative inline-flex align-middle w-full">
-            <button
-              className="text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 bg-red-500 active:bg-red-600 ease-linear transition-all duration-150"
-              type="button"
-              ref={btnDropdownRef_2}
-              onClick={() => {
-                dropdownPopoverShow_2
-                  ? closeDropdownPopover_2()
-                  : openDropdownPopover_2();
-              }}
-            >
-              {metodo_envio}
-            </button>
-            <div
-              ref={popoverDropdownRef_2}
-              className={
-                (dropdownPopoverShow_2 ? "block " : "hidden ") +
-                "bg-red-500 text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 min-w-48"
-              }
-            >
-              {arreglo_envios.map((envio, index) => {
-                return (
-                  <>
-                    <a
-                      className="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent text-white"
-                      onClick={(e) => cambiar_metodo_envio(envio)}
-                      key={index}
-                    >
-                      {envio}
-                    </a>
-                  </>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <br />
-
       <div className="flex flex-wrap w-full mb-12 px-4">
         <CardCarritoESB color="dark" lista={libros}></CardCarritoESB>
       </div>
+
+      <input
+        type="text"
+        className="border-0 px-1 py-2 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+        placeholder="Direccion"
+        onChange={(e) => onChangeDireccion(e)}
+      />
+      <br />
+      <br />
 
       <button
         className="bg-orange-500 text-white active:bg-orange-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"

@@ -7,7 +7,6 @@ export default function CardProductoTiendaESB(props) {
   const [producto, setProducto] = useState(props.objeto);
   const [generos, setGeneros] = useState(props.objeto.generos.SS);
 
-  console.log(producto)
 
   const Toast = Swal.mixin({
     toast: true,
@@ -50,9 +49,9 @@ export default function CardProductoTiendaESB(props) {
     <>
       <div
         className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
-        key={props.index}
+        key={props.index*100+15}
       >
-        <div className="rounded-t mb-0 px-4 py-3 border-0">
+        <div className="rounded-t mb-0 px-4 py-3 border-0" >
           <div className="flex flex-wrap items-center">
             <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
               <button

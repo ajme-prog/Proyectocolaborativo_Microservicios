@@ -3,7 +3,8 @@ import { URL } from "./rutas";
 
 import CardStats from "../../components/Cards/CardStats";
 import CardProductoTiendaESB from "components/Cards/CardProductoTiendaESB";
-import { useEsb } from "contexts/EsbContext";
+const { useEsb } = require("../../contexts/EsbContext");
+
 
 export const TiendaESB = (props) => {
   const [libros, setLibros] = useState([]);
@@ -12,8 +13,8 @@ export const TiendaESB = (props) => {
   const [booleano, setBooleano] = useState(false);
   const [carrito] = useState(JSON.parse(localStorage.getItem("Carrito")));
   const esb =useEsb();
-
-  console.log("QQQQQQQQQQQQQQQQQQq",esb)
+  console.log("IP ESB: ",esb.esb)
+  
   useEffect(() => {
     //localStorage.setItem("Carrito",JSON.stringify([]))
 
@@ -24,7 +25,7 @@ export const TiendaESB = (props) => {
     let actual = {};
     let precio = 0;
     libros.map((producto) => {
-      let precio_ciclo = parseInt(producto.precio.S);
+      let precio_ciclo = parseInt(producto.precio.N);
       if (precio_ciclo > precio) {
         actual = producto;
         precio = precio_ciclo;
@@ -38,7 +39,7 @@ export const TiendaESB = (props) => {
     let precio = 1111111100000;
 
     libros.map((producto) => {
-      let precio_ciclo = parseInt(producto.precio.S);
+      let precio_ciclo = parseInt(producto.precio.N);
       if (precio_ciclo < precio) {
         actual = producto;
         precio = precio_ciclo;
@@ -49,7 +50,7 @@ export const TiendaESB = (props) => {
   };
 
   const obtenerLibros = () => {
-    fetch("http://localhost:9000/orders/get_books", {
+    fetch(`${esb.esb}/orders/get_books`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -59,15 +60,15 @@ export const TiendaESB = (props) => {
       .then((res) => res)
       .then(async (response) => {
         let respuesta = await response.json();
-        console.log("_REeeeeee",respuesta)
+        
         if (respuesta.status === 200) {
           let arr = respuesta.data.filter(
             (libro) => parseInt(libro.stock.N) > 0
           );
           
           setLibros(arr);
-          /*get_caro(respuesta.data);
-          get_barato(respuesta.data);*/
+          get_caro(arr);
+          get_barato(arr);
         } else {
           alert("Error al crear el producto");
         }
@@ -90,7 +91,7 @@ export const TiendaESB = (props) => {
                   statPercentColor="text-emerald-500"
                   statDescripiron={
                     booleano
-                      ? "El precio es de Q " + libro_caro.precio.S
+                      ? "El precio es de Q " + libro_caro.precio.N
                       : "Cargando..."
                   }
                   statIconName="far fa-plus-square"
@@ -106,7 +107,7 @@ export const TiendaESB = (props) => {
                   statPercentColor="text-red-500"
                   statDescripiron={
                     booleano
-                      ? "El precio es de Q " + libro_barato.precio.S
+                      ? "El precio es de Q " + libro_barato.precio.N
                       : "Cargando..."
                   }
                   statIconName="fas fa-minus-square"
@@ -128,6 +129,7 @@ export const TiendaESB = (props) => {
                   index={index}
                   objeto={producto}
                   lista={carrito}
+                  key={index+158*96}
                 ></CardProductoTiendaESB>
               </div>
             </>

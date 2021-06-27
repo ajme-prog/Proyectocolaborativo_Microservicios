@@ -1,7 +1,6 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var router = express.Router();
-const notice_purchase = require("./email.js");
 
 const crypto = require("crypto");
 const cors = require("cors");
@@ -10,7 +9,6 @@ var corsOptions = { origin: true, optionsSuccessStatus: 200 };
 const generarID = () => crypto.randomBytes(16).toString("hex");
 
 var AWS = require("aws-sdk");
-const { parse } = require("dotenv");
 
 var dynamoClient = new AWS.DynamoDB(aws_keys.dynamodb);
 
@@ -29,13 +27,29 @@ router.get("/read", function (req, res, next) {
     } else {
       console.log(data.Items);
       let arreglo = data.Items;
-      console.log(arreglo)
+      console.log(arreglo);
       let arreglo_esb = arreglo.map((compra) => {
+        let arr_detalle = JSON.parse(compra.detalle.S).map((detalle) => {
+          return {
+            nombre: detalle.nombre.S,
+            autor: detalle.autor.S,
+            generos: detalle.generos.SS,
+            id_editorial: detalle.id_editorial.S,
+            stock: detalle.stock.N,
+            foto: detalle.foto.S,
+            id: detalle.id.S,
+            precio: detalle.precio.N,
+            cantidad: detalle.cantidad.N,
+            subtotal: 1030.35,
+          };
+        });
+
         return {
           id_compra: compra.id_compra.S,
           id_cliente: compra.id_cliente.S,
+          direccion:compra.direccion.S,
           total: compra.total.S,
-          books: JSON.parse(compra.detalle.S),
+          books: arr_detalle,
         };
       });
       console.log(arreglo_esb);
@@ -45,9 +59,9 @@ router.get("/read", function (req, res, next) {
 });
 
 router.post("/buy", function (req, res, next) {
-  const { id_cliente, books, total } = req.body;
+  const { id_cliente, books, total, direccion } = req.body;
   console.log("dasd", id_cliente);
-  let id_compra=generarID();
+  let id_compra = generarID();
   const params = {
     TableName: "compras_esb",
     Item: {
@@ -55,6 +69,7 @@ router.post("/buy", function (req, res, next) {
       id_cliente: { S: id_cliente },
       total: { S: total.toString() },
       detalle: { S: JSON.stringify(books) },
+      direccion: { S: direccion },
     },
   };
 
@@ -65,14 +80,6 @@ router.post("/buy", function (req, res, next) {
         mensaje: "La compra no se realizó, verifique nuevamente su orden",
       });
     } else {
-      /*notice_purchase(
-        id_cliente,
-        `Número de confirmación: ${id_compra}; 
-        Total: ${total};
-        Detalle: ${JSON.stringify(books)}`,
-        dynamoClient
-      );*/
-
       res.status(200).json({
         message: "Compra registrada correctamente",
       });

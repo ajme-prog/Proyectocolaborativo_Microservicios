@@ -3,19 +3,25 @@ import { useCookies } from "react-cookie";
 
 import { URL } from "./rutas";
 import CardComprasESB from "components/Cards/CardComprasESB";
+const { useEsb } = require("../../contexts/EsbContext");
+
+
+
+
 
 export const ComprasESB = () => {
   const [compras, setCompras] = useState([]);
 
   const [cookies, setCookie] = useCookies(["usuario"]);
+  const esb =useEsb();
+  console.log("IP ESB: ",esb.esb)
 
   useEffect(() => {
-    console.log("Que pedo", cookies.accessToken);
-    get_compras();
+      get_compras();
   }, []);
 
   const get_compras = () => {
-    fetch("http://localhost:9000/orders/read", {
+    fetch(`${esb.esb}/orders/read`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
