@@ -8,6 +8,7 @@ import {
   
 } from "../../services/Libros_esb";
 
+import {getESB} from "../../services/esb.js"
 import makeAnimated from "react-select/animated";
 import {
   SortableContainer,
@@ -19,7 +20,7 @@ const { useEsb } = require("../../contexts/EsbContext");
 export default function LibrosEsb() {
   const [selected, setSelected] = React.useState([]);
   const { esb } = useEsb();
-  console.log("EL ESB ES "+esb)
+ 
   function arrayMove(array, from, to) {
     array = array.slice();
     array.splice(to < 0 ? array.length + to : to, 0, array.splice(from, 1)[0]);
@@ -147,6 +148,8 @@ export default function LibrosEsb() {
     // console.log("el valor seleccionado es "+selected[0].label);
 //alert("el esb es" +esb)
 //---aqui tengo que agregar lo del local storage para esb
+  let esb= await getESB();
+  console.log("EL ESB ES "+esb)
     let generos = [];
 
     for (let i = 0; i < selected.length; i++) {
@@ -170,14 +173,15 @@ export default function LibrosEsb() {
       generos,
       stockRef.current.value,
       autorRef.current.value,
-      usuarioActual.usuario,
+      usuarioActual.id,
       precioRef.current.value,
-      archivos.files
+      archivos.files,
+      esb
     );
 
     const respuestaalbum = await subirarchivo.json();
 
-    if (respuestaalbum.status == 200) {
+    if (respuestaalbum.message == "Ok") {
       Toast.fire({
         icon: "success",
         title: "Libro creado correctamente",
@@ -186,9 +190,6 @@ export default function LibrosEsb() {
       // inputalbum.value="";
       nombreRef.current.value = "";
       autorRef.current.value = "";
-      idiomaRef.current.value = "";
-      fechapublicacionRef.current.value = "";
-      paginasRef.current.value = "";
       stockRef.current.value = "";
       precioRef.current.value = "";
       setSelected([]);
@@ -202,12 +203,12 @@ export default function LibrosEsb() {
     } else if (respuestaalbum.status == 401) {
       Toast.fire({
         icon: "warning",
-        title: "Ocurrio un error",
+        title: "Error al guardar el registro del libro",
       });
     } else {
       Toast.fire({
         icon: "error",
-        title: "Hubo un error",
+        title: "Error al guardar el registro del libro",
       });
     }
 

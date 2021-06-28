@@ -51,6 +51,7 @@ function pFileReader(file) {
 
 export async function getLibrosEsb(esb) {
 esb=url_api_libros//esto quitarlo después 
+console.log("esb es "+esb)
   return fetch(`${esb}/book/read`, {
     method: "GET",
     headers: {

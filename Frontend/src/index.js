@@ -36,12 +36,8 @@ ReactDOM.render(
           <PrivateRoute path="/admin" component={Admin} />
           <PrivateRoute path="/editorial" component={Editorial} />
           <PrivateRoute path="/cliente" component={Cliente} />
-<<<<<<< HEAD
-
-
-=======
           <PrivateRoute path="/editorial_esb" component={EditorialESB} />
->>>>>>> front_libros_esb
+       
           <Route path="/auth" component={Auth} />
           {/* add routes without layouts */}
           <Route path="/landing" exact component={Landing} />

@@ -8,6 +8,8 @@ import {
 getLibrosEsb
 } from "../../services/Libros_esb";
 import makeAnimated from "react-select/animated";
+
+import {getESB} from "../../services/esb.js"
 import {
   SortableContainer,
   SortableElement,
@@ -62,7 +64,7 @@ export default function VerLibrosEsb() {
   var urlimagen = "";
   var archivos;
   const [selectedFiles, setSelectedFiles] = useState([]);
- 
+  var ideditorial=""
   useEffect(() => {
     async function fetchData() {
       //selected.push({value:"hola",label:"jaja"}) //---esta linea me va a servir para actualizar el libro
@@ -71,17 +73,28 @@ export default function VerLibrosEsb() {
       usuario = await JSON.parse(usuario);
       console.log(usuario);
       setUsuarioActual(usuario);
-
+      let esb=getESB();
       console.log("EL USUARIO ES " + usuario.nombre);
-      const rawResponse = await getLibrosEsb("aqui va el esb");
+      ideditorial=usuario.id;
+      console.log("el ideditorial es "+ideditorial)
+      const rawResponse = await getLibrosEsb(esb);
+      
       const respuesta = await rawResponse.json();
+
       return respuesta;
     }
 
     fetchData().then((respuesta) => {
-      if (respuesta.status === 200) {
-        console.log(respuesta.data);
-        setAlbums(respuesta.data);
+        console.log("la respuesta es " +respuesta)
+      if (respuesta.length > 0) {
+       let datos=[]
+        for(let i=0;i<respuesta.length;i++){
+           if(respuesta[i].id_editorial==ideditorial){
+               datos.push(respuesta[i])
+           }
+        }
+
+        setAlbums(datos);
       } else {
         Toast.fire({
           icon: "warning",
@@ -141,9 +154,11 @@ export default function VerLibrosEsb() {
   
   return (
     <>
-      c
+      
       {albums.map((album) => {
+
         options.push({ value: album.id, label: album.nombre });
+    
       })}
       <div className="relative bg-white-600 md:pt-32 pb-32 pt-12">
       <div className="rounded-t bg-white mb-0 px-6 py-6">
@@ -169,11 +184,13 @@ export default function VerLibrosEsb() {
                         albums.map((foto) => {
                           return (
                             <div className="w-full xl:w-3/12 lg:w-4/12 px-4" key={foto.nombre}>
-                              <h5 className="block uppercase text-blueGray-900 text-center font-bold mb-2">
-                                {foto.nombre}
-                              </h5>
+                           
+                         
                               <a>
                                 <div className="hover:-mt-4 relative align-middle flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg ease-linear transition-all duration-150">
+                                <h5 className="block uppercase text-blueGray-900 text-center font-bold mb-2">
+                                {foto.nombre}
+                              </h5>
                                   <img
                                     alt={foto.nombre}
                                     className="align-middle border-none max-w-full h-auto rounded-lg"
@@ -183,49 +200,32 @@ export default function VerLibrosEsb() {
                             
                                <div className="text-left py-3 px-md-10">
                                 
-                               <div className="text-sm align-middle leading-normal mt-0 mb-2 text-gray-500 font-bold">
-                                  <i className=" fas fa-book mr-4 text-lg text-gray-500"></i>
+                               <div className="text-sm leading-normal mt-0 mb-2 text-black-500 font-bold">
+                               &nbsp; &nbsp;
+                                  <i className=" fas fa-book mr-4 text-lg text-black-500"></i>
                                   
                                   {foto.generos.join('-')}
                                 </div>
 
-                                <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold px-md-10">
-                                  <i className="fas fa-layer-group mr-4 text-lg text-gray-500 px-md-10"></i>
+                                <div className="text-sm leading-normal mt-0 mb-2 text-black-500 font-bold">
+                                &nbsp; &nbsp; 
+                                  <i className="fas fa-layer-group mr-4 text-lg text-black-500 px-md-10"></i>
                                   {foto.stock + " unidades disponibles"}
                                 </div>
 
                                
-                                <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold">
-                                  <i className=" mr-4 fas fa-user-edit text-lg text-gray-500"></i>
+                                <div className="text-sm leading-normal mt-0 mb-2 text-black-500 font-bold">
+                                &nbsp; &nbsp;
+                                  <i className=" mr-4 fas fa-user-edit text-lg text-black-500"></i>
                                   {foto.autor }
                                 </div>
 
                                 
-                                <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold">
-                                  <i className=" mr-4 fas fa-edit text-lg text-gray-500"></i>
-                                  {foto.editorial }
-                                </div>
-
-                             
-                                <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold">
-                                  <i className=" mr-4 fas fa-file text-lg text-gray-500"></i>
-                                  {foto.numeropaginas + " páginas" }
-                                </div>
-
+                            
                               
-                                <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold">
-                                  <i className=" mr-4 fas fa-calendar text-lg text-gray-500"></i>
-                                  {foto.fechapublicacion }
-                                </div>
-
-                               
-                                <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold">
-                                  <i className=" mr-4 fas fa-language text-lg text-gray-500"></i>
-                                  {foto.idioma }
-                                </div>
-                              
-                                <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold">
-                                  <i className=" mr-4 fas fa-money-bill-wave text-lg text-gray-500"></i>
+                                <div className="text-sm leading-normal mt-0 mb-2 text-black-500 font-bold">
+                                &nbsp; &nbsp;
+                                  <i className=" mr-4 fas fa-money-bill-wave text-lg text-black-500"></i>
                                   {"Q"+foto.precio}
                                 </div>
 
