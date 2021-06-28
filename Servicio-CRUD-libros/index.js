@@ -571,7 +571,7 @@ app.post("/book/create", function (req, res) {
   var stock = parseInt(req.body.stock);
   var autor = req.body.autor;
   var id_editorial = req.body.id_editorial;
-  var foto = req.body.foto;
+  var foto = req.body.foto.split(",")[1];
   var precio = parseFloat(req.body.precio);
 
   const params1 = {
