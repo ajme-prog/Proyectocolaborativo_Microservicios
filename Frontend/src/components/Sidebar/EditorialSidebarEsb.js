@@ -22,7 +22,7 @@ export default function EditorialSidebarEsb() {
           {/* Brand */}
           <Link
             className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-            to="/editorial/dashboard"
+            to="/editorial_esb/Crearlibro"
           >
             BookSA
           </Link>
@@ -48,7 +48,7 @@ export default function EditorialSidebarEsb() {
                 <div className="w-6/12">
                   <Link
                     className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-                    to="/editorial/esb/dashboard"
+                    to="/editorial_esb/Crearlibro"
                   >
                     BookSA
                   </Link>
@@ -91,16 +91,16 @@ export default function EditorialSidebarEsb() {
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/editorial/esb/Crearlibro") !== -1
+                    (window.location.href.indexOf("/editorial_esb/Crearlibro") !== -1
                       ? "text-amber-500 hover:text-amber-600"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
-                  to="/editorial/Crearlibro"
+                  to="/editorial_esb/Crearlibro"
                 >
                   <i
                     className={
                       "fas fa-book mr-2 text-sm " +
-                      (window.location.href.indexOf("/editorial/esb/Crearlibro") !== -1
+                      (window.location.href.indexOf("/editorial_esb/Crearlibro") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
                     }
@@ -114,16 +114,16 @@ export default function EditorialSidebarEsb() {
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/editorial/esb/Verlibro") !== -1
+                    (window.location.href.indexOf("/editorial_esb/Verlibro") !== -1
                       ? "text-amber-500 hover:text-amber-600"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
-                  to="/editorial/Verlibro"
+                  to="/editorial_esb/Verlibro"
                 >
                   <i
                     className={
                       "fas fa-book-open mr-2 text-sm " +
-                      (window.location.href.indexOf("/editorial/esb/Verlibro") !== -1
+                      (window.location.href.indexOf("/editorial_esb/Verlibro") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
                     }

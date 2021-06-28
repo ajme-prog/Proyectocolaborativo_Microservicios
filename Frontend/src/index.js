@@ -11,6 +11,7 @@ import "assets/styles/tailwind.css";
 import Admin from "layouts/Admin.js";
 import Auth from "layouts/Auth.js";
 import Editorial from "layouts/Editorial.js";
+import EditorialESB from "layouts/EditorialESB.js";
 // views without layouts
 
 import Landing from "views/Landing.js";
@@ -20,6 +21,7 @@ import Index from "views/Index.js";
 import PrivateRoute from "components/PrivateRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 import { EsbProvider } from "./contexts/EsbContext";
+
 import Cliente from "layouts/Cliente";
 
 ReactDOM.render(
@@ -32,7 +34,7 @@ ReactDOM.render(
           <PrivateRoute path="/admin" component={Admin} />
           <PrivateRoute path="/editorial" component={Editorial} />
           <PrivateRoute path="/cliente" component={Cliente} />
-
+          <PrivateRoute path="/editorial_esb" component={EditorialESB} />
           <Route path="/auth" component={Auth} />
           {/* add routes without layouts */}
           <Route path="/landing" exact component={Landing} />

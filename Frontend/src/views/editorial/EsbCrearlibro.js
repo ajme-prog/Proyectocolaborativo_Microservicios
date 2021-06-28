@@ -3,10 +3,11 @@ import Select, { components } from "react-select";
 import Swal from "sweetalert2";
 import {
   getGeneros,
-  Crearlibro,
-  ModificarLibro,
-  DeleteLibro,
-} from "../../services/Libros";
+  CrearlibroEsb,
+  getLibrosEsb
+  
+} from "../../services/Libros_esb";
+
 import makeAnimated from "react-select/animated";
 import {
   SortableContainer,
@@ -14,9 +15,11 @@ import {
   sortableHandle,
 } from "react-sortable-hoc";
 
+const { useEsb } = require("../../contexts/EsbContext");
 export default function LibrosEsb() {
   const [selected, setSelected] = React.useState([]);
-
+  const { esb } = useEsb();
+  console.log("EL ESB ES "+esb)
   function arrayMove(array, from, to) {
     array = array.slice();
     array.splice(to < 0 ? array.length + to : to, 0, array.splice(from, 1)[0]);
@@ -142,7 +145,8 @@ export default function LibrosEsb() {
     //console.log("OPCIONES SON"+options.selectOption)
 
     // console.log("el valor seleccionado es "+selected[0].label);
-
+//alert("el esb es" +esb)
+//---aqui tengo que agregar lo del local storage para esb
     let generos = [];
 
     for (let i = 0; i < selected.length; i++) {
@@ -161,16 +165,12 @@ export default function LibrosEsb() {
     }
 
     //----llamo a crear album
-    const subirarchivo = await Crearlibro(
+    const subirarchivo = await CrearlibroEsb(
       nombreRef.current.value,
       generos,
       stockRef.current.value,
       autorRef.current.value,
-      usuarioActual.nombre,
       usuarioActual.usuario,
-      paginasRef.current.value,
-      fechapublicacionRef.current.value,
-      idiomaRef.current.value,
       precioRef.current.value,
       archivos.files
     );
@@ -284,51 +284,7 @@ export default function LibrosEsb() {
                   />
                 </div>
               </div>
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Idioma
-                  </label>
-                  <input
-                    type="text"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    ref={idiomaRef}
-                  />
-                </div>
-              </div>
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Fecha publicación
-                  </label>
-                  <input
-                    type="date"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    ref={fechapublicacionRef}
-                  />
-                </div>
-              </div>
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Número de Páginas
-                  </label>
-                  <input
-                    type="Number"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    ref={paginasRef}
-                  />
-                </div>
-              </div>
+           
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
@@ -393,7 +349,7 @@ export default function LibrosEsb() {
                   <div className="flex justify-center py-4 lg:pt-4 pt-8  max-w-150-px">
                     <div
                       align="center"
-                      className="flex justify-center"
+                      className="flex justify-center "
                       id="preview"
                     >
                       {" "}
