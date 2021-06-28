@@ -2,10 +2,9 @@ import React, { useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { Link, useHistory } from "react-router-dom";
 const { loginUsuario } = require("../../services/autenticacion_esb");
-const { useEsb } = require("../../contexts/EsbContext");
+const { setearESB } = require('../../services/esb')
 
 export default function EsbLogin() {
-  const { setearESB, esb } = useEsb();
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const correoRef = useRef();
@@ -70,7 +69,6 @@ export default function EsbLogin() {
     });
 
     localStorage.setItem("usuario", JSON.stringify(respuesta.data));
-    //await setCookie("accessToken", respuesta.accessToken, { path: "/" });
     setLoading(false);
 
     console.log("*******************",respuesta.data)

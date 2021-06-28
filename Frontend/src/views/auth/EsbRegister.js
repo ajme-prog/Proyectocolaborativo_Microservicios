@@ -3,10 +3,9 @@ import Swal from "sweetalert2";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 const { registrarUsuario } = require("../../services/autenticacion_esb");
-const { useEsb } = require("../../contexts/EsbContext");
+const { setearESB } = require('../../services/esb')
 
 export default function EsbRegister() {
-  const { setearESB } = useEsb();
   const history = useHistory();
   const esbRef = useRef();
   // Usuario tipo cliente
