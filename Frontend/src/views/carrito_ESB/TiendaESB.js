@@ -13,7 +13,7 @@ export const TiendaESB = (props) => {
   const [booleano, setBooleano] = useState(false);
   const [carrito] = useState(JSON.parse(localStorage.getItem("Carrito")));
   const esb =useEsb();
-  console.log("IP ESB: ",esb.esb)
+  console.log("IP ESB: ",localStorage.getItem("esb"))
   
   useEffect(() => {
     //localStorage.setItem("Carrito",JSON.stringify([]))
@@ -50,7 +50,7 @@ export const TiendaESB = (props) => {
   };
 
   const obtenerLibros = () => {
-    fetch(`${esb.esb}/orders/get_books`, {
+    fetch(`${localStorage.getItem("esb")}/orders/get_books`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

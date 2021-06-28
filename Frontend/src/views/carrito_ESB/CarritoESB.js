@@ -38,7 +38,7 @@ export const CarritoESB = (props) => {
 
 
   const esb =useEsb();
-  console.log("IP ESB: ",esb.esb)
+  console.log("IP ESB: ",localStorage.getItem("esb"))
 
 
   const Toast = Swal.mixin({
@@ -97,8 +97,8 @@ export const CarritoESB = (props) => {
     if (direccion != "") {
       if (libros.length != 0) {
         console.log(JSON.parse(localStorage.getItem("usuario")));
-        //fetch(`${esb.esb}/orders/buy`, {
-          fetch(`${esb.eb}/orders/buy`, {
+        //fetch(`${localStorage.getItem("esb")}/orders/buy`, {
+          fetch(`${localStorage.getItem("esb")}/orders/buy`, {
           
         method: "POST",
           body: JSON.stringify({

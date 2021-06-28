@@ -14,14 +14,14 @@ export const ComprasESB = () => {
 
   const [cookies, setCookie] = useCookies(["usuario"]);
   const esb =useEsb();
-  console.log("IP ESB: ",esb.esb)
+  console.log("IP ESB: ",localStorage.getItem("esb"))
 
   useEffect(() => {
       get_compras();
   }, []);
 
   const get_compras = () => {
-    fetch(`${esb.esb}/orders/read`, {
+    fetch(`${localStorage.getItem("esb")}/orders/read`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
