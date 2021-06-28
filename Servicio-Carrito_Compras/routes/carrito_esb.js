@@ -1,7 +1,6 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var router = express.Router();
-const notice_purchase = require('./email.js');
 
 const crypto = require("crypto");
 const cors = require("cors");
@@ -10,7 +9,6 @@ var corsOptions = { origin: true, optionsSuccessStatus: 200 };
 const generarID = () => crypto.randomBytes(16).toString("hex");
 
 var AWS = require("aws-sdk");
-const { parse } = require("dotenv");
 
 var dynamoClient = new AWS.DynamoDB(aws_keys.dynamodb);
 
@@ -25,17 +23,33 @@ router.get("/read", function (req, res, next) {
 
   dynamoClient.scan(params, function (err, data) {
     if (err) {
-      res.status(500).json({message: "Error en la base de datos" });
+      res.status(500).json({ message: "Error en la base de datos" });
     } else {
       console.log(data.Items);
       let arreglo = data.Items;
-
+      console.log(arreglo);
       let arreglo_esb = arreglo.map((compra) => {
+        let arr_detalle = JSON.parse(compra.detalle.S).map((detalle) => {
+          return {
+            nombre: detalle.nombre.S,
+            autor: detalle.autor.S,
+            generos: detalle.generos.SS,
+            id_editorial: detalle.id_editorial.S,
+            stock: detalle.stock.N,
+            foto: detalle.foto.S,
+            id: detalle.id.S,
+            precio: detalle.precio.N,
+            cantidad: detalle.cantidad.N,
+            subtotal: 1030.35,
+          };
+        });
+
         return {
           id_compra: compra.id_compra.S,
           id_cliente: compra.id_cliente.S,
-          total: compra.total.N,
-          books: JSON.parse(compra.detalle.S),
+          direccion:compra.direccion.S,
+          total: compra.total.S,
+          books: arr_detalle,
         };
       });
       console.log(arreglo_esb);
@@ -45,15 +59,17 @@ router.get("/read", function (req, res, next) {
 });
 
 router.post("/buy", function (req, res, next) {
-  const { id_cliente, books, total } = req.body;
-  console.log(req.body)
+  const { id_cliente, books, total, direccion } = req.body;
+  console.log("dasd", id_cliente);
+  let id_compra = generarID();
   const params = {
     TableName: "compras_esb",
     Item: {
-      id_compra: { S: generarID() },
+      id_compra: { S: id_compra },
       id_cliente: { S: id_cliente },
-      total: { N: total.toString() },
+      total: { S: total.toString() },
       detalle: { S: JSON.stringify(books) },
+      direccion: { S: direccion },
     },
   };
 
@@ -64,13 +80,25 @@ router.post("/buy", function (req, res, next) {
         mensaje: "La compra no se realizó, verifique nuevamente su orden",
       });
     } else {
-      notice_purchase(id_cliente,`Número de confirmación: ${id_compra}; 
-        Total: ${total};
-        Detalle: ${JSON.stringify(books)}`,dynamoClient);
-
       res.status(200).json({
         message: "Compra registrada correctamente",
       });
+    }
+  });
+});
+
+router.get("/get_books", function (req, res, next) {
+  const params = {
+    TableName: "libros_esb",
+  };
+
+  dynamoClient.scan(params, function (err, data) {
+    if (err) {
+      res.json({ status: 404, mensaje: "Error en la base de datos" });
+    } else {
+      console.log(data.Items);
+
+      res.json({ status: 200, mensaje: "OK", data: data.Items });
     }
   });
 });

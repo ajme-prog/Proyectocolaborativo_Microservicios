@@ -79,7 +79,7 @@ export default function EsbLogin() {
     } else if (respuesta.data.tipo === 4) {
       console.log("Es cliente");
       localStorage.setItem("Carrito", JSON.stringify([]));
-      history.push("/cliente/tienda");
+      history.push("/cliente_esb");
     } else {
       console.log("Es editorial");
       history.push("/editorial/dashboard");
