@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const notice_purchase = require('./email.js');
+const notice_purchase = require("./email.js");
 
 var express = require("express");
 var bodyParser = require("body-parser");
@@ -82,6 +82,7 @@ router.post("/generar_pedido", autenticarToken, function (req, res, next) {
       tipo_envio: { S: tipo_envio },
       tipo_pago: { S: tipo_pago },
       detalle: { S: JSON.stringify(pedido) },
+      estado: { S: "Estado Inicial" },
     },
   };
 
@@ -93,14 +94,62 @@ router.post("/generar_pedido", autenticarToken, function (req, res, next) {
         mensaje: "Error al crear la compra",
       });
     } else {
-      notice_purchase(usuarioReq.usuario,`Fecha: ${fecha}; 
+      notice_purchase(
+        usuarioReq.usuario,
+        `Fecha: ${fecha}; 
         Tipo de envío: ${tipo_envio};
         Tipo de pago: ${tipo_pago};
-        Detalle: ${JSON.stringify(pedido)}`,dynamoClient);
+        Detalle: ${JSON.stringify(pedido)}`,
+        dynamoClient
+      );
       res.json({
         status: 200,
         mensaje: "Compra registrada correctamente",
       });
+    }
+  });
+});
+
+router.get("/obtener_compras_admin", function (req, res, next) {
+  const params = {
+    TableName: "Compras",
+  };
+
+  dynamoClient.scan(params, function (err, data) {
+    if (err) {
+      res.json({ status: 404, mensaje: "Error en la base de datos" });
+    } else {
+      console.log(data.Items);
+      res.json({ status: 200, mensaje: "OK", data: data.Items });
+    }
+  });
+});
+
+router.post("/modificar_estado_compra", function (req, res, next) {
+  const { id_compra, id_usuario, nuevo_estado } = req.body;
+
+  console.log(req.body);
+
+  const params = {
+    TableName: "Compras",
+    Key: {
+      id: { S: id_compra },
+      id_usuario: { S: id_usuario },
+    },
+    ExpressionAttributeValues: {
+      ":estado": { S: nuevo_estado },
+    },
+    UpdateExpression: "set estado=:estado",
+  };
+
+  dynamoClient.updateItem(params, function (err, data) {
+    if (err) {
+      console.error("Unable to read item. Error JSON:", JSON.stringify(err));
+      res
+        .status(404)
+        .json({ mensaje: "Error en la base de datos al actualizar" });
+    } else {
+      res.status(200).json({ mensaje: "OK" });
     }
   });
 });
