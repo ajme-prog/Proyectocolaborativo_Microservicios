@@ -4,9 +4,9 @@ const fetch = require('node-fetch');
 const app = express();
 app.use(express.json());
 app.use(cors());
-const url_autenticacion = "http://localhost:3001"
-const url_compras = "http://localhost:9000";
-const url_books = "http://localhost:4040";
+const url_autenticacion = "http://104.198.109.25:3001"
+const url_compras = "http://35.233.133.215:9000";
+const url_books = "http://35.247.41.123:4040";
 
 app.post('/auth/login', async(req, res) => {
     const query = await fetch(`${url_autenticacion}/auth/login`, {
