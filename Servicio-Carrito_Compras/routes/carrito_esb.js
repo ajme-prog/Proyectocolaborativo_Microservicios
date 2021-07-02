@@ -27,19 +27,20 @@ router.get("/read", function (req, res, next) {
     } else {
       console.log(data.Items);
       let arreglo = data.Items;
-      console.log(arreglo);
       let arreglo_esb = arreglo.map((compra) => {
         let arr_detalle = JSON.parse(compra.detalle.S).map((detalle) => {
+      console.log(detalle);
+
           return {
-            nombre: detalle.nombre.S,
-            autor: detalle.autor.S,
-            generos: detalle.generos.SS,
-            id_editorial: detalle.id_editorial.S,
-            stock: detalle.stock.N,
-            foto: detalle.foto.S,
-            id: detalle.id.S,
-            precio: detalle.precio.N,
-            cantidad: detalle.cantidad.N,
+            nombre: detalle.nombre,
+            autor: detalle.autor,
+            generos: detalle.generos,
+            id_editorial: detalle.id_editorial,
+            stock: detalle.stock,
+            foto: detalle.foto,
+            id_libro: detalle.id_libro,
+            precio: detalle.precio,
+            cantidad: detalle.cantidad,
             subtotal: 1030.35,
           };
         });

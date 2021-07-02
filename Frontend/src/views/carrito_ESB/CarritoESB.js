@@ -9,10 +9,9 @@ import CardCarritoESB from "../../components/Cards/CardCarritoESB";
 
 import Swal from "sweetalert2";
 import { isExpressionWithTypeArguments } from "typescript";
-const { useEsb } = require("../../contexts/EsbContext");
+import { getESB } from "services/esb";
 
 const { useAuth } = require("../../contexts/AuthContext");
-
 
 export const CarritoESB = (props) => {
   const [libros, setLibros] = useState(
@@ -37,9 +36,7 @@ export const CarritoESB = (props) => {
   const [direccion, setDireccion] = useState("");
 
 
-  const esb =useEsb();
-  console.log("IP ESB: ",localStorage.getItem("esb"))
-
+  
 
   const Toast = Swal.mixin({
     toast: true,
@@ -93,19 +90,19 @@ export const CarritoESB = (props) => {
     return suma;
   };
 
-  const generarCompra = () => {
+  const generarCompra = async() => {
     if (direccion != "") {
       if (libros.length != 0) {
-        console.log(JSON.parse(localStorage.getItem("usuario")));
+        const esb = await getESB();
+        console.log("IP ESB: ", esb);
         //fetch(`${localStorage.getItem("esb")}/orders/buy`, {
-          fetch(`${localStorage.getItem("esb")}/orders/buy`, {
-          
-        method: "POST",
+        fetch(`${esb}/orders/buy`, {
+          method: "POST",
           body: JSON.stringify({
             id_cliente: JSON.parse(localStorage.getItem("usuario")).id,
             books: JSON.parse(localStorage.getItem("Carrito")),
             total: calcular_total(),
-            direccion:direccion
+            direccion: direccion,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -117,7 +114,7 @@ export const CarritoESB = (props) => {
             let respuesta = await response.json();
             console.log(respuesta);
             localStorage.setItem("Carrito", JSON.stringify([]));
-            setDireccion("")
+            setDireccion("");
             history.push("/cliente_esb/compras");
           })
           .catch((error) => {

@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 export default function CardProductoTiendaESB(props) {
   const [producto, setProducto] = useState(props.objeto);
-  const [generos, setGeneros] = useState(props.objeto.generos.SS);
+  const [generos, setGeneros] = useState(props.objeto.generos);
 
 
   const Toast = Swal.mixin({
@@ -24,7 +24,7 @@ export default function CardProductoTiendaESB(props) {
     var lista = JSON.parse(localStorage.getItem("Carrito"));
     console.log("Carrito",lista)
     let tmp_carrito = lista.filter(
-      (producto_tmp) => producto_tmp.id.S == producto.id.S
+      (producto_tmp) => producto_tmp.id_libro == producto.id_libro
     );
 
     if (tmp_carrito.length != 0) {
@@ -37,8 +37,8 @@ export default function CardProductoTiendaESB(props) {
 
     var tmp = {
       ...producto,
-      cantidad: { N: 1 },
-      subtotal: producto.precio.N,
+      cantidad: 1,
+      subtotal: producto.precio,
     };
 
     lista.push(tmp);
@@ -74,7 +74,7 @@ export default function CardProductoTiendaESB(props) {
                 <div className="relative">
                   <img
                     alt="..."
-                    src={producto.foto.S}
+                    src={producto.foto}
                     className="shadow-xl rounded-full h-auto align-middle border-none "
                   />
                 </div>
@@ -82,11 +82,11 @@ export default function CardProductoTiendaESB(props) {
             </div>
             <div className="text-center mt-10">
               <h1 className="text-xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                {producto.nombre.S}
+                {producto.nombre}
               </h1>
               <div className="text-l leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                 <i className="fas fa-user-edit mr-2 text-lg text-blueGray-400"></i>{" "}
-                {producto.autor.S}
+                {producto.autor}
               </div>
               
               
@@ -104,7 +104,7 @@ export default function CardProductoTiendaESB(props) {
 
               <div className="text-blueGray-600 uppercase">
                 <i className="fas fa-sort-numeric-up-alt mr-2 text-lg text-blueGray-400 "></i>
-                Stock: {producto.stock.N}
+                Stock: {producto.stock}
               </div>
               {/* <div className="text-blueGray-600 uppercase">
                 <i className="fas fa-newspaper mr-2 text-lg text-blueGray-400 "></i>
@@ -117,7 +117,7 @@ export default function CardProductoTiendaESB(props) {
 
               <div className="text-blueGray-600 uppercase">
                 <i className="fas fa-money-bill-alt mr-2 text-lg text-blueGray-400"></i>
-                Q {producto.precio.N}
+                Q {producto.precio}
               </div>
             </div>
           </div>

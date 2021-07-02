@@ -20,14 +20,15 @@ export default function CardCarritoESB(props) {
       nuevo_precio = 0;
 
     for (let j = 0; j < carrito.length; j++) {
-      if (carrito[j].id === id) {
+      console.log("Libro",carrito[j])
+      if (carrito[j].id_libro === id) {
         if (tipo === 0) {
-          carrito[j].cantidad.N += 1;
+          carrito[j].cantidad += 1;
         } else {
-          carrito[j].cantidad.N -= 1;
+          carrito[j].cantidad -= 1;
         }
-        nueva_cantidad = carrito[j].cantidad.N;
-        nuevo_precio = carrito[j].cantidad.N * parseFloat(carrito[j].precio.N);
+        nueva_cantidad = carrito[j].cantidad;
+        nuevo_precio = carrito[j].cantidad * parseFloat(carrito[j].precio);
         carrito[j].subtotal = nuevo_precio;
 
         break;
@@ -45,7 +46,7 @@ export default function CardCarritoESB(props) {
 
   const eliminar_producto = (id) => {
     //setCantidad(cantidad - 1);
-    let arreglo_tmp=carrito.filter((producto)=>producto.id.S!==id)
+    let arreglo_tmp=carrito.filter((producto)=>producto.id_libro!==id)
     setCarrito(arreglo_tmp)
     localStorage.setItem("Carrito", JSON.stringify(arreglo_tmp));
 
@@ -123,7 +124,7 @@ export default function CardCarritoESB(props) {
                     <tr key={index+500*400}>
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                         <img
-                          src={producto.foto.S}
+                          src={producto.foto}
                           className="h-12 w-12 bg-white rounded-full border"
                           alt="..."
                         ></img>{" "}
@@ -135,36 +136,36 @@ export default function CardCarritoESB(props) {
                               : "text-white")
                           }
                         >
-                          {producto.nombre.S}
+                          {producto.nombre}
                         </span>
                       </th>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         <i
                           className="text-blueGray-400 fas fa-minus-circle text-lg leading-lg "
-                          onClick={() => restar(index, producto.id)}
+                          onClick={() => restar(index, producto.id_libro)}
                         />
 
                         <input
                           type="text"
                           className="border-0 px-1 py-2 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          value={producto.cantidad.N}
+                          value={producto.cantidad}
                           id={"input" + index}
                         />
 
                         <i
                           className="text-blueGray-400 fas fa-plus-circle text-lg leading-lg "
-                          onClick={() => sumar(index, producto.id)}
+                          onClick={() => sumar(index, producto.id_libro)}
                         />
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        Q {producto.precio.N}
+                        Q {producto.precio}
                       </td>
                       <td
                         className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
                         id={"subtotal" + index}
                       >
                         <p>
-                          Q {producto.cantidad.N * producto.precio.N}
+                          Q {producto.cantidad * producto.precio}
                         </p>
                       </td>
 
@@ -172,7 +173,7 @@ export default function CardCarritoESB(props) {
                         <button
                           className="bg-orange-500 text-white active:bg-orange-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="button"
-                          onClick={()=>eliminar_producto(producto.id.S)}
+                          onClick={()=>eliminar_producto(producto.id_libro)}
                         >
                           <i className="fas fa-minus-circle"></i>
                         </button>

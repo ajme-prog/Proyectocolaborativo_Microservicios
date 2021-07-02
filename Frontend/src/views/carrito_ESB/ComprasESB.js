@@ -3,6 +3,7 @@ import { useCookies } from "react-cookie";
 
 import { URL } from "./rutas";
 import CardComprasESB from "components/Cards/CardComprasESB";
+import { getESB } from "services/esb";
 const { useEsb } = require("../../contexts/EsbContext");
 
 
@@ -13,15 +14,16 @@ export const ComprasESB = () => {
   const [compras, setCompras] = useState([]);
 
   const [cookies, setCookie] = useCookies(["usuario"]);
-  const esb =useEsb();
-  console.log("IP ESB: ",localStorage.getItem("esb"))
+
 
   useEffect(() => {
       get_compras();
   }, []);
 
-  const get_compras = () => {
-    fetch(`${localStorage.getItem("esb")}/orders/read`, {
+  const get_compras = async () => {
+    const esb =await getESB();
+  console.log("IP ESB1: ",esb)
+    fetch(`${esb}/orders/read`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +33,7 @@ export const ComprasESB = () => {
     })
       .then(async (response) => {
         let respuesta = await response.json();
-
+        console.log(respuesta)
         let arr = [];
         for (let i = 0; i < respuesta.length; i++) {
           if (
