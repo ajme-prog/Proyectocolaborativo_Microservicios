@@ -73,7 +73,7 @@ export default function VerLibrosEsb() {
       usuario = await JSON.parse(usuario);
       console.log(usuario);
       setUsuarioActual(usuario);
-      let esb=getESB();
+      let esb=await getESB();
       console.log("EL USUARIO ES " + usuario.nombre);
       ideditorial=usuario.id;
       console.log("el ideditorial es "+ideditorial)

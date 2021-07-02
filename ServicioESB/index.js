@@ -2,6 +2,7 @@ const cors = require("cors");
 const express = require("express");
 const fetch = require('node-fetch');
 const app = express();
+app.use(express.json({limit:'50mb'}));
 app.use(express.json());
 app.use(cors());
 const url_autenticacion = "http://104.198.109.25:3001"
