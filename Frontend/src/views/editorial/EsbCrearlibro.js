@@ -179,9 +179,9 @@ export default function LibrosEsb() {
       esb
     );
 
-    const respuestaalbum = await subirarchivo.json();
-
-    if (respuestaalbum.message == "Ok") {
+    const respuestaalbum = await subirarchivo;
+     console.log("LA RESPUESTA ES "+respuestaalbum)
+    if (respuestaalbum.status == 200) {
       Toast.fire({
         icon: "success",
         title: "Libro creado correctamente",
