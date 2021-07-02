@@ -51,7 +51,6 @@ export default function EsbLogin() {
     const rawResponse = await loginUsuario(correo, pwd, esbR);
     
     const respuesta = await rawResponse.json();
-    console.log(respuesta);
 
     if (rawResponse.status !== 200) {
       swalPersonalizado.fire({
@@ -68,15 +67,16 @@ export default function EsbLogin() {
       text: `Bienvenido ${respuesta.data.nombre}`,
     });
 
+    respuesta.data.tipo = parseInt(respuesta.data.tipo)
     localStorage.setItem("usuario", JSON.stringify(respuesta.data));
     setLoading(false);
 
     console.log("*******************",respuesta.data)
-
-    if (respuesta.data.tipo === 2) {
+     
+    if (respuesta.data.tipo == 2) {
       console.log("Es admin");
       history.push("/admin/settings");
-    } else if (respuesta.data.tipo === 4) {
+    } else if (respuesta.data.tipo == 4) {
       console.log("Es cliente");
       localStorage.setItem("Carrito", JSON.stringify([]));
       history.push("/cliente_esb");
@@ -131,7 +131,7 @@ export default function EsbLogin() {
                     </label>
                     <input
                       ref={correoRef}
-                      type="email"
+                      type="text"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Correo electrónico"
                       required
