@@ -58,19 +58,11 @@ export default function EsbRegister() {
       text: respuesta.message
     });
 
-    limpiarInputs();
-
     localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
     history.push("/auth/esb/login");
   }
 
-  function limpiarInputs() {
-    nombreRef.current.value = "";
-    correoRef.current.value = "";
-    pwdRef.current.value = "";
-    apellidosRef.current.value = "";
-    telefonoRef.current.value = "";
-  }
+
 
   return (
     <>
