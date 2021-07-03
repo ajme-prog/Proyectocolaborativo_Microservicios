@@ -1,5 +1,5 @@
 const grupo1 = "http://35.230.87.64:4091";
-const grupo2 = "http://35.232.176.148:4091";
+const grupo2 = "http://34.123.35.142:4091";
 const grupo3 = "http://35.222.108.70:4091";
 const grupo4 = "http://34.68.53.63:4091";
 
